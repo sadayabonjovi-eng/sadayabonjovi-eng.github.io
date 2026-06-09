@@ -1,5 +1,4 @@
 :root {
-  /* Light mode defaults */
   --bg-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475') no-repeat center center fixed;
   --bg-overlay: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6));
   --text-color: #333;
@@ -29,7 +28,7 @@ body.dark-mode {
 .hero {
   background: url('https://images.unsplash.com/photo-1581090700227-4c4d1a3f3f3b') no-repeat center center;
   background-size: cover;
-  min-height: 100vh; /* full screen height */
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -37,13 +36,14 @@ body.dark-mode {
   color: #fff;
   text-align: center;
   position: relative;
+  padding-top: 100px; /* pushes text down so it doesn’t overlap toggle */
 }
 
 .hero::before {
   content: "";
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.6); /* overlay for readability */
+  background: rgba(0,0,0,0.6);
   z-index: 1;
 }
 
@@ -61,7 +61,7 @@ nav {
   top: 0;
 }
 
-nav a, nav span {
+nav a {
   color: #ecf0f1;
   margin: 0 20px;
   text-decoration: none;
@@ -72,12 +72,6 @@ nav a, nav span {
 nav a:hover {
   color: #f39c12;
   transform: scale(1.1);
-}
-
-nav .active {
-  color: #f39c12;
-  font-weight: bold;
-  cursor: default;
 }
 
 /* Toggle button */

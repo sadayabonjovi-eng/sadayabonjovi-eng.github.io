@@ -27,15 +27,24 @@
       <li>Customizable city/location</li>
     </ul>
 
-    <h2>Demo Screenshot</h2>
-    <img src="images/weather-bot.png" alt="Weather Bot Screenshot" class="screenshot">
+    <h2>Demo Video</h2>
+    <!-- Local video file -->
+    <video class="screenshot" controls>
+      <source src="videos/weather-bot-demo.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <!-- Or embed from YouTube -->
+    <!--
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID"
+      title="Weather Bot Demo" frameborder="0" allowfullscreen></iframe>
+    -->
   </div>
 
   <footer><p>© 2026 Bon Jovi F. Sadaya</p></footer>
 
   <script>
-    const toggleBtn = document.getElementById('theme-toggle');
-    toggleBtn.addEventListener('click', () => {
+    document.getElementById('theme-toggle').addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
     });
   </script>

@@ -48,15 +48,6 @@ body.dark-mode {
   z-index: 2; /* keeps text above overlay */
 }
 
-/* Header */
-header {
-  background: var(--header-bg);
-  color: #fff;
-  padding: 80px 20px;
-  text-align: center;
-  animation: fadeInDown 1s ease-out;
-}
-
 /* Navigation */
 nav {
   background: var(--nav-bg);
@@ -79,7 +70,7 @@ nav a:hover {
   transform: scale(1.1);
 }
 
-/* Toggle button fixed in top-left corner */
+/* Toggle button */
 #theme-toggle {
   position: fixed;
   top: 20px;
@@ -108,49 +99,8 @@ nav a:hover {
   background: var(--card-bg);
   border-radius: 10px;
   backdrop-filter: blur(6px);
-  animation: fadeInUp 1s ease-out;
   position: relative;
   z-index: 10;
-}
-
-/* Contact links */
-.container a {
-  color: #0077cc;
-  text-decoration: none;
-  cursor: pointer;
-  transition: color 0.3s, text-decoration 0.3s;
-}
-
-.container a:hover {
-  text-decoration: underline;
-  color: #005599;
-}
-
-/* Project cards */
-.project {
-  background: var(--card-bg);
-  padding: 20px;
-  margin: 20px 0;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.project:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-}
-
-/* Screenshots */
-.screenshot {
-  max-width: 100%;
-  border-radius: 8px;
-  margin: 20px 0;
-  transition: transform 0.3s;
-}
-
-.screenshot:hover {
-  transform: scale(1.05);
 }
 
 /* Footer */
@@ -160,21 +110,4 @@ footer {
   text-align: center;
   padding: 20px;
   margin-top: 40px;
-  animation: fadeIn 2s ease-out;
-}
-
-/* Animations */
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }

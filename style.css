@@ -28,7 +28,7 @@ body.dark-mode {
 .hero {
   background: url('https://images.unsplash.com/photo-1581090700227-4c4d1a3f3f3b') no-repeat center center;
   background-size: cover;
-  min-height: 60vh;   /* reduced height so nav is visible */
+  min-height: 55vh;   /* reduced height */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -36,7 +36,7 @@ body.dark-mode {
   color: #fff;
   text-align: center;
   position: relative;
-  padding-top: 100px; /* keeps text clear of toggle */
+  padding: 60px 20px 40px; /* balanced spacing top/bottom */
 }
 
 .hero::before {

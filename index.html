@@ -7,21 +7,24 @@
     body {
       font-family: 'Roboto', sans-serif;
       margin: 0;
-      background: #f4f6f8;
+      background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') no-repeat center center fixed;
+      background-size: cover;
       color: #333;
     }
 
     header {
-      background: linear-gradient(135deg, #2c3e50, #4ca1af);
+      background: rgba(44, 62, 80, 0.85);
       color: white;
-      padding: 60px 20px;
+      padding: 80px 20px;
       text-align: center;
     }
 
     nav {
-      background: #34495e;
+      background: rgba(52, 73, 94, 0.9);
       padding: 15px;
       text-align: center;
+      position: sticky;
+      top: 0;
     }
 
     nav a {
@@ -40,6 +43,9 @@
       max-width: 900px;
       margin: auto;
       padding: 30px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
 
     h2 {
@@ -53,4 +59,64 @@
       padding: 20px;
       margin: 20px 0;
       border-radius: 8px;
-      box-shadow: 0 4
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+
+    .project:hover {
+      transform: translateY(-5px);
+    }
+
+    footer {
+      background: rgba(44, 62, 80, 0.9);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Welcome to My Portfolio</h1>
+    <p>Hi, I'm Bon Jovi F. Sadaya. I build AI automations and agentic systems.</p>
+  </header>
+
+  <nav>
+    <a href="#about">About Me</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <div class="container">
+    <section id="about">
+      <h2>About Me</h2>
+      <p>I’m passionate about automation, AI-driven workflows, and building tools that make life easier.</p>
+    </section>
+
+    <section id="projects">
+      <h2>Projects</h2>
+      <div class="project">
+        <h3>Email Weather Bot</h3>
+        <p>Fetches weather data daily and emails it automatically.</p>
+        <a href="https://github.com/sadayabonjovi-eng/weather-bot">View on GitHub</a>
+      </div>
+      <div class="project">
+        <h3>Text Sentiment Analyzer</h3>
+        <p>Analyzes text and predicts sentiment (positive/negative).</p>
+        <a href="https://github.com/sadayabonjovi-eng/sentiment-analyzer">View on GitHub</a>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>Email: sadayabonjovi@gmail.com</p>
+      <p>LinkedIn: <a href="https://linkedin.com/in/yourprofile">Profile</a></p>
+    </section>
+  </div>
+
+  <footer>
+    <p>© 2026 Bon Jovi F. Sadaya | Built with GitHub Pages</p>
+  </footer>
+</body>
+</html>

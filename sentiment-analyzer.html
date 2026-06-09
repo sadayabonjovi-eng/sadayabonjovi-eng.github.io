@@ -6,24 +6,38 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <button id="theme-toggle">🌙 Dark/Light</button>
+
   <header><h1>Text Sentiment Analyzer</h1></header>
 
   <nav>
     <a href="index.html">Home</a>
-    <a href="about.html">About Me</a>
     <a href="projects.html">Projects</a>
     <a href="contact.html">Contact</a>
   </nav>
 
   <div class="container">
-    <p>This project analyzes text and predicts sentiment (positive/negative).</p>
-    <img src="images/sentiment-analyzer-screenshot.png" alt="Sentiment Analyzer Screenshot" class="screenshot">
-    <h3>Demo Video</h3>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID"
-      title="Sentiment Analyzer Demo" frameborder="0" allowfullscreen></iframe>
-    <p><a href="projects.html">← Back to Projects</a></p>
+    <h2>Overview</h2>
+    <p>This project analyzes text input and predicts whether the sentiment is positive, negative, or neutral.</p>
+
+    <h2>Features</h2>
+    <ul>
+      <li>Uses natural language processing (NLP)</li>
+      <li>Supports multiple languages</li>
+      <li>Provides confidence scores</li>
+    </ul>
+
+    <h2>Demo Screenshot</h2>
+    <img src="images/sentiment-analyzer.png" alt="Sentiment Analyzer Screenshot" class="screenshot">
   </div>
 
   <footer><p>© 2026 Bon Jovi F. Sadaya</p></footer>
+
+  <script>
+    const toggleBtn = document.getElementById('theme-toggle');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
+  </script>
 </body>
 </html>

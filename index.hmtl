@@ -1,33 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My AI Portfolio</title>
+  <title>Lucifer's AI Portfolio</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 40px; background: #f9f9f9; }
     h1 { color: #2c3e50; }
-    h2 { color: #34495e; }
+    nav { margin-bottom: 20px; }
+    nav a { margin-right: 15px; text-decoration: none; color: #2980b9; }
     .project { margin-bottom: 20px; padding: 10px; background: #fff; border-radius: 6px; }
   </style>
 </head>
 <body>
   <h1>Welcome to My Portfolio</h1>
-  <p>Hi, I'm Bon Jovi. I build AI automations and agentic systems.</p>
+  <nav>
+    <a href="#about">About Me</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
 
-  <h2>Projects</h2>
-  <div class="project">
-    <h3>Email Weather Bot</h3>
-    <p>Fetches weather data daily and emails it automatically.</p>
-    <a href="https://github.com/sadayabonjovi-eng/weather-bot">View on GitHub</a>
-  </div>
+  <section id="about">
+    <h2>About Me</h2>
+    <p>Hi, I'm Bon Jovi F. Sadaya. I build AI automations and agentic systems.</p>
+  </section>
 
-  <div class="project">
-    <h3>Text Sentiment Analyzer</h3>
-    <p>Analyzes text and predicts sentiment (positive/negative).</p>
-    <a href="https://github.com/sadayabonjovi-eng/sentiment-analyzer">View on GitHub</a>
-  </div>
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="project">
+      <h3>Email Weather Bot</h3>
+      <p>Fetches weather data daily and emails it automatically.</p>
+      <a href="https://github.com/sadayabonjovi-eng/weather-bot">View on GitHub</a>
+    </div>
+    <div class="project">
+      <h3>Text Sentiment Analyzer</h3>
+      <p>Analyzes text and predicts sentiment (positive/negative).</p>
+      <a href="https://github.com/sadayabonjovi-eng/sentiment-analyzer">View on GitHub</a>
+    </div>
+  </section>
 
-  <h2>Contact</h2>
-  <p>Email: sadayabonjovi@gmail.com</p>
-  <p>LinkedIn: <a href="https://linkedin.com/in/yourprofile">Profile</a></p>
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>Email: yourname@example.com</p>
+    <p>LinkedIn: <a href="https://linkedin.com/in/yourprofile">Profile</a></p>
+  </section>
 </body>
 </html>

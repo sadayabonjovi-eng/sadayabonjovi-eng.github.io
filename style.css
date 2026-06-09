@@ -129,3 +129,23 @@ footer {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+#theme-toggle {
+  position: fixed;   /* stays in place */
+  top: 20px;         /* distance from top */
+  right: 20px;       /* distance from right (use left:20px if you want upper left) */
+  background: none;
+  border: 2px solid #f39c12;
+  color: #f39c12;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s, color 0.3s;
+  z-index: 1000;     /* ensures it stays above other elements */
+}
+
+#theme-toggle:hover {
+  background: #f39c12;
+  color: #fff;
+}

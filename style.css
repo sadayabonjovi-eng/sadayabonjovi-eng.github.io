@@ -27,33 +27,33 @@ body.dark-mode {
   --card-bg: rgba(255,255,255,0.1);
 }
 
-/* Hero Section */
-.hero {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;             /* full viewport height */
+/* Centered Header for all pages */
+header {
+  background: var(--header-bg);
+  color: #fff;
+  height: 100vh;                 /* full screen height */
+  display: flex;                 /* enable flexbox */
+  flex-direction: column;        /* stack heading + paragraph */
+  justify-content: center;       /* center vertically */
+  align-items: center;           /* center horizontally */
   text-align: center;
-  flex-direction: column;
-  background: var(--bg-overlay), var(--bg-image);
-  background-size: cover;
   animation: fadeInDown 1s ease-out;
+  padding: 0;                    /* remove old padding */
 }
 
-.hero h1 {
-  font-size: 4rem;
-  font-weight: 800;
-  margin: 0;
-  text-transform: uppercase;
-  color: var(--text-color);
+header h1 {
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 20px;
+  color: #f39c12;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
 }
 
-.hero p {
-  font-size: 1.5rem;
-  max-width: 800px;
-  margin-top: 20px;
-  color: var(--text-color);
+header p {
+  max-width: 700px;
+  font-size: 1.3rem;
   line-height: 1.6;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
 }
 
 /* Navigation */

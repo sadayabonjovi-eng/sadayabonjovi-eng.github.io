@@ -30,7 +30,7 @@ body.dark-mode {
   background: url('https://images.unsplash.com/photo-1581090700227-4c4d1a3f3f3b') no-repeat center center;
   background-size: cover;
   height: auto;              /* compact height */
-  padding: 80px 20px 40px;   /* balanced spacing */
+  padding: 40px 20px 30px;   /* balanced spacing */
   color: #fff;
   text-align: center;
   position: relative;

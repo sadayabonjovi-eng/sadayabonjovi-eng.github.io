@@ -85,21 +85,6 @@ nav a:hover {
   border-radius: 10px;
   backdrop-filter: blur(6px);
   animation: fadeInUp 1s ease-out;
-  position: relative;   /* ensures it sits above overlays */
-  z-index: 10;          /* makes links clickable */
-}
-
-/* Contact links */
-.container a {
-  color: #0077cc;
-  text-decoration: none;
-  cursor: pointer;
-  transition: color 0.3s, text-decoration 0.3s;
-}
-
-.container a:hover {
-  text-decoration: underline;
-  color: #005599;
 }
 
 .project {

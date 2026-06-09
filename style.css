@@ -1,5 +1,7 @@
 :root {
-  --bg-color: #f0f0f0;
+  /* Light mode defaults */
+  --bg-color: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+               url('https://images.unsplash.com/photo-1518770660439-4636190af475') no-repeat center center fixed;
   --text-color: #333;
   --header-bg: rgba(44,62,80,0.85);
   --nav-bg: rgba(52,73,94,0.9);
@@ -11,6 +13,7 @@ body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
   background: var(--bg-color);
+  background-size: cover;
   color: var(--text-color);
   transition: background 0.5s, color 0.5s;
 }
@@ -54,15 +57,20 @@ nav a:hover {
   transform: scale(1.1);
 }
 
+/* Toggle button fixed in top-left corner */
 #theme-toggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
   background: none;
   border: 2px solid #f39c12;
   color: #f39c12;
-  padding: 5px 10px;
+  padding: 6px 12px;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
   transition: background 0.3s, color 0.3s;
+  z-index: 1000;
 }
 
 #theme-toggle:hover {
@@ -128,24 +136,4 @@ footer {
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
-}
-
-#theme-toggle {
-  position: fixed;   /* stays in place */
-  top: 20px;         /* distance from top */
-  right: 20px;       /* distance from right (use left:20px if you want upper left) */
-  background: none;
-  border: 2px solid #f39c12;
-  color: #f39c12;
-  padding: 6px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s, color 0.3s;
-  z-index: 1000;     /* ensures it stays above other elements */
-}
-
-#theme-toggle:hover {
-  background: #f39c12;
-  color: #fff;
 }

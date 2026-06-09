@@ -16,6 +16,7 @@
     <a href="about.html">About Me</a>
     <a href="projects.html">Projects</a>
     <a href="contact.html">Contact</a>
+    <button id="theme-toggle">🌙 Dark/Light</button>
   </nav>
 
   <div class="container">
@@ -26,5 +27,12 @@
   <footer>
     <p>© 2026 Bon Jovi F. Sadaya | Built with GitHub Pages</p>
   </footer>
+
+  <script>
+    const toggleBtn = document.getElementById('theme-toggle');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
+  </script>
 </body>
 </html>

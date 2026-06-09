@@ -1,4 +1,5 @@
 :root {
+  /* Light mode defaults */
   --bg-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475') no-repeat center center fixed;
   --bg-overlay: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6));
   --text-color: #333;
@@ -7,6 +8,7 @@
   --card-bg: rgba(255,255,255,0.9);
 }
 
+/* Default Light Mode */
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
@@ -16,6 +18,7 @@ body {
   transition: background 0.5s, color 0.5s;
 }
 
+/* Dark Mode */
 body.dark-mode {
   --bg-overlay: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7));
   --text-color: #f0f0f0;
@@ -24,37 +27,17 @@ body.dark-mode {
   --card-bg: rgba(255,255,255,0.1);
 }
 
-/* Hero Section */
-.hero {
-  background: url('https://images.unsplash.com/photo-1581090700227-4c4d1a3f3f3b') no-repeat center center;
-  background-size: cover;
-  height: auto;              /* compact height */
-  padding: 20px 15px;        /* minimal spacing */
+header {
+  background: var(--header-bg);
   color: #fff;
+  padding: 80px 20px;
   text-align: center;
-  position: relative;
+  animation: fadeInDown 1s ease-out;
 }
 
-.hero::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.6);
-  z-index: 1;
-}
-
-.hero h1, .hero p {
-  position: relative;
-  z-index: 2;
-  margin: 8px auto;
-  max-width: 600px; /* narrower text block */
-  font-size: 1rem;  /* smaller text size */
-}
-
-/* Navigation */
 nav {
   background: var(--nav-bg);
-  padding: 8px;
+  padding: 15px;
   text-align: center;
   position: sticky;
   top: 0;
@@ -62,7 +45,7 @@ nav {
 
 nav a {
   color: #ecf0f1;
-  margin: 0 10px;
+  margin: 0 20px;
   text-decoration: none;
   font-weight: bold;
   transition: color 0.3s, transform 0.3s;
@@ -70,24 +53,23 @@ nav a {
 
 nav a:hover {
   color: #f39c12;
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 
-/* Toggle button */
+/* Toggle button fixed in top-left corner */
 #theme-toggle {
   position: fixed;
-  top: 8px;
-  left: 8px;
+  top: 20px;
+  left: 20px;
   background: none;
   border: 2px solid #f39c12;
   color: #f39c12;
-  padding: 4px 8px;
+  padding: 6px 12px;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
   transition: background 0.3s, color 0.3s;
   z-index: 1000;
-  font-size: 0.85rem;
 }
 
 #theme-toggle:hover {
@@ -95,23 +77,62 @@ nav a:hover {
   color: #fff;
 }
 
-/* Content container */
 .container {
-  max-width: 700px;
+  max-width: 900px;
   margin: auto;
-  padding: 20px;
+  padding: 30px;
   background: var(--card-bg);
   border-radius: 10px;
   backdrop-filter: blur(6px);
-  position: relative;
-  z-index: 10;
+  animation: fadeInUp 1s ease-out;
 }
 
-/* Footer */
+.project {
+  background: var(--card-bg);
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.project:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+.screenshot {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 20px 0;
+  transition: transform 0.3s;
+}
+
+.screenshot:hover {
+  transform: scale(1.05);
+}
+
 footer {
   background: var(--header-bg);
   color: #fff;
   text-align: center;
-  padding: 10px;
-  margin-top: 20px;
+  padding: 20px;
+  margin-top: 40px;
+  animation: fadeIn 2s ease-out;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

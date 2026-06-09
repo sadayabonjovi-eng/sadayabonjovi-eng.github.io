@@ -3,4 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <title>Contact</title>
-  <link rel="stylesheet"
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button id="theme-toggle">🌙 Dark/Light</button>
+
+  <header><h1>Contact Me</h1></header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About Me</a>
+    <a href="projects.html">Projects</a>
+  </nav>
+
+  <div class="container">
+    <h2>Get in Touch</h2>
+    <p>If you’d like to collaborate or learn more about my work, feel free to reach out:</p>
+    <ul>
+      <li>Email: bonjovi@example.com</li>
+      <li>LinkedIn: <a href="#">linkedin.com/in/bonjovi</a></li>
+      <li>GitHub: <a href="https://github.com/sadayabonjovi-eng">sadayabonjovi-eng</a></li>
+    </ul>
+  </div>
+
+  <footer><p>© 2026 Bon Jovi F. Sadaya</p></footer>
+
+  <script>
+    const toggleBtn = document.getElementById('theme-toggle');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
+  </script>
+</body>
+</html>

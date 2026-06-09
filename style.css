@@ -27,21 +27,20 @@ body.dark-mode {
   --card-bg: rgba(255,255,255,0.1);
 }
 
-header {
-  background: var(--header-bg);
-  color: #fff;
-  padding: 0; /* remove old padding */
-  text-align: center;
-  animation: fadeInDown 1s ease-out;
-  height: 100vh; /* full screen hero */
+/* Hero Section */
+.hero {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;             /* full viewport height */
+  text-align: center;
   flex-direction: column;
+  background: var(--bg-overlay), var(--bg-image);
+  background-size: cover;
+  animation: fadeInDown 1s ease-out;
 }
 
-/* Big bold centered heading */
-header h1 {
+.hero h1 {
   font-size: 4rem;
   font-weight: 800;
   margin: 0;
@@ -49,13 +48,15 @@ header h1 {
   color: var(--text-color);
 }
 
-/* Optional subheading */
-header p {
+.hero p {
   font-size: 1.5rem;
+  max-width: 800px;
   margin-top: 20px;
   color: var(--text-color);
+  line-height: 1.6;
 }
 
+/* Navigation */
 nav {
   background: var(--nav-bg);
   padding: 15px;
@@ -98,6 +99,7 @@ nav a:hover {
   color: #fff;
 }
 
+/* Main Content */
 .container {
   max-width: 900px;
   margin: auto;
@@ -133,6 +135,7 @@ nav a:hover {
   transform: scale(1.05);
 }
 
+/* Footer */
 footer {
   background: var(--header-bg);
   color: #fff;

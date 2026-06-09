@@ -45,7 +45,7 @@ body.dark-mode {
 
 .hero h1, .hero p {
   position: relative;
-  z-index: 2; /* keeps text above overlay */
+  z-index: 2;
 }
 
 /* Navigation */

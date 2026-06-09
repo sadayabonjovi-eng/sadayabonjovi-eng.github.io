@@ -4,10 +4,112 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bon Jovi F. Sadaya Portfolio</title>
-  <link rel="stylesheet" href="style.css"> <!-- external CSS file -->
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --bg-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475') no-repeat center center fixed;
+      --bg-overlay: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6));
+      --text-color: #333;
+      --header-bg: rgba(44,62,80,0.85);
+      --nav-bg: rgba(52,73,94,0.9);
+      --card-bg: rgba(255,255,255,0.9);
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      background: var(--bg-overlay), var(--bg-image);
+      background-size: cover;
+      color: var(--text-color);
+      transition: background 0.5s, color 0.5s;
+    }
+
+    body.dark-mode {
+      --bg-overlay: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7));
+      --text-color: #f0f0f0;
+      --header-bg: rgba(20,20,20,0.85);
+      --nav-bg: rgba(30,30,30,0.9);
+      --card-bg: rgba(255,255,255,0.1);
+    }
+
+    /* Navigation */
+    nav {
+      background: var(--nav-bg);
+      padding: 12px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+    }
+
+    nav a {
+      color: #ecf0f1;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s, transform 0.3s;
+    }
+
+    nav a:hover {
+      color: #f39c12;
+      transform: scale(1.05);
+    }
+
+    /* Toggle button */
+    #theme-toggle {
+      position: fixed;
+      top: 8px;
+      left: 8px;
+      background: none;
+      border: 2px solid #f39c12;
+      color: #f39c12;
+      padding: 4px 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s, color 0.3s;
+      z-index: 1000;
+      font-size: 0.85rem;
+    }
+
+    #theme-toggle:hover {
+      background: #f39c12;
+      color: #fff;
+    }
+
+    /* Content container */
+    .container {
+      max-width: 800px;
+      margin: 60px auto; /* spacing from top */
+      padding: 30px;
+      background: var(--card-bg);
+      border-radius: 10px;
+      backdrop-filter: blur(6px);
+      text-align: center;
+    }
+
+    .container h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #f39c12;
+      margin-bottom: 20px;
+    }
+
+    .container p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--header-bg);
+      color: #fff;
+      text-align: center;
+      padding: 12px;
+      margin-top: 40px;
+    }
+  </style>
 </head>
 <body>
-  <!-- Theme toggle -->
   <button id="theme-toggle">Dark/Light</button>
 
   <!-- Navigation -->
@@ -19,6 +121,9 @@
 
   <!-- Main Content -->
   <div class="container">
+    <h1>Welcome to My Portfolio</h1>
+    <p>I’m Bon Jovi F. Sadaya — builder of AI automations and agentic systems designed to make workflows smarter, faster, and more creative. Explore my projects to see how I combine disciplined problem-solving with innovative design, and discover how technology and storytelling come together in my work.</p>
+
     <h2>Home</h2>
     <p>This is my portfolio homepage. Use the navigation bar to explore more about me, my projects, and how to contact me.</p>
   </div>
@@ -28,7 +133,6 @@
     <p>&copy; 2026 Bon Jovi F. Sadaya | Built with GitHub Pages</p>
   </footer>
 
-  <!-- Script for dark/light toggle -->
   <script>
     const toggle = document.getElementById('theme-toggle');
     toggle.addEventListener('click', () => {

@@ -1,5 +1,4 @@
 :root {
-  /* Light mode defaults */
   --bg-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475') no-repeat center center fixed;
   --bg-overlay: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6));
   --text-color: #333;
@@ -30,7 +29,7 @@ body.dark-mode {
   background: url('https://images.unsplash.com/photo-1581090700227-4c4d1a3f3f3b') no-repeat center center;
   background-size: cover;
   height: auto;              /* compact height */
-  padding: 40px 20px 30px;   /* balanced spacing */
+  padding: 40px 20px 30px;   /* reduced spacing */
   color: #fff;
   text-align: center;
   position: relative;
@@ -48,13 +47,13 @@ body.dark-mode {
   position: relative;
   z-index: 2;
   margin: 0 auto;
-  max-width: 800px; /* keeps text narrow */
+  max-width: 700px; /* narrower text block */
 }
 
 /* Navigation */
 nav {
   background: var(--nav-bg);
-  padding: 12px;
+  padding: 10px;
   text-align: center;
   position: sticky;
   top: 0;
@@ -62,7 +61,7 @@ nav {
 
 nav a {
   color: #ecf0f1;
-  margin: 0 15px;
+  margin: 0 12px;
   text-decoration: none;
   font-weight: bold;
   transition: color 0.3s, transform 0.3s;
@@ -70,18 +69,18 @@ nav a {
 
 nav a:hover {
   color: #f39c12;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 /* Toggle button */
 #theme-toggle {
   position: fixed;
-  top: 20px;
-  left: 20px;
+  top: 15px;
+  left: 15px;
   background: none;
   border: 2px solid #f39c12;
   color: #f39c12;
-  padding: 6px 12px;
+  padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
@@ -96,9 +95,9 @@ nav a:hover {
 
 /* Content container */
 .container {
-  max-width: 900px;
+  max-width: 800px;
   margin: auto;
-  padding: 30px;
+  padding: 25px;
   background: var(--card-bg);
   border-radius: 10px;
   backdrop-filter: blur(6px);
@@ -111,6 +110,6 @@ footer {
   background: var(--header-bg);
   color: #fff;
   text-align: center;
-  padding: 15px;
-  margin-top: 30px;
+  padding: 12px;
+  margin-top: 25px;
 }

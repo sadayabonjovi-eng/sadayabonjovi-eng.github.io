@@ -1,14 +1,32 @@
+:root {
+  --bg-color: #f0f0f0;
+  --text-color: #333;
+  --header-bg: rgba(44,62,80,0.85);
+  --nav-bg: rgba(52,73,94,0.9);
+  --card-bg: rgba(255,255,255,0.9);
+}
+
+/* Default Light Mode */
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
-  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-              url('https://images.unsplash.com/photo-1518770660439-4636190af475') no-repeat center center fixed;
-  background-size: cover;
-  color: #f0f0f0;
+  background: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.5s, color 0.5s;
+}
+
+/* Dark Mode */
+body.dark-mode {
+  --bg-color: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+               url('https://images.unsplash.com/photo-1518770660439-4636190af475') no-repeat center center fixed;
+  --text-color: #f0f0f0;
+  --header-bg: rgba(20,20,20,0.85);
+  --nav-bg: rgba(30,30,30,0.9);
+  --card-bg: rgba(255,255,255,0.1);
 }
 
 header {
-  background: rgba(44,62,80,0.85);
+  background: var(--header-bg);
   color: #fff;
   padding: 80px 20px;
   text-align: center;
@@ -16,7 +34,7 @@ header {
 }
 
 nav {
-  background: rgba(52,73,94,0.9);
+  background: var(--nav-bg);
   padding: 15px;
   text-align: center;
   position: sticky;
@@ -36,18 +54,34 @@ nav a:hover {
   transform: scale(1.1);
 }
 
+#theme-toggle {
+  background: none;
+  border: 2px solid #f39c12;
+  color: #f39c12;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s, color 0.3s;
+}
+
+#theme-toggle:hover {
+  background: #f39c12;
+  color: #fff;
+}
+
 .container {
   max-width: 900px;
   margin: auto;
   padding: 30px;
-  background: rgba(255,255,255,0.1);
+  background: var(--card-bg);
   border-radius: 10px;
   backdrop-filter: blur(6px);
   animation: fadeInUp 1s ease-out;
 }
 
 .project {
-  background: rgba(255,255,255,0.15);
+  background: var(--card-bg);
   padding: 20px;
   margin: 20px 0;
   border-radius: 8px;
@@ -72,7 +106,7 @@ nav a:hover {
 }
 
 footer {
-  background: rgba(44,62,80,0.9);
+  background: var(--header-bg);
   color: #fff;
   text-align: center;
   padding: 20px;

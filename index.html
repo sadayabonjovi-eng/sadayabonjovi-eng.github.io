@@ -3,60 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bon Jovi Flores Sadaya Portfolio</title>
+  <title>Bon Jovi F. Sadaya Portfolio</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    /* Hero Section */
-    .hero {
-      background: url('https://images.unsplash.com/photo-1581090700227-4c4d1a3f3f3b') no-repeat center center;
-      background-size: cover;
-      height: 100vh;              /* full screen height */
-      display: flex;
-      flex-direction: column;
-      justify-content: center;    /* center vertically */
-      align-items: center;        /* center horizontally */
-      text-align: center;
-      position: relative;
-      padding-top: 60px;          /* push content down a little */
-      color: #fff;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 1;
-    }
-
-    .hero h1 {
-      position: relative;
-      z-index: 2;
-      font-size: 4rem;            /* big heading */
-      font-weight: 900;
-      margin-bottom: 20px;
-      color: #f39c12;
-      text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
-    }
-
-    .hero p {
-      position: relative;
-      z-index: 2;
-      max-width: 700px;
-      font-size: 1.5rem;
-      line-height: 1.6;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
-    }
-  </style>
 </head>
 <body>
+  <!-- Theme toggle -->
   <button id="theme-toggle">Dark/Light</button>
-
-  <!-- Hero Section -->
-  <div class="hero">
-    <h1>Welcome to My Portfolio</h1>
-    <p>I’m Bon Jovi F. Sadaya — builder of AI automations and agentic systems designed to make workflows smarter, faster, and more creative.</p>
-  </div>
 
   <!-- Navigation -->
   <nav>
@@ -76,6 +28,7 @@
     <p>&copy; 2026 Bon Jovi F. Sadaya | Built with GitHub Pages</p>
   </footer>
 
+  <!-- Script for dark/light toggle -->
   <script>
     const toggle = document.getElementById('theme-toggle');
     toggle.addEventListener('click', () => {

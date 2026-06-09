@@ -27,9 +27,13 @@ body.dark-mode {
 
 /* Hero Section */
 .hero {
-  background: url('https://images.unsplash.com/photo-1581090700227-4c4d1a3f3f3b') no-repeat center center fixed;
+  background: url('https://images.unsplash.com/photo-1581090700227-4c4d1a3f3f3b') no-repeat center center;
   background-size: cover;
-  padding: 120px 20px;
+  min-height: 100vh; /* full screen height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   color: #fff;
   text-align: center;
   position: relative;
@@ -57,7 +61,7 @@ nav {
   top: 0;
 }
 
-nav a {
+nav a, nav span {
   color: #ecf0f1;
   margin: 0 20px;
   text-decoration: none;
@@ -68,6 +72,12 @@ nav a {
 nav a:hover {
   color: #f39c12;
   transform: scale(1.1);
+}
+
+nav .active {
+  color: #f39c12;
+  font-weight: bold;
+  cursor: default;
 }
 
 /* Toggle button */

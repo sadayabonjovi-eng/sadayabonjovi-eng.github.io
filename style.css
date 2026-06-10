@@ -1,162 +1,219 @@
-:root {
-  /* Light mode defaults */
-  --bg-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475') no-repeat center center fixed;
-  --bg-overlay: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6));
-  --text-color: #333;
-  --header-bg: rgba(44,62,80,0.85);
-  --nav-bg: rgba(52,73,94,0.9);
-  --card-bg: rgba(255,255,255,0.9);
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bon Jovi F. Sadaya Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Light mode defaults */
+      --bg-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475') no-repeat center center fixed;
+      --bg-overlay: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6));
+      --text-color: #333;
+      --header-bg: rgba(44,62,80,0.85);
+      --nav-bg: rgba(52,73,94,0.9);
+      --card-bg: rgba(255,255,255,0.9);
+    }
 
-/* Default Light Mode */
-body {
-  font-family: 'Roboto', sans-serif;
-  margin: 0;
-  background: var(--bg-overlay), var(--bg-image);
-  background-size: cover;
-  color: var(--text-color);
-  transition: background 0.5s, color 0.5s;
-}
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      background: var(--bg-overlay), var(--bg-image);
+      background-size: cover;
+      color: var(--text-color);
+      transition: background 0.5s, color 0.5s;
+    }
 
-/* Dark Mode */
-body.dark-mode {
-  --bg-overlay: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7));
-  --text-color: #f0f0f0;
-  --header-bg: rgba(20,20,20,0.85);
-  --nav-bg: rgba(30,30,30,0.9);
-  --card-bg: rgba(255,255,255,0.1);
-}
+    body.dark-mode {
+      --bg-overlay: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7));
+      --text-color: #f0f0f0;
+      --header-bg: rgba(20,20,20,0.85);
+      --nav-bg: rgba(30,30,30,0.9);
+      --card-bg: rgba(255,255,255,0.1);
+    }
 
-/* Centered Header */
-header {
-  background: var(--header-bg);
-  color: #fff;
-  height: 100vh;                 /* full screen height */
-  display: flex;                 /* enable flexbox */
-  flex-direction: column;        /* stack heading + paragraph */
-  justify-content: center;       /* center vertically */
-  align-items: center;           /* center horizontally */
-  text-align: center;
-  animation: fadeInDown 1s ease-out;
-  padding: 0;                    /* remove old padding */
-}
+    header {
+      background: var(--header-bg);
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      animation: fadeInDown 1s ease-out;
+    }
 
-header h1 {
-  font-size: 3rem;
-  font-weight: 900;
-  margin-bottom: 20px;
-  color: #f39c12;
-  text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
-}
+    header h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 20px;
+      color: #f39c12;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
+    }
 
-header p {
-  max-width: 700px;
-  font-size: 1.3rem;
-  line-height: 1.6;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
-}
+    header p {
+      max-width: 700px;
+      font-size: 1.3rem;
+      line-height: 1.6;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+    }
 
-/* Navigation */
-nav {
-  background: var(--nav-bg);
-  padding: 15px;
-  text-align: center;
-  position: sticky;
-  top: 0;
-}
+    nav {
+      background: var(--nav-bg);
+      padding: 15px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+    }
 
-nav a {
-  color: #ecf0f1;
-  margin: 0 20px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s, transform 0.3s;
-}
+    nav a {
+      color: #ecf0f1;
+      margin: 0 20px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s, transform 0.3s;
+    }
 
-nav a:hover {
-  color: #f39c12;
-  transform: scale(1.1);
-}
+    nav a:hover {
+      color: #f39c12;
+      transform: scale(1.1);
+    }
 
-/* Toggle button fixed in top-left corner */
-#theme-toggle {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  background: none;
-  border: 2px solid #f39c12;
-  color: #f39c12;
-  padding: 6px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s, color 0.3s;
-  z-index: 1000;
-}
+    #theme-toggle {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: none;
+      border: 2px solid #f39c12;
+      color: #f39c12;
+      padding: 6px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s, color 0.3s;
+      z-index: 1000;
+    }
 
-#theme-toggle:hover {
-  background: #f39c12;
-  color: #fff;
-}
+    #theme-toggle:hover {
+      background: #f39c12;
+      color: #fff;
+    }
 
-/* Main Content */
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 30px;
-  background: var(--card-bg);
-  border-radius: 10px;
-  backdrop-filter: blur(6px);
-  animation: fadeInUp 1s ease-out;
-}
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 30px;
+      background: var(--card-bg);
+      border-radius: 10px;
+      backdrop-filter: blur(6px);
+      animation: fadeInUp 1s ease-out;
+    }
 
-.project {
-  background: var(--card-bg);
-  padding: 20px;
-  margin: 20px 0;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
+    .project {
+      background: var(--card-bg);
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
 
-.project:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-}
+    .project:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
 
-.screenshot {
-  max-width: 100%;
-  border-radius: 8px;
-  margin: 20px 0;
-  transition: transform 0.3s;
-}
+    .screenshot {
+      max-width: 100%;
+      border-radius: 8px;
+      margin: 20px 0;
+      transition: transform 0.3s;
+    }
 
-.screenshot:hover {
-  transform: scale(1.05);
-}
+    .screenshot:hover {
+      transform: scale(1.05);
+    }
 
-/* Footer */
-footer {
-  background: var(--header-bg);
-  color: #fff;
-  text-align: center;
-  padding: 20px;
-  margin-top: 40px;
-  animation: fadeIn 2s ease-out;
-}
+    footer {
+      background: var(--header-bg);
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      animation: fadeIn 2s ease-out;
+    }
 
-/* Animations */
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <button id="theme-toggle">Dark/Light</button>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about-me">About Me</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <header id="home">
+    <h1>Welcome to My Portfolio</h1>
+    <p>I’m Bon Jovi F. Sadaya — builder of AI automations and agentic systems designed to make workflows smarter, faster, and more creative.</p>
+  </header>
+
+  <section id="about-me" class="container">
+    <h2>About Me</h2>
+    <p>With over six years of disciplined service in the Philippine Coast Guard, I bring resilience, focus, and innovation into every project.</p>
+    <p>In January 2026, I graduated <strong>top of my class</strong> in the Coast Guard Information System Technician specialization course, earning:</p>
+    <ul>
+      <li><strong>Award of Excellence</strong> — Highest overall grade in academic and non-academic performance</li>
+      <li><strong>Award of Recognition</strong> — Highest overall grade in academic subjects</li>
+      <li><strong>Certificate of Distinction</strong> — Final grade average of <strong>96.77%</strong>, with no grade below 85%</li>
+    </ul>
+    <p>Today, I channel that same drive into building intelligent solutions that enhance efficiency, strengthen workflows, and deliver reliable results.</p>
+  </section>
+
+  <section id="projects" class="container">
+    <h2>Projects</h2>
+    <div class="project">
+      <h3>Email Weather Bot</h3>
+      <p>Fetches weather data daily and emails it automatically. Built with Python and API integration.</p>
+    </div>
+    <div class="project">
+      <h3>Text Sentiment Analyzer</h3>
+      <p>Analyzes text and predicts sentiment (positive/negative). Uses machine learning libraries like NLTK and scikit-learn.</p>
+    </div>
+  </section>
+
+  <section id="contact" class="container">
+    <h2>Contact Me</h2>
+    <p>Email: <a href="mailto:sadayabonjovi@gmail.com">sadayabonjovi@gmail.com</a></p>
+    <p>Cellphone: <a href="tel:09562972094">09562972094</a></p>
+    <p>Facebook: <a href="https://facebook.com/bon.jovi.sadaya">facebook.com/bon.jovi.sadaya</a></p>
+    <p>LinkedIn: <a href="https://linkedin.com/in/bonjovi">linkedin.com/in/bonjovi</a></p>
+    <p>GitHub: <a href="https://github.com/sadayabonjovi-eng">sadayabonjovi-eng</a></p>
+  </section>
+
+  <footer>
+    <p>© 2026 Bon Jovi F. Sadaya | Built with GitHub Pages</p>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle

@@ -11,6 +11,7 @@
       flex-wrap: wrap;
       gap: 12px;
       margin-bottom: 20px;
+      animation: fadeInUp 1s ease-out;
     }
 
     .contact-btn {
@@ -35,6 +36,7 @@
       flex-direction: column;
       gap: 12px;
       margin-top: 20px;
+      animation: fadeInUp 1.2s ease-out;
     }
 
     .contact-form input,
@@ -82,6 +84,34 @@
       background: #d35400;
       transform: scale(1.05);
     }
+
+    /* Success Message */
+    .success-message {
+      display: none;
+      margin-top: 15px;
+      padding: 12px;
+      background: #2ecc71;
+      color: #fff;
+      border-radius: 6px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    /* Error Styling */
+    .error {
+      border-color: #e74c3c !important;
+      box-shadow: 0 0 8px rgba(231,76,60,0.4);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -113,19 +143,20 @@
     </div>
 
     <!-- Interactive Contact Form -->
-    <form action="https://formspree.io/f/yourFormID" method="POST" class="contact-form">
+    <form id="contactForm" action="https://formspree.io/f/yourFormID" method="POST" class="contact-form">
       <input type="text" name="name" placeholder="Your Name" required>
       <input type="email" name="email" placeholder="Your Email" required>
       <textarea name="message" placeholder="Tell me about your project or idea..." maxlength="500" required></textarea>
       <p class="char-count">0/500 characters</p>
       <button type="submit">Send Message</button>
+      <div class="success-message">✅ Thanks for reaching out, I’ll get back to you soon!</div>
     </form>
   </div>
 
   <!-- Footer -->
   <footer><p>© 2026 Bon Jovi F. Sadaya</p></footer>
 
-  <!-- Script for dark/light toggle + live char counter -->
+  <!-- Script for dark/light toggle + live char counter + feedback -->
   <script>
     const toggleBtn = document.getElementById('theme-toggle');
     toggleBtn.addEventListener('click', () => {
@@ -136,6 +167,30 @@
     const charCount = document.querySelector('.char-count');
     textarea.addEventListener('input', () => {
       charCount.textContent = `${textarea.value.length}/500 characters`;
+    });
+
+    const form = document.getElementById('contactForm');
+    const successMessage = document.querySelector('.success-message');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // prevent default for demo
+      let valid = true;
+
+      // Validate inputs
+      form.querySelectorAll('input, textarea').forEach(field => {
+        if (!field.value.trim()) {
+          field.classList.add('error');
+          valid = false;
+        } else {
+          field.classList.remove('error');
+        }
+      });
+
+      if (valid) {
+        successMessage.style.display = 'block';
+        form.reset();
+        charCount.textContent = "0/500 characters";
+      }
     });
   </script>
 </body>

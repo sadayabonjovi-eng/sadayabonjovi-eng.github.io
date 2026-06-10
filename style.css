@@ -12,7 +12,7 @@
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
-  background: var(--bg-overlay), var(--bg-image);
+  background-image: var(--bg-overlay), var(--bg-image);
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;

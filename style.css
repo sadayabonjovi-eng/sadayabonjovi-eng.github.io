@@ -137,6 +137,24 @@ nav a:hover {
   transform: scale(1.05);
 }
 
+/* CV Download Button */
+.cv-button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: #f39c12;
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.cv-button:hover {
+  background: #d35400;
+  transform: scale(1.05);
+}
+
 /* Footer */
 footer {
   background: var(--header-bg);

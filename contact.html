@@ -6,30 +6,46 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Theme toggle -->
   <button id="theme-toggle">🌙 Dark/Light</button>
 
+  <!-- Header -->
   <header><h1>Contact Me</h1></header>
 
+  <!-- Navigation -->
   <nav>
     <a href="index.html">Home</a>
     <a href="about.html">About Me</a>
     <a href="projects.html">Projects</a>
   </nav>
 
+  <!-- Main Content -->
   <div class="container">
     <h2>Get in Touch</h2>
     <p>If you’d like to collaborate or learn more about my work, feel free to reach out:</p>
-    <ul>
-      <li>Email: <a href="mailto:sadayabonjovi@gmail.com">sadayabonjovi@gmail.com</a></li>
-<li>Cellphone Number: <a href="tel:09562972094">09562972094</a></li>
-<li>Facebook: <a href="https://facebook.com/bon.jovi.sadaya" target="_blank">facebook.com/bon.jovi.sadaya</a></li>
-<li>LinkedIn: <a href="https://linkedin.com/in/bonjovi" target="_blank">linkedin.com/in/bonjovi</a></li>
-<li>GitHub: <a href="https://github.com/sadayabonjovi-eng" target="_blank">sadayabonjovi-eng</a></li>
-</ul>
+
+    <!-- Contact Links styled as buttons -->
+    <div class="contact-links">
+      <a href="mailto:sadayabonjovi@gmail.com" class="contact-btn">📧 Email Me</a>
+      <a href="tel:09562972094" class="contact-btn">📱 Call Me</a>
+      <a href="https://facebook.com/bon.jovi.sadaya" target="_blank" class="contact-btn">📘 Facebook</a>
+      <a href="https://linkedin.com/in/bonjovi" target="_blank" class="contact-btn">🔗 LinkedIn</a>
+      <a href="https://github.com/sadayabonjovi-eng" target="_blank" class="contact-btn">🐙 GitHub</a>
+    </div>
+
+    <!-- Interactive Contact Form -->
+    <form action="https://formspree.io/f/yourFormID" method="POST" class="contact-form">
+      <input type="text" name="name" placeholder="Your Name" required>
+      <input type="email" name="email" placeholder="Your Email" required>
+      <textarea name="message" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
   </div>
 
+  <!-- Footer -->
   <footer><p>© 2026 Bon Jovi F. Sadaya</p></footer>
 
+  <!-- Script for dark/light toggle -->
   <script>
     const toggleBtn = document.getElementById('theme-toggle');
     toggleBtn.addEventListener('click', () => {

@@ -6,6 +6,8 @@
   --header-bg: rgba(44,62,80,0.85);
   --nav-bg: rgba(52,73,94,0.9);
   --card-bg: rgba(255,255,255,0.9);
+  --accent-color: #f39c12;
+  --accent-hover: #d35400;
 }
 
 /* Default Light Mode */
@@ -19,6 +21,7 @@ body {
   background-size: cover;
   color: var(--text-color);
   transition: background 0.5s, color 0.5s;
+  line-height: 1.6;
 }
 
 /* Dark Mode */
@@ -34,7 +37,7 @@ body.dark-mode {
 header {
   background: var(--header-bg);
   color: #fff;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -47,14 +50,13 @@ header h1 {
   font-size: 3rem;
   font-weight: 900;
   margin-bottom: 20px;
-  color: #f39c12;
+  color: var(--accent-color);
   text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
 }
 
 header p {
   max-width: 700px;
   font-size: 1.3rem;
-  line-height: 1.6;
   text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
 }
 
@@ -65,6 +67,7 @@ nav {
   text-align: center;
   position: sticky;
   top: 0;
+  z-index: 999;
 }
 
 nav a {
@@ -76,7 +79,7 @@ nav a {
 }
 
 nav a:hover {
-  color: #f39c12;
+  color: var(--accent-color);
   transform: scale(1.1);
 }
 
@@ -86,8 +89,8 @@ nav a:hover {
   top: 20px;
   left: 20px;
   background: none;
-  border: 2px solid #f39c12;
-  color: #f39c12;
+  border: 2px solid var(--accent-color);
+  color: var(--accent-color);
   padding: 6px 12px;
   border-radius: 5px;
   cursor: pointer;
@@ -97,7 +100,7 @@ nav a:hover {
 }
 
 #theme-toggle:hover {
-  background: #f39c12;
+  background: var(--accent-color);
   color: #fff;
 }
 
@@ -112,6 +115,7 @@ nav a:hover {
   animation: fadeInUp 1s ease-out;
 }
 
+/* Project Cards */
 .project {
   background: var(--card-bg);
   padding: 20px;
@@ -126,6 +130,16 @@ nav a:hover {
   box-shadow: 0 8px 20px rgba(0,0,0,0.5);
 }
 
+.project h3 {
+  color: var(--accent-color);
+  margin-bottom: 10px;
+}
+
+.project p {
+  font-size: 1rem;
+}
+
+/* Screenshots */
 .screenshot {
   max-width: 100%;
   border-radius: 8px;
@@ -137,24 +151,83 @@ nav a:hover {
   transform: scale(1.05);
 }
 
-/* CV Download Button */
-.cv-button {
+/* Buttons */
+.cv-button,
+.contact-btn,
+.contact-form button {
   display: inline-block;
-  margin-top: 25px;
   padding: 12px 28px;
-  background: #f39c12;
+  background: var(--accent-color);
   color: #fff;
   font-weight: bold;
   text-decoration: none;
   border-radius: 6px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
 }
 
-.cv-button:hover {
-  background: #d35400;
+.cv-button:hover,
+.contact-btn:hover,
+.contact-form button:hover {
+  background: var(--accent-hover);
   transform: scale(1.05);
   box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+}
+
+/* Contact Form */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 8px rgba(243,156,18,0.4);
+  outline: none;
+}
+
+.contact-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.char-count {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: -8px;
+  margin-bottom: 8px;
+}
+
+/* Success Message */
+.success-message {
+  display: none;
+  margin-top: 15px;
+  padding: 12px;
+  background: #2ecc71;
+  color: #fff;
+  border-radius: 6px;
+  animation: fadeIn 0.8s ease-out;
+}
+
+/* Error Styling */
+.error {
+  border-color: #e74c3c !important;
+  box-shadow: 0 0 8px rgba(231,76,60,0.4);
 }
 
 /* Footer */
@@ -165,6 +238,33 @@ footer {
   padding: 20px;
   margin-top: 40px;
   animation: fadeIn 2s ease-out;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  nav a {
+    margin: 0 10px;
+    font-size: 0.9rem;
+  }
+
+  header h1 {
+    font-size: 2.2rem;
+  }
+
+  header p {
+    font-size: 1rem;
+  }
+
+  .container {
+    padding: 20px;
+  }
+
+  .cv-button,
+  .contact-btn,
+  .contact-form button {
+    width: 100%;
+    text-align: center;
+  }
 }
 
 /* Animations */

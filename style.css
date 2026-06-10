@@ -30,7 +30,7 @@ body.dark-mode {
   --card-bg: rgba(255,255,255,0.1);
 }
 
-/* Centered Header */
+/* Header */
 header {
   background: var(--header-bg);
   color: #fff;
@@ -80,7 +80,7 @@ nav a:hover {
   transform: scale(1.1);
 }
 
-/* Toggle button */
+/* Theme Toggle */
 #theme-toggle {
   position: fixed;
   top: 20px;

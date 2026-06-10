@@ -4,6 +4,85 @@
   <meta charset="UTF-8">
   <title>Contact</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Contact Buttons */
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .contact-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #f39c12;
+      color: #fff;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .contact-btn:hover {
+      background: #d35400;
+      transform: scale(1.05);
+    }
+
+    /* Contact Form */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: #f39c12;
+      box-shadow: 0 0 8px rgba(243,156,18,0.4);
+      outline: none;
+    }
+
+    .contact-form textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .char-count {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: -8px;
+      margin-bottom: 8px;
+    }
+
+    .contact-form button {
+      padding: 12px;
+      background: #f39c12;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .contact-form button:hover {
+      background: #d35400;
+      transform: scale(1.05);
+    }
+  </style>
 </head>
 <body>
   <!-- Theme toggle -->
@@ -37,7 +116,8 @@
     <form action="https://formspree.io/f/yourFormID" method="POST" class="contact-form">
       <input type="text" name="name" placeholder="Your Name" required>
       <input type="email" name="email" placeholder="Your Email" required>
-      <textarea name="message" placeholder="Your Message" required></textarea>
+      <textarea name="message" placeholder="Tell me about your project or idea..." maxlength="500" required></textarea>
+      <p class="char-count">0/500 characters</p>
       <button type="submit">Send Message</button>
     </form>
   </div>
@@ -45,11 +125,17 @@
   <!-- Footer -->
   <footer><p>© 2026 Bon Jovi F. Sadaya</p></footer>
 
-  <!-- Script for dark/light toggle -->
+  <!-- Script for dark/light toggle + live char counter -->
   <script>
     const toggleBtn = document.getElementById('theme-toggle');
     toggleBtn.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
+    });
+
+    const textarea = document.querySelector('.contact-form textarea');
+    const charCount = document.querySelector('.char-count');
+    textarea.addEventListener('input', () => {
+      charCount.textContent = `${textarea.value.length}/500 characters`;
     });
   </script>
 </body>

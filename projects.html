@@ -2,33 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Projects</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Theme toggle -->
   <button id="theme-toggle">🌙 Dark/Light</button>
 
-  <header><h1>Projects</h1></header>
+  <!-- Header -->
+  <header>
+    <h1>Projects</h1>
+    <p>Explore some of my featured projects showcasing automation, AI, and data solutions.</p>
+  </header>
 
+  <!-- Navigation -->
   <nav>
     <a href="index.html">Home</a>
     <a href="about.html">About Me</a>
     <a href="contact.html">Contact</a>
   </nav>
 
+  <!-- Main Content -->
   <div class="container">
+    <!-- Project Card 1 -->
     <div class="project">
-      <h3><a href="weather-bot.html">Email Weather Bot</a></h3>
-      <p>Fetches weather data daily and emails it automatically.</p>
+      <h3>📧 Email Weather Bot</h3>
+      <p>Fetches weather data daily and emails it automatically — built with <strong>Python</strong> and <strong>API integration</strong>.</p>
+      <div class="project-links">
+        <a href="weather-bot.html" class="contact-btn">🔎 Details</a>
+        <a href="https://github.com/sadayabonjovi-eng/weather-bot" target="_blank" class="contact-btn">🐙 GitHub</a>
+      </div>
     </div>
+
+    <!-- Project Card 2 -->
     <div class="project">
-      <h3><a href="sentiment-analyzer.html">Text Sentiment Analyzer</a></h3>
-      <p>Analyzes text and predicts sentiment (positive/negative).</p>
+      <h3>📝 Text Sentiment Analyzer</h3>
+      <p>Analyzes text and predicts sentiment (positive/negative) — powered by <strong>Python</strong> and <strong>NLP libraries</strong>.</p>
+      <div class="project-links">
+        <a href="sentiment-analyzer.html" class="contact-btn">🔎 Details</a>
+        <a href="https://github.com/sadayabonjovi-eng/sentiment-analyzer" target="_blank" class="contact-btn">🐙 GitHub</a>
+      </div>
+    </div>
+
+    <!-- Future Projects Placeholder -->
+    <div class="project">
+      <h3>⚙️ Upcoming Projects</h3>
+      <p>Stay tuned for more automation and AI solutions currently in development.</p>
     </div>
   </div>
 
-  <footer><p>© 2026 Bon Jovi F. Sadaya</p></footer>
+  <!-- Footer -->
+  <footer>
+    <p>© 2026 Bon Jovi F. Sadaya</p>
+  </footer>
 
+  <!-- Script for dark/light toggle -->
   <script>
     const toggleBtn = document.getElementById('theme-toggle');
     toggleBtn.addEventListener('click', () => {

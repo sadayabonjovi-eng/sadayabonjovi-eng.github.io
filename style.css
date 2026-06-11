@@ -139,6 +139,25 @@ nav a:hover {
   font-size: 1rem;
 }
 
+/* Services Section */
+.project ul {
+  list-style: none;
+  padding: 0;
+}
+
+.project ul li {
+  margin: 8px 0;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.project ul li::before {
+  content: "✔️";
+  margin-right: 8px;
+  color: var(--accent-color);
+}
+
 /* Screenshots */
 .screenshot {
   max-width: 100%;

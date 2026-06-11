@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Order & Customer Retention System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Theme toggle -->
+  <button id="theme-toggle">🌙 Dark/Light</button>
+
+  <!-- Header -->
+  <header>
+    <h1>🛒 AI Order & Customer Retention System</h1>
+    <p>An end‑to‑end automation workflow that processes orders, collects feedback, and re‑engages customers using AI + Zapier + Google Sheets.</p>
+  </header>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="projects.html">Projects</a>
+    <a href="about.html">About Me</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Problem -->
+    <section class="project-detail">
+      <h2>📌 Problem</h2>
+      <p>Businesses often struggle with manual order handling, slow feedback collection, and lack of consistent customer follow‑up. This leads to errors, missed opportunities, and reduced retention.</p>
+    </section>
+
+    <!-- Solution -->
+    <section class="project-detail">
+      <h2>💡 Solution</h2>
+      <p>I designed an AI‑powered automation system that:</p>
+      <ul>
+        <li><strong>Order Processing:</strong> Filters incoming emails, extracts order details, calculates totals, and sends confirmations.</li>
+        <li><strong>Data Tracking:</strong> Logs orders into Google Sheets with Order ID, customer details, cost, and profit.</li>
+        <li><strong>Feedback Automation:</strong> Sends rating emails, collects reviews, and generates tailored responses based on satisfaction level.</li>
+        <li><strong>Customer Retention:</strong> After 24 hours, automatically sends a follow‑up email inviting customers to order again or visit back.</li>
+      </ul>
+    </section>
+
+    <!-- System Flow -->
+    <section class="project-detail">
+      <h2>⚙️ System Flow</h2>
+      <ol>
+        <li><strong>Email Trigger:</strong> Detects new customer orders.</li>
+        <li><strong>AI Extraction:</strong> Pulls order details from unstructured text.</li>
+        <li><strong>Google Sheets Logging:</strong> Stores structured data for tracking and profit calculation.</li>
+        <li><strong>Feedback Loop:</strong> Sends rating request + logs responses.</li>
+        <li><strong>Retention Email:</strong> Sends personalized re‑engagement after 24 hours.</li>
+      </ol>
+    </section>
+
+    <!-- Result -->
+    <section class="project-detail">
+      <h2>🚀 Result</h2>
+      <p>This automation reduced manual work, improved accuracy, and increased repeat orders. Customers receive timely confirmations, personalized feedback responses, and re‑engagement emails — strengthening loyalty and boosting profits.</p>
+    </section>
+
+    <!-- Links -->
+    <div class="project-links">
+      <a href="https://github.com/sadayabonjovi-eng/order-automation" target="_blank" class="contact-btn">🐙 GitHub Repo</a>
+      <!-- Optional: Add YouTube demo later -->
+      <!-- <a href="https://youtube.com/your-demo-link" target="_blank" class="contact-btn">🎥 Demo Video</a> -->
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2026 Bon Jovi F. Sadaya</p>
+  </footer>
+
+  <!-- Script for dark/light toggle -->
+  <script>
+    const toggleBtn = document.getElementById('theme-toggle');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
+  </script>
+</body>
+</html>

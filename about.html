@@ -1,62 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About Me</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <button id="theme-toggle">🌙 Dark/Light</button>
 
-  <header>
-    <h1>About Me</h1>
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
+  </div>
+
+  <header style="grid-template-columns:1fr;">
+    <div class="hero-text">
+      <p class="welcome">About me</p>
+      <div class="status-line"><span class="pulse"></span> Virtual Assistant · Automation Builder · Data Specialist</div>
+      <h1>Bon Jovi F. Sadaya</h1>
+      <p class="lede">
+        Six years of disciplined service in the <strong>Philippine Coast Guard</strong>
+        taught me how to stay focused, reliable, and precise under pressure. My
+        background in information systems and data organization carries that same
+        discipline into administrative and support work.
+      </p>
+    </div>
   </header>
 
   <nav>
-    <a href="index.html">Home</a>
-    <a href="projects.html">Projects</a>
-    <a href="contact.html">Contact</a>
+    <a href="index.html">/home</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
   </nav>
 
   <div class="container">
-    <section id="profile">
-      <img src="files/profile-placeholder.jpg" alt="Bon Jovi F. Sadaya" class="screenshot">
-      <h2>Bon Jovi F. Sadaya</h2>
-      <p><strong>Virtual Assistant | Automation Builder | Data Specialist</strong></p>
-    </section>
 
-    <section id="about-me">
-      <h2>Background</h2>
-      <p>With over six years of disciplined service in the Philippine Coast Guard, I bring resilience, focus, and reliability into every role. My background in information systems and data organization has prepared me to handle administrative tasks with precision and professionalism.</p>
-      <p>I graduated <strong>top of my class</strong> in the Coast Guard Information System Technician Specialization Course, earning multiple awards for excellence and recognition in academic performance. I also hold a <strong>TESDA National Certificate II (NC II) in Computer Systems Servicing</strong>, validating my technical foundation and ability to support IT-related tasks.</p>
-      <p>Today, I channel that same drive into Virtual Assistant work — helping businesses with <strong>email management, scheduling, data entry, customer support, and workflow automation</strong>. My portfolio projects demonstrate how I use tools like Zapier and Google Sheets to streamline operations, improve efficiency, and deliver reliable results.</p>
-      <p>I am open to opportunities in <strong>administrative support, customer service, data management, and automation setup</strong>, where I can apply both my disciplined background and technical skills to support business growth.</p>
-      <a href="files/BonJoviSadaya_CV.pdf.docx" download class="cv-button">📄 Download My CV</a>
-    </section>
+    <h2>// background</h2>
+    <p class="container-intro">
+      How I got here, and what I bring to a team.
+    </p>
 
-    <section id="skills">
-      <h2>Virtual Assistant Skills</h2>
-      <ul>
-        <li>📧 <strong>Email Management</strong> — Inbox cleanup, automated replies, and daily reporting</li>
-        <li>📅 <strong>Scheduling & Reminders</strong> — Calendar organization and follow-up automation</li>
-        <li>📂 <strong>Data Entry & Tracking</strong> — Structured logging in Google Sheets and CRM systems</li>
-        <li>📝 <strong>Documentation</strong> — Preparing reports, summaries, and official records</li>
-        <li>🤝 <strong>Customer Support</strong> — Feedback collection, tailored responses, and retention emails</li>
-        <li>⚙️ <strong>Automation Setup</strong> — Zapier workflows for repetitive tasks and efficiency</li>
-      </ul>
-    </section>
+    <div class="pipeline">
+
+      <section class="project">
+        <span class="entry-tag">Record · service & training</span>
+        <h3>Coast Guard & Technical Foundation</h3>
+        <p>
+          I graduated <strong>top of my class</strong> in the Coast Guard Information
+          System Technician Specialization Course, earning multiple awards for academic
+          excellence. I also hold a <strong>TESDA NC II in Computer Systems
+          Servicing</strong>, validating my technical foundation and ability to support
+          IT-related tasks.
+        </p>
+      </section>
+
+      <section class="project">
+        <span class="entry-tag">Now · virtual assistant work</span>
+        <h3>What I Do Today</h3>
+        <p>
+          I channel that same discipline into Virtual Assistant work — helping
+          businesses with <strong>email management, scheduling, data entry, customer
+          support, and workflow automation</strong>. My project pipeline shows how I use
+          tools like <strong>Zapier, Tally, and Google Sheets</strong> to streamline
+          operations, cut down repetitive work, and deliver reliable results.
+        </p>
+      </section>
+
+      <section class="project is-service">
+        <span class="entry-tag">Open to · roles</span>
+        <h3>Where I Can Contribute</h3>
+        <p>
+          I'm open to opportunities in <strong>administrative support, customer service,
+          data management, and automation setup</strong> — applying both my disciplined
+          background and technical skills to support business operations and growth.
+        </p>
+        <a href="files/BonJoviSadaya_CV.pdf" download class="contact-btn">→ download_cv.pdf</a>
+      </section>
+
+    </div>
+
+    <h2 style="margin-top:1rem;">// skills</h2>
+    <p class="container-intro">
+      Core areas I cover as a Virtual Assistant.
+    </p>
+
+    <ul class="services-list" style="max-width:none; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); margin-bottom:3rem;">
+      <li><strong>Email Management</strong> — inbox cleanup, automated replies, and daily reporting</li>
+      <li><strong>Scheduling & Reminders</strong> — calendar organization and follow-up automation</li>
+      <li><strong>Data Entry & Tracking</strong> — structured logging in Google Sheets and CRM systems</li>
+      <li><strong>Documentation</strong> — reports, summaries, and official records</li>
+      <li><strong>Customer Support</strong> — feedback collection, tailored responses, and retention</li>
+      <li><strong>Automation Setup</strong> — Zapier workflows for repetitive tasks</li>
+    </ul>
+
   </div>
 
   <footer>
-    <p>© 2026 Bon Jovi F. Sadaya</p>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
   </footer>
 
   <script>
-    const toggleBtn = document.getElementById('theme-toggle');
-    toggleBtn.addEventListener('click', () => {
+    const toggle = document.getElementById('theme-toggle');
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Dark' : 'Switch to Light';
+    };
+    toggle.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
+      setLabel();
     });
+    setLabel();
   </script>
 </body>
 </html>

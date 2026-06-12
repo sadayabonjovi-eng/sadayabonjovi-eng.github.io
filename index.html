@@ -1,76 +1,522 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bon Jovi F. Sadaya Portfolio</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bon Jovi F. Sadaya — Virtual Assistant & Automation Builder</title>
+<style>
+  :root{
+    --bg:#0d1117;
+    --bg-2:#131a22;
+    --ink:#dde3ea;
+    --muted:#7d8b99;
+    --line:#26313c;
+    --signal:#5eead4;
+    --signal-dim:#2b5c54;
+    --warn:#f0b86e;
+    --mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --sans: "Helvetica Neue", Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.65;
+    transition:background .3s ease, color .3s ease;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--line) 60%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--line) 60%, transparent) 1px, transparent 1px);
+    background-size:42px 42px;
+    background-attachment:fixed;
+    background-position:-1px -1px;
+    position:relative;
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    opacity:.5;
+    background:
+      radial-gradient(ellipse 700px 500px at 85% -5%, color-mix(in srgb, var(--signal) 18%, transparent), transparent 70%),
+      radial-gradient(ellipse 600px 500px at 0% 90%, color-mix(in srgb, var(--warn) 12%, transparent), transparent 70%);
+  }
+  body.dark-mode{
+    --bg:#f5f2ea;
+    --bg-2:#ebe6da;
+    --ink:#1b232c;
+    --muted:#6b7682;
+    --line:#d6cfbf;
+    --signal:#0f8f7e;
+    --signal-dim:#bfe6df;
+    --warn:#b9701f;
+  }
+
+  /* ===== Top strip ===== */
+  .topstrip{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:.65rem 1.5rem;
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.12em;
+    border-bottom:1px solid var(--line);
+    color:var(--muted);
+  }
+  .topstrip .dot{ color:var(--signal); }
+
+  #theme-toggle{
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.1em;
+    background:transparent;
+    border:1px solid var(--line);
+    color:var(--ink);
+    padding:.35rem .8rem;
+    cursor:pointer;
+    border-radius:3px;
+    transition:border-color .2s, color .2s;
+  }
+  #theme-toggle:hover{ border-color:var(--signal); color:var(--signal); }
+  #theme-toggle:focus-visible{ outline:2px solid var(--signal); outline-offset:2px; }
+
+  /* ===== Header / hero ===== */
+  header{
+    padding:4.5rem 1.5rem 3rem;
+    max-width:920px;
+    margin:0 auto;
+    position:relative;
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:2.5rem;
+    align-items:center;
+  }
+  .hero-text{ grid-column:1; }
+  .hero-art{
+    grid-column:2;
+    align-self:center;
+  }
+  .hero-art svg{ width:100%; height:auto; display:block; }
+  .welcome{
+    font-family:var(--mono);
+    font-size:1.4rem;
+    letter-spacing:.25em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin:0 0 .8rem;
+    font-weight:700;
+  }
+  @media (max-width:760px){
+    header{ grid-template-columns:1fr; }
+    .hero-art{ grid-column:1; order:-1; max-width:280px; margin:0 auto 1rem; }
+  }
+  .status-line{
+    font-family:var(--mono);
+    font-size:.78rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--signal);
+    margin-bottom:1rem;
+    display:flex;
+    align-items:center;
+    gap:.6rem;
+  }
+  .status-line .pulse{
+    width:8px; height:8px; border-radius:50%;
+    background:var(--signal);
+    box-shadow:0 0 0 0 var(--signal);
+    animation:pulse 2.4s infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(94,234,212,.5); }
+    70%{ box-shadow:0 0 0 8px rgba(94,234,212,0); }
+    100%{ box-shadow:0 0 0 0 rgba(94,234,212,0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .status-line .pulse{ animation:none; }
+  }
+
+  header h1{
+    font-family:var(--sans);
+    font-weight:700;
+    font-size:clamp(2.4rem, 6vw, 4rem);
+    line-height:1.05;
+    margin:0 0 1.2rem;
+    letter-spacing:-.02em;
+  }
+  header .lede{
+    font-size:1.08rem;
+    max-width:640px;
+    margin:0 0 1.4rem;
+    color:var(--ink);
+  }
+  header .lede strong{ color:var(--signal); font-weight:600; }
+
+  .credentials{
+    font-family:var(--mono);
+    font-size:.8rem;
+    color:var(--muted);
+    margin:0 0 2.2rem;
+    max-width:620px;
+    padding:.9rem 1.1rem;
+    border:1px solid var(--line);
+    border-radius:6px;
+    background:var(--bg-2);
+  }
+  .credentials span{ color:var(--warn); }
+
+  .cv-button{
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    font-family:var(--mono);
+    font-size:.85rem;
+    letter-spacing:.05em;
+    text-decoration:none;
+    color:var(--bg);
+    background:var(--signal);
+    padding:.85rem 1.6rem;
+    border-radius:4px;
+    transition:transform .15s ease, opacity .2s ease;
+  }
+  .cv-button:hover{ transform:translateY(-2px); opacity:.9; }
+
+  /* ===== Nav ===== */
+  nav{
+    max-width:920px;
+    margin:0 auto;
+    display:flex;
+    gap:2.2rem;
+    padding:1.1rem 1.5rem;
+    font-family:var(--mono);
+    font-size:.85rem;
+    border-bottom:1px solid var(--line);
+  }
+  nav a{
+    color:var(--muted);
+    text-decoration:none;
+    transition:color .2s ease;
+  }
+  nav a:hover, nav a:focus-visible{ color:var(--signal); }
+
+  /* ===== Main ===== */
+  .container{
+    max-width:920px;
+    margin:0 auto;
+    padding:3rem 1.5rem 1rem;
+  }
+  .container > h2{
+    font-family:var(--mono);
+    font-size:.78rem;
+    letter-spacing:.25em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:.4rem;
+  }
+  .container > .container-intro{
+    max-width:640px;
+    margin:.4rem 0 2.8rem;
+    color:var(--muted);
+  }
+
+  /* ===== Pipeline / node-based entries ===== */
+  .pipeline{
+    position:relative;
+    padding-left:2.2rem;
+  }
+  .pipeline::before{
+    content:"";
+    position:absolute;
+    left:7px; top:10px; bottom:10px;
+    width:1px;
+    background:var(--line);
+  }
+  .project{
+    position:relative;
+    padding:0 0 2.4rem 1.4rem;
+  }
+  .project::before{
+    content:"";
+    position:absolute;
+    left:-2.2rem;
+    top:6px;
+    width:14px; height:14px;
+    border-radius:50%;
+    background:var(--bg);
+    border:2px solid var(--signal);
+  }
+  .project.is-service::before{
+    border-color:var(--warn);
+    border-radius:3px;
+  }
+  .entry-tag{
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--signal);
+    display:block;
+    margin-bottom:.4rem;
+  }
+  .project.is-service .entry-tag{ color:var(--warn); }
+
+  .project h3{
+    font-family:var(--sans);
+    font-weight:700;
+    font-size:1.4rem;
+    margin:0 0 .6rem;
+  }
+  .project p{ margin:0 0 1rem; max-width:560px; color:var(--ink); }
+  .project p strong{ color:var(--signal); font-weight:600; }
+  .project.is-service p strong{ color:var(--warn); }
+
+  .stack{
+    font-family:var(--mono);
+    font-size:.72rem;
+    color:var(--muted);
+    margin:0 0 1rem;
+  }
+  .stack span{
+    display:inline-block;
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:.15rem .5rem;
+    margin:0 .3rem .3rem 0;
+  }
+
+  .contact-btn{
+    font-family:var(--mono);
+    font-size:.78rem;
+    text-decoration:none;
+    color:var(--signal);
+    border-bottom:1px solid var(--signal-dim);
+    padding-bottom:1px;
+    transition:border-color .2s;
+  }
+  .project.is-service .contact-btn{ color:var(--warn); border-color:var(--signal-dim); }
+  .contact-btn:hover{ border-color:currentColor; }
+
+  .services-list{
+    list-style:none;
+    margin:0 0 1rem;
+    padding:0;
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:.5rem 1rem;
+    max-width:600px;
+    font-family:var(--mono);
+    font-size:.85rem;
+  }
+  .services-list li{
+    padding:.4rem .6rem;
+    border:1px solid var(--line);
+    border-radius:4px;
+    background:var(--bg-2);
+  }
+
+  /* ===== Footer ===== */
+  footer{
+    max-width:920px;
+    margin:0 auto;
+    padding:2.5rem 1.5rem 3rem;
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.08em;
+    color:var(--muted);
+    border-top:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:.5rem;
+  }
+
+  @media (max-width:600px){
+    .pipeline{ padding-left:1.6rem; }
+    .project{ padding-left:1rem; }
+    .project::before{ left:-1.6rem; }
+  }
+</style>
 </head>
 <body>
-  <!-- Theme toggle -->
-  <button id="theme-toggle">🌙 Dark/Light</button>
 
-  <!-- Hero Header Section -->
-  <header>
-    <h1>Welcome to My Portfolio</h1>
-    <p><strong>I’m Bon Jovi F. Sadaya — a Virtual Assistant and builder of AI automations, with a strong background in information systems and data organization. Recognized for excellence during my service in the Philippine Coast Guard and certified with TESDA NC II in Computer Systems Servicing.</strong></p>
-    <p>I specialize in <strong>email management, data entry, customer support, scheduling, and automation setup</strong>. Explore my projects to see how I combine disciplined problem‑solving with innovative design, and discover how I can contribute to your business operations, documentation, and support work.</p>
-    <a href="projects.html" class="cv-button">🚀 Explore My Work</a>
-  </header>
-
-  <!-- Navigation -->
-  <nav>
-    <a href="about.html">About Me</a>
-    <a href="projects.html">Projects</a>
-    <a href="contact.html">Contact</a>
-  </nav>
-
-  <!-- Main Content -->
-  <div class="container">
-    <h2>Home</h2>
-    <p>This is my portfolio homepage. Use the navigation bar to explore more about me, my projects, and how to contact me.</p>
-
-    <!-- Featured Project Preview -->
-    <section class="project">
-      <h3>Featured Project: AI Order & Customer Retention System</h3>
-      <p>Automates order processing, feedback collection, and customer re‑engagement — built with Zapier AI and Google Sheets. Demonstrates skills in <strong>data entry, customer support, and follow‑up scheduling</strong>.</p>
-      <a href="order-automation.html" class="contact-btn">🔎 View Project</a>
-    </section>
-
-    <!-- Secondary Project Preview -->
-    <section class="project">
-      <h3>📧 Email Weather Bot</h3>
-      <p>Fetches daily weather data and emails it automatically — powered by Zapier AI and Weather integration. Demonstrates skills in <strong>email automation and reporting</strong>.</p>
-      <a href="weather-bot.html" class="contact-btn">🔎 View Project</a>
-    </section>
-
-    <!-- VA Services Section -->
-    <section class="project">
-      <h3>💼 Virtual Assistant Services</h3>
-      <p>Beyond automation projects, I offer practical VA support including:</p>
-      <ul>
-        <li>📧 Email inbox management & cleanup</li>
-        <li>📅 Calendar scheduling & reminders</li>
-        <li>📂 Data entry & Google Sheets tracking</li>
-        <li>📝 Documentation & reporting</li>
-        <li>🤝 Customer support & feedback handling</li>
-        <li>⚙️ Workflow automation setup with Zapier</li>
-      </ul>
-      <a href="contact.html" class="contact-btn">📩 Hire Me</a>
-    </section>
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
   </div>
 
-  <!-- Footer -->
+  <header>
+    <div class="hero-text">
+    <p class="welcome">Welcome to my portfolio</p>
+    <div class="status-line"><span class="pulse"></span> Virtual Assistant — Email, Scheduling & Customer Support</div>
+    <h1>Bon Jovi F. Sadaya</h1>
+    <p class="lede">
+      I'm a <strong>Virtual Assistant and builder of AI automations</strong>, with a
+      background in information systems and data organization — recognized for
+      excellence during my service in the Philippine Coast Guard, and certified with
+      TESDA NC II in Computer Systems Servicing.
+    </p>
+    <p class="lede">
+      I specialize in <strong>email management, data entry, customer support,
+      scheduling, and automation setup</strong>. Explore my projects to see how I
+      combine disciplined problem-solving with practical systems, and how I can
+      contribute to your business operations, documentation, and support work.
+    </p>
+    <div class="credentials">
+      <span>creds//</span> TESDA NC II, Computer Systems Servicing &nbsp;·&nbsp;
+      background in information systems & data organization &nbsp;·&nbsp;
+      recognized for excellence, Philippine Coast Guard
+    </div>
+    <a href="projects.html" class="cv-button">→ run_projects()</a>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="var(--signal)" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="var(--signal)" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle cx="180" cy="180" r="170" fill="url(#glow)"/>
+        <!-- connector lines -->
+        <g stroke="var(--line)" stroke-width="1.5" fill="none">
+          <line x1="180" y1="180" x2="60" y2="80"/>
+          <line x1="180" y1="180" x2="300" y2="70"/>
+          <line x1="180" y1="180" x2="50" y2="260"/>
+          <line x1="180" y1="180" x2="300" y2="270"/>
+          <line x1="180" y1="180" x2="180" y2="40"/>
+          <line x1="180" y1="180" x2="180" y2="320"/>
+        </g>
+        <!-- outer nodes -->
+        <g fill="var(--bg-2)" stroke="var(--signal)" stroke-width="2">
+          <rect x="30" y="60" width="60" height="40" rx="6"/>
+          <circle cx="300" cy="70" r="22"/>
+          <rect x="20" y="240" width="60" height="40" rx="6"/>
+          <circle cx="300" cy="270" r="22"/>
+          <rect x="150" y="14" width="60" height="40" rx="6"/>
+          <circle cx="180" cy="320" r="22"/>
+        </g>
+        <!-- icons inside outer nodes (simple line glyphs) -->
+        <g stroke="var(--signal)" stroke-width="2" fill="none" stroke-linecap="round">
+          <!-- mail icon -->
+          <path d="M40 70 h40 v20 h-40 z M40 70 l20 14 l20 -14"/>
+          <!-- gear icon -->
+          <path d="M300 60 v6 M300 84 v6 M290 70 h-6 M310 70 h6 M292 62 l-4 -4 M308 62 l4 -4 M292 78 l-4 4 M308 78 l4 4"/>
+          <circle cx="300" cy="70" r="8"/>
+          <!-- calendar icon -->
+          <rect x="30" y="248" width="40" height="26" rx="2"/>
+          <line x1="30" y1="258" x2="70" y2="258"/>
+          <!-- chat icon -->
+          <path d="M288 260 h24 v16 l-8 -6 h-16 z"/>
+          <!-- doc icon -->
+          <path d="M162 22 h24 v24 h-24 z M168 28 h12 M168 34 h12 M168 40 h8"/>
+          <!-- chart icon -->
+          <path d="M170 330 v-12 M180 330 v-18 M190 330 v-8"/>
+        </g>
+        <!-- central node: VA figure as circuit -->
+        <circle cx="180" cy="180" r="46" fill="var(--bg-2)" stroke="var(--signal)" stroke-width="2.5"/>
+        <g stroke="var(--signal)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="180" cy="164" r="14"/>
+          <path d="M156 206 c0 -16 11 -26 24 -26 s24 10 24 26"/>
+        </g>
+        <circle cx="180" cy="180" r="46" fill="none" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="4 6"/>
+      </svg>
+    </div>
+  </header>
+
+  <nav>
+    <a href="about.html">/about</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
+  </nav>
+
+  <div class="container">
+
+    <h2>// active builds</h2>
+    <p class="container-intro">
+      Each of these is a small pipeline: a trigger, a few automated steps, and a
+      human-readable result at the end.
+    </p>
+
+    <div class="pipeline">
+
+      <section class="project">
+        <span class="entry-tag">Agent · order-retention-flow</span>
+        <h3>AI Order Processing & Customer Retention System</h3>
+        <p>
+          Filters incoming emails to catch new orders, then uses <strong>AI to extract
+          order details</strong> from unstructured text and match each item against a
+          pricing database — calculating subtotals, totals, and profit automatically.
+        </p>
+        <p>
+          Confirmed orders get a unique <strong>Order ID</strong>, an automated
+          confirmation email with upsell suggestions, and a logged row in
+          <strong>Google Sheets</strong> (customer, order details, date, cost, total
+          payment, profit), with duplicate-confirmation filtering so the same order
+          never gets processed twice.
+        </p>
+        <p>
+          A few hours later, the system follows up with a 1–5 star feedback request
+          linked to a pre-filled <strong>Tally</strong> form, filters duplicate
+          submissions, and logs verified responses back to Sheets. Based on the rating,
+          it sends one of several tailored replies — from thank-you notes to apology
+          and recovery messages — then, a day after that, sends a personalized
+          reorder invitation shaped by how the customer rated their experience.
+        </p>
+        <div class="stack"><span>Zapier</span><span>Tally</span><span>Google Sheets</span><span>Email</span></div>
+        <a href="order-automation.html" class="contact-btn">→ view_project</a>
+      </section>
+
+      <section class="project">
+        <span class="entry-tag">Agent · weather-report-bot</span>
+        <h3>Email Weather Bot</h3>
+        <p>
+          Triggers automatically every day at <strong>7 AM</strong>, checks the forecast,
+          and uses AI to turn the raw data into a short, readable summary —
+          then sends it straight to an inbox over email, no manual checking required.
+        </p>
+        <div class="stack"><span>Zapier</span><span>Email</span></div>
+        <a href="weather-bot.html" class="contact-btn">→ view_project</a>
+      </section>
+
+      <section class="project is-service">
+        <span class="entry-tag">Service · always-on</span>
+        <h3>Virtual Assistant Support</h3>
+        <p>For the parts that still need a person, I cover:</p>
+        <ul class="services-list">
+          <li>Inbox management & cleanup</li>
+          <li>Calendar scheduling & reminders</li>
+          <li>Data entry & spreadsheet tracking</li>
+          <li>Documentation & reporting</li>
+          <li>Customer support & feedback handling</li>
+          <li>New automation builds with Zapier</li>
+        </ul>
+        <a href="contact.html" class="contact-btn">→ get_in_touch</a>
+      </section>
+
+    </div>
+  </div>
+
   <footer>
-    <p>© 2026 Bon Jovi F. Sadaya | Built with GitHub Pages</p>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
   </footer>
 
-  <!-- Script for dark/light toggle -->
   <script>
     const toggle = document.getElementById('theme-toggle');
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Dark' : 'Switch to Light';
+    };
     toggle.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
+      setLabel();
     });
+    setLabel();
   </script>
 </body>
 </html>

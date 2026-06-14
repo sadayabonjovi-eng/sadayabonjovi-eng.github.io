@@ -1,1 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expense & Income Tracker — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
+  </div>
+
+  <header style="grid-template-columns:1fr;">
+    <div class="hero-text">
+      <p class="welcome">Project Detail</p>
+      <div class="status-line"><span class="pulse"></span> Tracker · Google Sheets</div>
+      <h1>Client Expense &amp; Income Tracker</h1>
+      <p class="lede">
+        A professional financial tracker for small business owners and freelancers —
+        built entirely in Google Sheets, no extra tools required.
+      </p>
+    </div>
+  </header>
+
+  <nav>
+    <a href="index.html">/home</a>
+    <a href="about.html">/about</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
+  </nav>
+
+  <div class="container">
+
+    <h2>// overview</h2>
+
+    <div class="pipeline">
+
+      <section class="project">
+        <span class="entry-tag">Tracker · google-sheets</span>
+        <h3>What It Does</h3>
+        <p>
+          Monitors monthly cash flow without manual calculation. Every transaction
+          is logged once — the sheet handles the rest automatically.
+        </p>
+        <ul class="services-list">
+          <li><strong>Dropdown data validation</strong> — keeps entries clean and consistent</li>
+          <li><strong>Conditional formatting</strong> — color-codes transaction status at a glance</li>
+          <li><strong>SUMIFS formulas</strong> — automatically separates and totals income vs expenses by month</li>
+          <li><strong>Visual dashboard</strong> — summary boxes and a bar chart showing financial performance instantly</li>
+        </ul>
+        <div class="stack">
+          <span>Google Sheets</span><span>SUMIFS</span><span>Data Validation</span><span>Dashboard</span>
+        </div>
+      </section>
+
+      <section class="project">
+        <span class="entry-tag">Live · embedded</span>
+        <h3>Live Sheet Preview</h3>
+        <p>Scroll through the tracker below or open the full sheet to explore it.</p>
+
+        <div class="sheet-embed">
+          <iframe
+            src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7Xhv0hQspCziSRJMGs3P06rpWnbb2x2ojAR5iTYJOjLvNWrtR2j2PfoF2exWwou9nUKCxSEqLmO2l/pubhtml?widget=true&amp;headers=false"
+            width="100%"
+            height="520"
+            frameborder="0"
+            style="border-radius:6px;border:1px solid rgba(255,255,255,0.1);margin-top:1rem;">
+          </iframe>
+        </div>
+
+        <div class="project-links" style="margin-top:1rem;">
+          <a href="https://docs.google.com/spreadsheets/d/1Fac3VDslKX4kau8WeHsYUXws7QtvktoVCX1_ZdRpJ-M/edit?usp=sharing" target="_blank" class="contact-btn">→ open full sheet</a>
+          <a href="projects.html" class="contact-btn">← back to projects</a>
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Dark' : 'Switch to Light';
+    };
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      setLabel();
+    });
+    setLabel();
+  </script>
+</body>
+</html>

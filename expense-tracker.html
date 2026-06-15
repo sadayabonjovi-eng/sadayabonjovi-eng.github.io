@@ -7,12 +7,10 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <div class="topstrip">
     <span><span class="dot">●</span> system status: available for new workflows</span>
     <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
   </div>
-
   <header style="grid-template-columns:1fr;">
     <div class="hero-text">
       <p class="welcome">Project Detail</p>
@@ -24,18 +22,15 @@
       </p>
     </div>
   </header>
-
   <nav>
     <a href="index.html">/home</a>
     <a href="about.html">/about</a>
     <a href="projects.html">/projects</a>
     <a href="contact.html">/contact</a>
   </nav>
-
   <div class="container">
     <h2>// overview</h2>
     <div class="pipeline">
-
       <section class="project">
         <span class="entry-tag">Tracker · google-sheets</span>
         <h3>Overview</h3>
@@ -44,7 +39,7 @@
           is logged once — the sheet handles the rest automatically.
         </p>
         <h3>Features</h3>
-        <ul class="services-list">
+        <ul style="padding-left:1.2rem;margin:0 0 1rem;">
           <li><strong>Dropdown data validation</strong> — keeps entries clean and consistent</li>
           <li><strong>Conditional formatting</strong> — color-codes transaction status at a glance</li>
           <li><strong>SUMIFS formulas</strong> — automatically separates and totals income vs expenses by month</li>
@@ -54,7 +49,6 @@
           <span>Google Sheets</span><span>SUMIFS</span><span>Data Validation</span><span>Dashboard</span>
         </div>
       </section>
-
       <section class="project">
         <span class="entry-tag">Live · embedded</span>
         <h3>Live Sheet Preview</h3>
@@ -73,15 +67,12 @@
           <a href="projects.html" class="contact-btn">← back to projects</a>
         </div>
       </section>
-
     </div>
   </div>
-
   <footer>
     <span>© 2026 Bon Jovi F. Sadaya</span>
     <span>hosted on GitHub Pages</span>
   </footer>
-
   <script>
     const toggle = document.getElementById('theme-toggle');
     const setLabel = () => {

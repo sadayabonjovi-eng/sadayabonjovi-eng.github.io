@@ -7,12 +7,10 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <div class="topstrip">
     <span><span class="dot">●</span> system status: available for new workflows</span>
     <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
   </div>
-
   <header style="grid-template-columns:1fr;">
     <div class="hero-text">
       <p class="welcome">Project Detail</p>
@@ -24,18 +22,15 @@
       </p>
     </div>
   </header>
-
   <nav>
     <a href="index.html">/home</a>
     <a href="about.html">/about</a>
     <a href="projects.html">/projects</a>
     <a href="contact.html">/contact</a>
   </nav>
-
   <div class="container">
     <h2>// overview</h2>
     <div class="pipeline">
-
       <section class="project">
         <span class="entry-tag">Slides · portfolio-deck</span>
         <h3>Overview</h3>
@@ -45,7 +40,7 @@
           Clients can get a full picture of my work without clicking through manually.
         </p>
         <h3>Features</h3>
-        <ul class="services-list">
+        <ul style="padding-left:1.2rem;margin:0 0 1rem;">
           <li><strong>Professional background</strong> — Coast Guard experience and transition to VA work</li>
           <li><strong>Core VA skills</strong> — tools, strengths, and services offered</li>
           <li><strong>Automation projects</strong> — overview of Zapier and AI builds</li>
@@ -56,7 +51,6 @@
           <span>Google Slides</span><span>Presentation Design</span><span>Portfolio</span>
         </div>
       </section>
-
       <section class="project">
         <span class="entry-tag">Live · embedded</span>
         <h3>Live Slideshow</h3>
@@ -77,15 +71,12 @@
           <a href="projects.html" class="contact-btn">← back to projects</a>
         </div>
       </section>
-
     </div>
   </div>
-
   <footer>
     <span>© 2026 Bon Jovi F. Sadaya</span>
     <span>hosted on GitHub Pages</span>
   </footer>
-
   <script>
     const toggle = document.getElementById('theme-toggle');
     const setLabel = () => {

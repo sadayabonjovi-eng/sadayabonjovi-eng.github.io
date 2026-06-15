@@ -1,70 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Portfolio Slideshow — Bon Jovi F. Sadaya</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Slideshow — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Theme toggle -->
-  <button id="theme-toggle">🌙 Dark/Light</button>
 
-  <!-- Header -->
-  <header>
-    <h1>🗂️ Portfolio Slideshow</h1>
-    <p>A visual walkthrough of my skills, background, and projects — built and designed in <strong>Google Slides</strong>.</p>
-  </header>
-
-  <!-- Navigation -->
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="projects.html">Projects</a>
-    <a href="contact.html">Contact</a>
-  </nav>
-
-  <!-- Main Content -->
-  <div class="container">
-    <h2>Overview</h2>
-    <p>This slideshow serves as a visual portfolio — covering my professional background, VA skills, automation projects, and the tools I work with. It auto-advances every 3 seconds and loops continuously so clients can get a full picture of my work without clicking through manually.</p>
-
-    <h2>What's Inside</h2>
-    <ul>
-      <li>Professional background and Coast Guard experience</li>
-      <li>Core VA skills and tools I work with</li>
-      <li>AI automation projects overview</li>
-      <li>Google Sheets and data management capabilities</li>
-      <li>Services offered and how to get in touch</li>
-    </ul>
-
-    <h2>Tools Used</h2>
-    <ol>
-      <li>Google Slides — design and layout</li>
-      <li>Presentation design principles — clean, readable format</li>
-      <li>Auto-advance and loop settings — hands-free viewing</li>
-    </ol>
-
-    <h2>Live Slideshow</h2>
-    <iframe
-      src="https://docs.google.com/presentation/d/e/2PACX-1vSrhylxwuTAnvG9qysLUwpuxAL9VfpFDOtV7N_vbYS-wX_AnWR8q3Vu3iCOGI1xezHs4-OCa3LsRobM/pubembed?start=true&loop=true&delayms=3000"
-      frameborder="0"
-      width="100%"
-      height="520"
-      allowfullscreen="true"
-      mozallowfullscreen="true"
-      webkitallowfullscreen="true"
-      class="screenshot"
-      style="border-radius:6px;margin-top:0.5rem;">
-    </iframe>
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
   </div>
 
-  <!-- Footer -->
-  <footer><p>© 2026 Bon Jovi F. Sadaya</p></footer>
+  <header style="grid-template-columns:1fr;">
+    <div class="hero-text">
+      <p class="welcome">Project Detail</p>
+      <div class="status-line"><span class="pulse"></span> Slides · Presentation Design</div>
+      <h1>Portfolio Slideshow</h1>
+      <p class="lede">
+        A visual walkthrough of my skills, background, and projects —
+        built and designed in Google Slides. Auto-advances and loops continuously.
+      </p>
+    </div>
+  </header>
 
-  <!-- Script for dark/light toggle -->
+  <nav>
+    <a href="index.html">/home</a>
+    <a href="about.html">/about</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
+  </nav>
+
+  <div class="container">
+    <h2>// overview</h2>
+    <div class="pipeline">
+
+      <section class="project">
+        <span class="entry-tag">Slides · portfolio-deck</span>
+        <h3>Overview</h3>
+        <p>
+          A self-running visual portfolio covering my professional background,
+          VA skills, automation projects, and the tools I work with.
+          Clients can get a full picture of my work without clicking through manually.
+        </p>
+        <h3>Features</h3>
+        <ul class="services-list">
+          <li><strong>Professional background</strong> — Coast Guard experience and transition to VA work</li>
+          <li><strong>Core VA skills</strong> — tools, strengths, and services offered</li>
+          <li><strong>Automation projects</strong> — overview of Zapier and AI builds</li>
+          <li><strong>Presentation design</strong> — clean, readable, professional layout</li>
+          <li><strong>Auto-advance & loop</strong> — hands-free viewing, no interaction needed</li>
+        </ul>
+        <div class="stack">
+          <span>Google Slides</span><span>Presentation Design</span><span>Portfolio</span>
+        </div>
+      </section>
+
+      <section class="project">
+        <span class="entry-tag">Live · embedded</span>
+        <h3>Live Slideshow</h3>
+        <p>Watch the full presentation below or click fullscreen for the best experience.</p>
+        <div class="sheet-embed">
+          <iframe
+            src="https://docs.google.com/presentation/d/e/2PACX-1vSrhylxwuTAnvG9qysLUwpuxAL9VfpFDOtV7N_vbYS-wX_AnWR8q3Vu3iCOGI1xezHs4-OCa3LsRobM/pubembed?start=true&loop=true&delayms=3000"
+            frameborder="0"
+            width="100%"
+            height="520"
+            allowfullscreen="true"
+            mozallowfullscreen="true"
+            webkitallowfullscreen="true"
+            style="border-radius:6px;border:1px solid rgba(255,255,255,0.1);margin-top:1rem;">
+          </iframe>
+        </div>
+        <div class="project-links" style="margin-top:1rem;">
+          <a href="projects.html" class="contact-btn">← back to projects</a>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
+
   <script>
-    document.getElementById('theme-toggle').addEventListener('click', () => {
+    const toggle = document.getElementById('theme-toggle');
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Dark' : 'Switch to Light';
+    };
+    toggle.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
+      setLabel();
     });
+    setLabel();
   </script>
 </body>
 </html>

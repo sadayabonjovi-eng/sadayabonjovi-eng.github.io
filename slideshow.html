@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Portfolio Slideshow — Bon Jovi F. Sadaya</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Theme toggle -->
+  <button id="theme-toggle">🌙 Dark/Light</button>
+
+  <!-- Header -->
+  <header>
+    <h1>🗂️ Portfolio Slideshow</h1>
+    <p>A visual walkthrough of my skills, background, and projects — built and designed in <strong>Google Slides</strong>.</p>
+  </header>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="projects.html">Projects</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h2>Overview</h2>
+    <p>This slideshow serves as a visual portfolio — covering my professional background, VA skills, automation projects, and the tools I work with. It auto-advances every 3 seconds and loops continuously so clients can get a full picture of my work without clicking through manually.</p>
+
+    <h2>What's Inside</h2>
+    <ul>
+      <li>Professional background and Coast Guard experience</li>
+      <li>Core VA skills and tools I work with</li>
+      <li>AI automation projects overview</li>
+      <li>Google Sheets and data management capabilities</li>
+      <li>Services offered and how to get in touch</li>
+    </ul>
+
+    <h2>Tools Used</h2>
+    <ol>
+      <li>Google Slides — design and layout</li>
+      <li>Presentation design principles — clean, readable format</li>
+      <li>Auto-advance and loop settings — hands-free viewing</li>
+    </ol>
+
+    <h2>Live Slideshow</h2>
+    <iframe
+      src="https://docs.google.com/presentation/d/e/2PACX-1vSrhylxwuTAnvG9qysLUwpuxAL9VfpFDOtV7N_vbYS-wX_AnWR8q3Vu3iCOGI1xezHs4-OCa3LsRobM/pubembed?start=true&loop=true&delayms=3000"
+      frameborder="0"
+      width="100%"
+      height="520"
+      allowfullscreen="true"
+      mozallowfullscreen="true"
+      webkitallowfullscreen="true"
+      class="screenshot"
+      style="border-radius:6px;margin-top:0.5rem;">
+    </iframe>
+  </div>
+
+  <!-- Footer -->
+  <footer><p>© 2026 Bon Jovi F. Sadaya</p></footer>
+
+  <!-- Script for dark/light toggle -->
+  <script>
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
+  </script>
+</body>
+</html>

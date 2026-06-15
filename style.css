@@ -294,9 +294,8 @@
   .project.is-service .contact-btn{ color:var(--warn); border-color:var(--signal-dim); }
   .contact-btn:hover{ border-color:currentColor; }
 
-  /* ===== Features & Services lists — card grid ===== */
-  .services-list,
-  .project ul{
+  /* ===== Services list — card grid ===== */
+  .services-list{
     list-style:none;
     margin:0 0 1rem;
     padding:0;
@@ -307,8 +306,7 @@
     font-family:var(--mono);
     font-size:.85rem;
   }
-  .services-list li,
-  .project ul li{
+  .services-list li{
     padding:.4rem .6rem;
     border:1px solid var(--line);
     border-radius:4px;

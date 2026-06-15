@@ -56,7 +56,6 @@
     --warn:#b9701f;
   }
 
-  /* ===== Top strip ===== */
   .topstrip{
     display:flex;
     justify-content:space-between;
@@ -85,7 +84,6 @@
   #theme-toggle:hover{ border-color:var(--signal); color:var(--signal); }
   #theme-toggle:focus-visible{ outline:2px solid var(--signal); outline-offset:2px; }
 
-  /* ===== Header / hero ===== */
   header{
     padding:4.5rem 1.5rem 3rem;
     max-width:920px;
@@ -97,10 +95,7 @@
     align-items:center;
   }
   .hero-text{ grid-column:1; }
-  .hero-art{
-    grid-column:2;
-    align-self:center;
-  }
+  .hero-art{ grid-column:2; align-self:center; }
   .hero-art svg{ width:100%; height:auto; display:block; }
   .welcome{
     font-family:var(--mono);
@@ -186,7 +181,6 @@
   }
   .cv-button:hover{ transform:translateY(-2px); opacity:.9; }
 
-  /* ===== Nav ===== */
   nav{
     max-width:920px;
     margin:0 auto;
@@ -204,7 +198,6 @@
   }
   nav a:hover, nav a:focus-visible{ color:var(--signal); }
 
-  /* ===== Main ===== */
   .container{
     max-width:920px;
     margin:0 auto;
@@ -224,7 +217,6 @@
     color:var(--muted);
   }
 
-  /* ===== Pipeline / node-based entries ===== */
   .pipeline{
     position:relative;
     padding-left:2.2rem;
@@ -319,7 +311,6 @@
     background:var(--bg-2);
   }
 
-  /* ===== Footer ===== */
   footer{
     max-width:920px;
     margin:0 auto;
@@ -382,7 +373,6 @@
           </radialGradient>
         </defs>
         <circle cx="180" cy="180" r="170" fill="url(#glow)"/>
-        <!-- connector lines -->
         <g stroke="var(--line)" stroke-width="1.5" fill="none">
           <line x1="180" y1="180" x2="60" y2="80"/>
           <line x1="180" y1="180" x2="300" y2="70"/>
@@ -391,7 +381,6 @@
           <line x1="180" y1="180" x2="180" y2="40"/>
           <line x1="180" y1="180" x2="180" y2="320"/>
         </g>
-        <!-- outer nodes -->
         <g fill="var(--bg-2)" stroke="var(--signal)" stroke-width="2">
           <rect x="30" y="60" width="60" height="40" rx="6"/>
           <circle cx="300" cy="70" r="22"/>
@@ -400,24 +389,16 @@
           <rect x="150" y="14" width="60" height="40" rx="6"/>
           <circle cx="180" cy="320" r="22"/>
         </g>
-        <!-- icons inside outer nodes (simple line glyphs) -->
         <g stroke="var(--signal)" stroke-width="2" fill="none" stroke-linecap="round">
-          <!-- mail icon -->
           <path d="M40 70 h40 v20 h-40 z M40 70 l20 14 l20 -14"/>
-          <!-- gear icon -->
           <path d="M300 60 v6 M300 84 v6 M290 70 h-6 M310 70 h6 M292 62 l-4 -4 M308 62 l4 -4 M292 78 l-4 4 M308 78 l4 4"/>
           <circle cx="300" cy="70" r="8"/>
-          <!-- calendar icon -->
           <rect x="30" y="248" width="40" height="26" rx="2"/>
           <line x1="30" y1="258" x2="70" y2="258"/>
-          <!-- chat icon -->
           <path d="M288 260 h24 v16 l-8 -6 h-16 z"/>
-          <!-- doc icon -->
           <path d="M162 22 h24 v24 h-24 z M168 28 h12 M168 34 h12 M168 40 h8"/>
-          <!-- chart icon -->
           <path d="M170 330 v-12 M180 330 v-18 M190 330 v-8"/>
         </g>
-        <!-- central node: VA figure as circuit -->
         <circle cx="180" cy="180" r="46" fill="var(--bg-2)" stroke="var(--signal)" stroke-width="2.5"/>
         <g stroke="var(--signal)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="180" cy="164" r="14"/>
@@ -472,15 +453,23 @@
       </section>
 
       <section class="project">
-        <span class="entry-tag">Agent · weather-report-bot</span>
-        <h3>Email Weather Bot</h3>
+        <span class="entry-tag">Tracker · google-sheets</span>
+        <h3>Client Expense & Income Tracker</h3>
         <p>
-          Triggers automatically every day at <strong>7 AM</strong>, checks the forecast,
-          and uses AI to turn the raw data into a short, readable summary —
-          then sends it straight to an inbox over email, no manual checking required.
+          A professional financial tracker built in <strong>Google Sheets</strong> to
+          help small business owners and freelancers monitor their monthly cash flow
+          without manual calculation. Every transaction is logged once — the sheet
+          handles totals, summaries, and charts automatically.
         </p>
-        <div class="stack"><span>Zapier</span><span>Email</span></div>
-        <a href="weather-bot.html" class="contact-btn">→ view_project</a>
+        <p>
+          Features <strong>dropdown data validation</strong> for clean consistent entries,
+          <strong>conditional formatting</strong> that color-codes transaction status at a glance,
+          and <strong>SUMIFS formulas</strong> that automatically separate and total income
+          vs expenses by month — all feeding into a <strong>visual dashboard</strong>
+          with summary boxes and a bar chart showing financial performance instantly.
+        </p>
+        <div class="stack"><span>Google Sheets</span><span>SUMIFS</span><span>Data Validation</span><span>Dashboard</span></div>
+        <a href="expense-tracker.html" class="contact-btn">→ view_project</a>
       </section>
 
       <section class="project is-service">

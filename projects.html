@@ -5,6 +5,83 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Projects — Bon Jovi F. Sadaya</title>
 <link rel="stylesheet" href="style.css">
+<style>
+  .category-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6rem;
+    max-width: 1000px;
+    margin-bottom: 3.5rem;
+  }
+  @media (max-width: 680px) { .category-grid { grid-template-columns: 1fr; } }
+
+  .category-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-2);
+    padding: 1.8rem 1.8rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .category-card .cat-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: var(--mono);
+    font-size: .7rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: 1rem;
+  }
+  .category-card .cat-tag .dot-signal {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--signal);
+  }
+  .category-card h2 {
+    font-size: 1.4rem;
+    margin: 0 0 .7rem;
+  }
+  .category-card p {
+    color: var(--muted);
+    margin: 0 0 1.2rem;
+    flex-grow: 1;
+  }
+  .category-card .preview-list {
+    list-style: none;
+    margin: 0 0 1.4rem;
+    padding: 0;
+    font-family: var(--mono);
+    font-size: .78rem;
+    color: var(--ink);
+  }
+  .category-card .preview-list li {
+    padding: .35rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .category-card .preview-list li:last-child { border-bottom: none; }
+  .category-card .preview-list li::before {
+    content: "→ ";
+    color: var(--signal);
+  }
+  .category-card .view-all {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--signal);
+    text-decoration: none;
+    border-bottom: 1px solid var(--signal);
+    padding-bottom: 1px;
+    align-self: flex-start;
+  }
+  .category-card .view-all:hover { opacity: .8; }
+
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--line);
+    max-width: 1000px;
+    margin: 0 0 3rem;
+  }
+</style>
 </head>
 <body>
 
@@ -13,14 +90,15 @@
     <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
   </div>
 
-  <header style="grid-template-columns:1fr;">
+  <header>
     <div class="hero-text">
       <p class="welcome">Projects</p>
       <div class="status-line"><span class="pulse"></span> Automation · AI · Operations Systems</div>
       <h1>What I've Built</h1>
       <p class="lede">
-        Real systems built for real business problems — each one combining automation
-        running in the background with live VA oversight so nothing ever falls through the cracks.
+        Real systems built for real business problems — split into two kinds of work:
+        automation pipelines that run in the background, and the core VA skills that
+        keep everything else on track.
       </p>
     </div>
   </header>
@@ -33,120 +111,56 @@
 
   <div class="container">
 
-    <h2>// build log</h2>
-    <p class="container-intro">
-      Each entry is a working system or pipeline — a trigger, automated steps,
-      decision logic, and a reliable result at the end.
-    </p>
+    <div class="category-grid">
 
-    <div class="pipeline">
-
-      <section class="project">
-        <span class="entry-tag">Agent · order-retention-flow · live</span>
-        <h3>AI Order Processing & Customer Retention System</h3>
+      <!-- Automation category -->
+      <div class="category-card">
+        <span class="cat-tag"><span class="dot-signal"></span> Section 01</span>
+        <h2>Automation Builds</h2>
         <p>
-          Filters incoming emails to catch new orders, uses <strong>AI to extract order
-          details</strong> from unstructured text, matches items against a pricing
-          database, and calculates totals and profit — then logs everything to
-          <strong>Google Sheets</strong>, follows up with a <strong>Tally</strong>
-          feedback form, applies <strong>AI sentiment analysis</strong> to generate
-          personalized responses based on the customer's rating, and sends a
-          personalized reorder invitation 24 hours later.
+          Working systems — a trigger, automated steps, decision logic, and a
+          reliable result at the end. Built with Zapier, AI tools, and connected apps.
         </p>
-        <div class="stack"><span>Zapier</span><span>Tally</span><span>Google Sheets</span><span>Email</span><span>AI Sentiment Analysis</span></div>
-        <div class="project-links">
-          <a href="order-automation.html" class="contact-btn">→ details</a>
-          <a href="https://github.com/sadayabonjovi-eng/order-automation" target="_blank" class="contact-btn">→ github</a>
-        </div>
-      </section>
-
-      <section class="project">
-        <span class="entry-tag">Pipeline · content-automation · in progress</span>
-        <h3>AI Content Publishing Pipeline</h3>
-        <p>
-          A fully automated content production system that runs on a daily schedule —
-          using <strong>AI to generate scripts</strong>, JavaScript to process and format
-          the output, <strong>Visla</strong> to create video projects from the script,
-          and <strong>Google AI Studio (Gemini)</strong> to generate thumbnails.
-        </p>
-        <p>
-          From there, the pipeline cross-posts automatically to <strong>YouTube</strong>
-          and <strong>Instagram for Business</strong>, logs every publish to
-          <strong>Google Sheets</strong>, and sends email notifications at each stage —
-          with conditional path logic handling success, fallback, and error states
-          throughout the entire flow.
-        </p>
-        <div class="stack"><span>Zapier</span><span>Visla</span><span>Google AI Studio</span><span>YouTube</span><span>Instagram</span><span>Google Sheets</span><span>JavaScript</span></div>
-        <div class="project-links">
-          <a href="content-pipeline.html" class="contact-btn">→ details</a>
-        </div>
-      </section>
-
-      <section class="project">
-        <span class="entry-tag">Tracker · google-sheets · live</span>
-        <h3>Client Expense & Income Tracker</h3>
-        <p>
-          A professional financial tracker built in <strong>Google Sheets</strong> to
-          help small business owners and freelancers monitor their monthly cash flow
-          without manual calculation. Features <strong>dropdown data validation</strong>
-          for clean consistent entries, <strong>conditional formatting</strong> that
-          color-codes transaction status at a glance, and <strong>SUMIFS formulas</strong>
-          that automatically separate and total income vs expenses by month —
-          all feeding into a <strong>visual dashboard</strong> with summary boxes and
-          a bar chart showing financial performance instantly.
-        </p>
-        <div class="stack"><span>Google Sheets</span><span>SUMIFS</span><span>Data Validation</span><span>Dashboard</span></div>
-        <div class="project-links">
-          <a href="expense-tracker.html" class="contact-btn">→ details</a>
-        </div>
-      </section>
-
-      <section class="project">
-        <span class="entry-tag">Agent · weather-report-bot · live</span>
-        <h3>Email Weather Bot</h3>
-        <p>
-          Triggers every day at <strong>7 AM</strong>, checks the forecast, uses AI to
-          turn it into a short readable summary, and sends it straight to an inbox —
-          a small example of <strong>recurring reports that run themselves</strong>.
-        </p>
-        <div class="stack"><span>Zapier</span><span>Email</span></div>
-        <div class="project-links">
-          <a href="weather-bot.html" class="contact-btn">→ details</a>
-          <a href="https://github.com/sadayabonjovi-eng/weather-bot" target="_blank" class="contact-btn">→ github</a>
-        </div>
-      </section>
-
-      <section class="project">
-        <span class="entry-tag">Slides · portfolio-deck</span>
-        <h3>Portfolio Slideshow</h3>
-        <p>
-          A visual walkthrough of my work, skills, and background built in
-          <strong>Google Slides</strong> — covering my automation projects, VA skills,
-          and professional experience in a clean, easy-to-follow format.
-          Auto-advances and loops continuously.
-        </p>
-        <div class="stack"><span>Google Slides</span><span>Presentation Design</span></div>
-        <div class="project-links">
-          <a href="slideshow.html" class="contact-btn">→ details</a>
-        </div>
-      </section>
-
-      <section class="project is-service">
-        <span class="entry-tag">Service · always-on</span>
-        <h3>Virtual Assistant Support</h3>
-        <p>The automation handles the routine. I handle the rest — live, during working hours, so nothing ever falls through the cracks.</p>
-        <ul class="services-list">
-          <li>Inbox management & monitoring</li>
-          <li>Calendar scheduling & reminders</li>
-          <li>Data entry & spreadsheet tracking</li>
-          <li>Documentation & reporting</li>
-          <li>Customer support & feedback handling</li>
-          <li>Zapier workflow builds & maintenance</li>
+        <ul class="preview-list">
+          <li>AI Order Processing & Customer Retention System</li>
+          <li>AI Content Publishing Pipeline</li>
+          <li>Email Weather Bot</li>
         </ul>
-        <a href="contact.html" class="contact-btn">→ hire_me</a>
-      </section>
+        <a href="automation.html" class="view-all">→ view_all_automation()</a>
+      </div>
+
+      <!-- VA Skills category -->
+      <div class="category-card">
+        <span class="cat-tag"><span class="dot-signal"></span> Section 02</span>
+        <h2>Core VA Skills</h2>
+        <p>
+          Not everything needs to be automated. The manual, detail-driven side of
+          the work — spreadsheets, organization, and presentation, done well
+          without a trigger or a workflow tool.
+        </p>
+        <ul class="preview-list">
+          <li>Client Expense & Income Tracker</li>
+          <li>Portfolio Slideshow</li>
+          <li>Virtual Assistant Support</li>
+        </ul>
+        <a href="va-skills.html" class="view-all">→ view_all_va_skills()</a>
+      </div>
 
     </div>
+
+    <hr class="section-divider">
+
+    <div class="section-block" style="max-width:760px;">
+      <h2 style="font-family:var(--mono); font-size:.78rem; letter-spacing:.25em; text-transform:uppercase; color:var(--muted); margin:0 0 .8rem;">// why two lists</h2>
+      <p style="color:var(--ink); margin:0 0 1rem;">
+        Automation work and core VA work require different things from me — one is
+        about building systems that run without me, the other is about being the
+        reliable human in the loop. Keeping them separate makes it easier to see
+        which kind of help you actually need, and easier for this page to keep
+        growing without turning into one long scroll.
+      </p>
+    </div>
+
   </div>
 
   <footer>

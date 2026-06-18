@@ -1,177 +1,242 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    /* Contact Buttons */
-    .contact-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 20px;
-      animation: fadeInUp 1s ease-out;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    margin-top: 1rem;
+    max-width: 820px;
+  }
+  @media (max-width: 640px) {
+    .contact-grid { grid-template-columns: 1fr; }
+  }
 
-    .contact-btn {
-      display: inline-block;
-      padding: 10px 20px;
-      background: #f39c12;
-      color: #fff;
-      font-weight: bold;
-      text-decoration: none;
-      border-radius: 6px;
-      transition: background 0.3s, transform 0.3s;
-    }
+  .contact-links-block h3 {
+    font-family: var(--mono);
+    font-size: .78rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 1rem;
+  }
 
-    .contact-btn:hover {
-      background: #d35400;
-      transform: scale(1.05);
-    }
+  .contact-channel {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .75rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: var(--bg-2);
+    text-decoration: none;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: .82rem;
+    margin-bottom: .55rem;
+    transition: border-color .2s, color .2s;
+  }
+  .contact-channel:hover { border-color: var(--signal); color: var(--signal); }
+  .contact-channel .ch-icon { font-size: 1rem; }
+  .contact-channel .ch-label { color: var(--muted); font-size: .72rem; display: block; }
 
-    /* Contact Form */
-    .contact-form {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 20px;
-      animation: fadeInUp 1.2s ease-out;
-    }
+  .contact-form-block h3 {
+    font-family: var(--mono);
+    font-size: .78rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 1rem;
+  }
 
-    .contact-form input,
-    .contact-form textarea {
-      width: 100%;
-      padding: 12px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-family: 'Roboto', sans-serif;
-      font-size: 1rem;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+  }
 
-    .contact-form input:focus,
-    .contact-form textarea:focus {
-      border-color: #f39c12;
-      box-shadow: 0 0 8px rgba(243,156,18,0.4);
-      outline: none;
-    }
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: .75rem 1rem;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: .82rem;
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+  }
+  .contact-form input::placeholder,
+  .contact-form textarea::placeholder { color: var(--muted); }
+  .contact-form input:focus,
+  .contact-form textarea:focus {
+    border-color: var(--signal);
+    box-shadow: 0 0 0 2px var(--signal-dim);
+  }
+  .contact-form input.error,
+  .contact-form textarea.error { border-color: #e05c5c; }
 
-    .contact-form textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
+  .contact-form textarea {
+    min-height: 130px;
+    resize: vertical;
+  }
 
-    .char-count {
-      font-size: 0.85rem;
-      color: #666;
-      margin-top: -8px;
-      margin-bottom: 8px;
-    }
+  .char-count {
+    font-family: var(--mono);
+    font-size: .72rem;
+    color: var(--muted);
+    margin-top: -.4rem;
+  }
 
-    .contact-form button {
-      padding: 12px;
-      background: #f39c12;
-      color: #fff;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
-    }
+  .submit-btn {
+    font-family: var(--mono);
+    font-size: .82rem;
+    letter-spacing: .05em;
+    background: var(--signal);
+    color: var(--bg);
+    border: none;
+    border-radius: 4px;
+    padding: .85rem 1.4rem;
+    cursor: pointer;
+    transition: opacity .2s, transform .15s;
+    text-align: left;
+  }
+  .submit-btn:hover { opacity: .88; transform: translateY(-1px); }
 
-    .contact-form button:hover {
-      background: #d35400;
-      transform: scale(1.05);
-    }
+  .success-message {
+    display: none;
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--signal);
+    border: 1px solid var(--signal-dim);
+    background: var(--bg-2);
+    border-radius: 4px;
+    padding: .75rem 1rem;
+  }
 
-    /* Success Message */
-    .success-message {
-      display: none;
-      margin-top: 15px;
-      padding: 12px;
-      background: #2ecc71;
-      color: #fff;
-      border-radius: 6px;
-      animation: fadeIn 0.8s ease-out;
-    }
-
-    /* Error Styling */
-    .error {
-      border-color: #e74c3c !important;
-      box-shadow: 0 0 8px rgba(231,76,60,0.4);
-    }
-
-    /* Animations */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-  </style>
+  .page-intro {
+    max-width: 580px;
+    margin: 0 0 2rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: .85rem;
+  }
+  .page-intro strong { color: var(--signal); font-weight: 600; }
+</style>
 </head>
 <body>
-  <!-- Theme toggle -->
+
   <div class="topstrip">
-    <span></span>
-    <button id="theme-toggle">🌙 Dark/Light</button>
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
   </div>
 
-  <!-- Header -->
-  <header><h1>Contact Me</h1></header>
+  <header style="grid-template-columns:1fr;">
+    <div class="hero-text">
+      <p class="welcome">Contact</p>
+      <div class="status-line"><span class="pulse"></span> Open to Remote Work — Let's Talk</div>
+      <h1>Get in Touch</h1>
+      <p class="lede">
+        Looking for a VA who handles operations <strong>and</strong> builds the systems behind them?
+        Reach out and let's see how I can help your business run better.
+      </p>
+    </div>
+  </header>
 
-  <!-- Navigation -->
   <nav>
-    <a href="index.html">Home</a>
-    <a href="about.html">About Me</a>
-    <a href="projects.html">Projects</a>
+    <a href="index.html">/home</a>
+    <a href="about.html">/about</a>
+    <a href="projects.html">/projects</a>
   </nav>
 
-  <!-- Main Content -->
   <div class="container">
-    <h2>Get in Touch</h2>
-    <p><strong>Hire me as your Virtual Assistant — let’s make your business more organized, efficient, and stress‑free.</strong></p>
-    <p>If you’d like to collaborate or learn more about my work, feel free to reach out through any of the options below:</p>
+    <h2>// connect</h2>
+    <p class="container-intro">Pick a channel or send a message directly below.</p>
 
-    <!-- Contact Links styled as buttons -->
-    <div class="contact-links">
-      <a href="mailto:sadayabonjovi@gmail.com" class="contact-btn">📧 Email Me</a>
-      <a href="tel:09562972094" class="contact-btn">📱 Call Me</a>
-      <a href="https://facebook.com/bon.jovi.sadaya" target="_blank" class="contact-btn">📘 Facebook</a>
-      <a href="https://linkedin.com/in/bonjovi" target="_blank" class="contact-btn">🔗 LinkedIn</a>
-      <a href="https://github.com/sadayabonjovi-eng" target="_blank" class="contact-btn">🐙 GitHub</a>
+    <div class="contact-grid">
+
+      <div class="contact-links-block">
+        <h3>// channels</h3>
+        <a href="mailto:sadayabonjovi@gmail.com" class="contact-channel">
+          <span class="ch-icon">📧</span>
+          <span>
+            sadayabonjovi@gmail.com
+            <span class="ch-label">Email — fastest response</span>
+          </span>
+        </a>
+        <a href="tel:09562972094" class="contact-channel">
+          <span class="ch-icon">📱</span>
+          <span>
+            09562972094
+            <span class="ch-label">Phone / WhatsApp</span>
+          </span>
+        </a>
+        <a href="https://linkedin.com/in/bonjovi" target="_blank" class="contact-channel">
+          <span class="ch-icon">🔗</span>
+          <span>
+            linkedin.com/in/bonjovi
+            <span class="ch-label">LinkedIn</span>
+          </span>
+        </a>
+        <a href="https://facebook.com/bon.jovi.sadaya" target="_blank" class="contact-channel">
+          <span class="ch-icon">📘</span>
+          <span>
+            bon.jovi.sadaya
+            <span class="ch-label">Facebook</span>
+          </span>
+        </a>
+        <a href="https://github.com/sadayabonjovi-eng" target="_blank" class="contact-channel">
+          <span class="ch-icon">🐙</span>
+          <span>
+            sadayabonjovi-eng
+            <span class="ch-label">GitHub — see my builds</span>
+          </span>
+        </a>
+      </div>
+
+      <div class="contact-form-block">
+        <h3>// send a message</h3>
+        <form id="contactForm" action="https://formspree.io/f/yourFormID" method="POST" class="contact-form">
+          <input type="text" name="name" placeholder="Your name" required>
+          <input type="email" name="email" placeholder="Your email" required>
+          <textarea name="message" placeholder="Tell me about your project or what you need help with..." maxlength="500" required></textarea>
+          <p class="char-count">0 / 500 characters</p>
+          <button type="submit" class="submit-btn">→ send_message()</button>
+          <div class="success-message">✓ Message received — I'll get back to you shortly.</div>
+        </form>
+      </div>
+
     </div>
-
-    <!-- Interactive Contact Form -->
-    <form id="contactForm" action="https://formspree.io/f/yourFormID" method="POST" class="contact-form">
-      <input type="text" name="name" placeholder="Your Name" required>
-      <input type="email" name="email" placeholder="Your Email" required>
-      <textarea name="message" placeholder="Tell me about your project or idea..." maxlength="500" required></textarea>
-      <p class="char-count">0/500 characters</p>
-      <button type="submit">📩 Send Message</button>
-      <div class="success-message">✅ Thanks for reaching out, I’ll get back to you soon!</div>
-    </form>
   </div>
 
-  <!-- Footer -->
-  <footer><p>© 2026 Bon Jovi F. Sadaya</p></footer>
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
 
-  <!-- Script for dark/light toggle + live char counter + feedback -->
   <script>
-    const toggleBtn = document.getElementById('theme-toggle');
-    toggleBtn.addEventListener('click', () => {
+    const toggle = document.getElementById('theme-toggle');
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Dark' : 'Switch to Light';
+    };
+    toggle.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
+      setLabel();
     });
+    setLabel();
 
     const textarea = document.querySelector('.contact-form textarea');
     const charCount = document.querySelector('.char-count');
     textarea.addEventListener('input', () => {
-      charCount.textContent = `${textarea.value.length}/500 characters`;
+      charCount.textContent = `${textarea.value.length} / 500 characters`;
     });
 
     const form = document.getElementById('contactForm');
@@ -180,8 +245,6 @@
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
       let valid = true;
-
-      // Validate inputs
       form.querySelectorAll('input, textarea').forEach(field => {
         if (!field.value.trim()) {
           field.classList.add('error');
@@ -190,7 +253,6 @@
           field.classList.remove('error');
         }
       });
-
       if (valid) {
         try {
           const response = await fetch(form.action, {
@@ -201,12 +263,12 @@
           if (response.ok) {
             successMessage.style.display = 'block';
             form.reset();
-            charCount.textContent = "0/500 characters";
+            charCount.textContent = '0 / 500 characters';
           } else {
-            alert("❌ There was a problem sending your message. Please try again.");
+            alert('There was a problem sending your message. Please try again.');
           }
         } catch (error) {
-          alert("❌ Network error. Please try again later.");
+          alert('Network error. Please try again later.');
         }
       }
     });

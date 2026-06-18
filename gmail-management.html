@@ -1,1 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gmail Inbox Management System — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
+  </div>
+
+  <header style="grid-template-columns:1fr;">
+    <div class="hero-text">
+      <p class="welcome">Project Detail</p>
+      <div class="status-line"><span class="pulse"></span> System · Gmail · Delegation</div>
+      <h1>Gmail Inbox Management System</h1>
+      <p class="lede">
+        A structured, fully operational email management system built for client delegation —
+        organizing 200+ emails without ever touching a client's password.
+      </p>
+    </div>
+  </header>
+
+  <nav>
+    <a href="index.html">/home</a>
+    <a href="about.html">/about</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
+  </nav>
+
+  <div class="container">
+
+    <h2>// overview</h2>
+
+    <div class="pipeline">
+
+      <!-- Overview -->
+      <section class="project">
+        <span class="entry-tag">System · gmail-management</span>
+        <h3>Overview</h3>
+        <p>
+          This project demonstrates a complete Gmail inbox management system built
+          for a real client delegation scenario. Using Gmail's native tools — labels,
+          filters, stars, templates, and delegated access — the inbox was transformed
+          from 200+ unorganized emails into a clean, prioritized, and fully actionable
+          workspace. No third-party tools required.
+        </p>
+        <p>
+          The system was built to be handed off — meaning the client never needs to
+          share their password, explain their inbox, or manage email manually again.
+        </p>
+      </section>
+
+      <!-- Architecture -->
+      <section class="project">
+        <span class="entry-tag">Architecture · label-system</span>
+        <h3>Label Architecture</h3>
+        <p>
+          Every email is categorized the moment it's identified. The label structure
+          uses parent labels for broad categories and sub-labels for specific context —
+          so nothing is ever just "somewhere in the inbox."
+        </p>
+        <ul style="padding-left:1.2rem;margin:0 0 1rem;">
+          <li><strong>CLIENT</strong> — Active / Past / Potential</li>
+          <li><strong>FOLLOW UP</strong> — Pending Payment / Remind Client / Schedule Call</li>
+          <li><strong>URGENT</strong> — High / Medium</li>
+          <li><strong>TO DO</strong> — actionable tasks needing a response or action</li>
+          <li><strong>TO READ</strong> — Can Skip / Must Read / Reference</li>
+          <li><strong>WAITING FOR REPLY</strong> — 1–2 Days / longer timelines</li>
+          <li><strong>COMPLETED</strong> — finished and archived, still searchable</li>
+        </ul>
+        <p>
+          Each label is color-coded for instant visual scanning — no reading required
+          to know what an email needs.
+        </p>
+      </section>
+
+      <!-- Star System -->
+      <section class="project">
+        <span class="entry-tag">Priority · star-system</span>
+        <h3>Star Priority System</h3>
+        <p>
+          Stars add a second layer of visibility on top of labels — a quick glance
+          at the inbox shows not just what category an email belongs to, but exactly
+          what action it needs right now.
+        </p>
+        <ul style="padding-left:1.2rem;margin:0 0 1rem;">
+          <li><strong>⭐ Yellow star</strong> — needs attention / reply</li>
+          <li><strong>🔴 Red bang</strong> — urgent, act immediately</li>
+          <li><strong>✅ Green check</strong> — done, ready to archive</li>
+          <li><strong>🔵 Blue info</strong> — waiting for reply, monitoring</li>
+        </ul>
+      </section>
+
+      <!-- Inbox Sections -->
+      <section class="project">
+        <span class="entry-tag">Layout · multiple-inboxes</span>
+        <h3>Inbox Section Layout</h3>
+        <p>
+          The inbox is split into labeled sections so high-priority emails are never
+          buried under newsletters or promotions. Each section surfaces only what
+          matters for that category — client emails at the top, everything else below.
+        </p>
+        <ul style="padding-left:1.2rem;margin:0 0 1rem;">
+          <li>CLIENT — active client emails always visible first</li>
+          <li>TO READ — content and updates, reviewed on schedule</li>
+          <li>URGENT — anything needing immediate action</li>
+          <li>TO DO — tasks queued and tracked</li>
+          <li>PROMOTIONS & SOCIAL — lowest priority, reviewed last</li>
+        </ul>
+      </section>
+
+      <!-- Automation -->
+      <section class="project">
+        <span class="entry-tag">Automation · filters-and-templates</span>
+        <h3>Filters & Response Templates</h3>
+        <p>
+          Incoming emails are automatically sorted using Gmail filters — no manual
+          labeling needed for recurring senders. Combined with canned response
+          templates, common replies go out in seconds instead of minutes.
+        </p>
+        <ul style="padding-left:1.2rem;margin:0 0 1rem;">
+          <li><strong>Auto-filters</strong> — label and categorize emails by sender or keyword on arrival</li>
+          <li><strong>Acknowledgement Reply</strong> — instant response confirming receipt within 24 hours</li>
+          <li><strong>Follow Up</strong> — polite check-in after no response</li>
+          <li><strong>Schedule Call</strong> — booking template with open time slots</li>
+          <li><strong>Payment Reminder</strong> — professional nudge with payment details</li>
+          <li><strong>Task Completed</strong> — clean summary of what was done and what's next</li>
+        </ul>
+      </section>
+
+      <!-- Delegation -->
+      <section class="project">
+        <span class="entry-tag">Access · delegated-management</span>
+        <h3>Delegated Access Setup</h3>
+        <p>
+          The entire system is managed through Gmail's delegated access feature —
+          meaning the VA can read, organize, label, and respond to emails on the
+          client's behalf without ever knowing the client's password. The client
+          stays in full control of their account at all times.
+        </p>
+        <ul style="padding-left:1.2rem;margin:0 0 1rem;">
+          <li>Client grants access via <strong>Settings → Accounts → Grant access</strong></li>
+          <li>VA logs in through their own Google account</li>
+          <li>All sent emails show the client's address — seamless to recipients</li>
+          <li>Access can be revoked instantly by the client at any time</li>
+        </ul>
+      </section>
+
+      <!-- Workflow -->
+      <section class="project">
+        <span class="entry-tag">Workflow · daily-process</span>
+        <h3>Daily Management Flow</h3>
+        <p>
+          The system follows a consistent daily workflow so the inbox never falls
+          behind and the client always has a clear picture of what's pending.
+        </p>
+        <ol style="padding-left:1.2rem;margin:0 0 1rem;">
+          <li>Open inbox → scan URGENT and CLIENT sections first</li>
+          <li>Apply labels and stars to any new unlabeled emails</li>
+          <li>Reply to priority emails using templates where applicable</li>
+          <li>Snooze non-urgent emails to the appropriate follow-up date</li>
+          <li>Schedule outgoing emails for optimal send times</li>
+          <li>Move completed items to COMPLETED label and archive</li>
+          <li>End of day — inbox is at zero unprocessed emails</li>
+        </ol>
+      </section>
+
+      <!-- Tools -->
+      <section class="project">
+        <span class="entry-tag">Tools · gmail-native</span>
+        <h3>Tools Used</h3>
+        <ul style="padding-left:1.2rem;margin:0 0 1rem;">
+          <li><strong>Gmail Labels & Sub-labels</strong> — category architecture</li>
+          <li><strong>Gmail Filters</strong> — auto-sort on arrival</li>
+          <li><strong>Gmail Stars</strong> — priority flagging system</li>
+          <li><strong>Gmail Templates</strong> — canned responses for common replies</li>
+          <li><strong>Schedule Send</strong> — timed outgoing emails</li>
+          <li><strong>Snooze</strong> — deferred inbox management</li>
+          <li><strong>Delegated Access</strong> — secure client handoff</li>
+          <li><strong>Multiple Inboxes</strong> — sectioned inbox layout</li>
+          <li><strong>Gmail Signature</strong> — professional sign-off on all outgoing mail</li>
+        </ul>
+
+        <div class="project-links" style="margin-top:1.5rem;">
+          <a href="va-skills.html" class="contact-btn">← back to projects</a>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Dark' : 'Switch to Light';
+    };
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      setLabel();
+    });
+    setLabel();
+  </script>
+
+</body>
+</html>

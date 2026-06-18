@@ -178,6 +178,7 @@
     transition:transform .15s ease, opacity .2s ease;
   }
   .cv-button:hover{ transform:translateY(-2px); opacity:.9; }
+  .cv-button:visited{ color:var(--bg); }
 
   /* ===== Nav ===== */
   nav{
@@ -196,6 +197,7 @@
     transition:color .2s ease;
   }
   nav a:hover, nav a:focus-visible{ color:var(--signal); }
+  nav a:visited{ color:var(--muted); }
 
   /* ===== Main ===== */
   .container{
@@ -293,6 +295,8 @@
   }
   .project.is-service .contact-btn{ color:var(--warn); border-color:var(--signal-dim); }
   .contact-btn:hover{ border-color:currentColor; }
+  .contact-btn:visited{ color:var(--signal); }
+  .project.is-service .contact-btn:visited{ color:var(--warn); }
 
   /* ===== Services list — card grid ===== */
   .services-list{
@@ -319,6 +323,7 @@
     flex-wrap:wrap;
     gap:1rem;
   }
+  .project-links a:visited{ color:var(--signal); }
 
   /* ===== Sheet embed ===== */
   .sheet-embed{
@@ -449,3 +454,4 @@
     transform:translateY(-2px);
     opacity:.9;
   }
+  .cv-download:visited{ color:var(--bg); }

@@ -1,1 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Content Publishing Pipeline — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border: 1px solid var(--warn);
+    color: var(--warn);
+    border-radius: 3px;
+    padding: .25rem .7rem;
+    margin-bottom: 1.5rem;
+  }
+  .status-badge .dot-warn {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--warn);
+  }
 
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    font-size: .78rem;
+    color: var(--muted);
+  }
+  .meta-row span { border: 1px solid var(--line); border-radius: 3px; padding: .2rem .6rem; background: var(--bg-2); }
+
+  .section-block {
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  .section-block h2 {
+    font-family: var(--mono);
+    font-size: .78rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 .6rem;
+  }
+  .section-block p {
+    color: var(--ink);
+    margin: 0 0 1rem;
+    max-width: 680px;
+  }
+  .section-block p strong { color: var(--signal); font-weight: 600; }
+
+  /* Diagram */
+  .diagram-wrap {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 2rem 1.5rem;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+  }
+  .diagram-wrap svg { display: block; margin: 0 auto; }
+
+  /* Step table */
+  .step-table {
+    width: 100%;
+    max-width: 820px;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: .80rem;
+    margin-bottom: 3rem;
+  }
+  .step-table th {
+    text-align: left;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-size: .70rem;
+    border-bottom: 1px solid var(--line);
+    padding: .5rem .8rem;
+  }
+  .step-table td {
+    padding: .65rem .8rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    vertical-align: top;
+  }
+  .step-table tr:last-child td { border-bottom: none; }
+  .step-table .step-num { color: var(--muted); width: 2.5rem; }
+  .step-table .step-tool { color: var(--signal); white-space: nowrap; }
+  .step-table .step-status-ok  { color: #5eead4; }
+  .step-table .step-status-blocked { color: var(--warn); }
+
+  /* Blocked / Working cards */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  @media (max-width: 580px) { .two-col { grid-template-columns: 1fr; } }
+
+  .info-card {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--bg-2);
+    padding: 1.1rem 1.2rem;
+  }
+  .info-card h3 {
+    font-family: var(--mono);
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin: 0 0 .8rem;
+  }
+  .info-card.working h3 { color: var(--signal); }
+  .info-card.blocked h3 { color: var(--warn); }
+  .info-card ul {
+    list-style: none;
+    margin: 0; padding: 0;
+    font-family: var(--mono);
+    font-size: .80rem;
+    color: var(--ink);
+  }
+  .info-card ul li {
+    padding: .3rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .info-card ul li:last-child { border-bottom: none; }
+  .info-card ul li::before { margin-right: .5rem; }
+  .info-card.working ul li::before { content: "✓"; color: var(--signal); }
+  .info-card.blocked ul li::before { content: "⚠"; color: var(--warn); }
+
+  .back-link {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1px;
+    transition: color .2s, border-color .2s;
+    display: inline-block;
+    margin-bottom: 2.5rem;
+  }
+  .back-link:hover { color: var(--signal); border-color: var(--signal); }
+</style>
+</head>
+<body>
+
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
+  </div>
+
+  <header style="grid-template-columns:1fr;">
+    <div class="hero-text">
+      <p class="welcome">Project</p>
+      <div class="status-line"><span class="pulse"></span> Pipeline · content-automation · in progress</div>
+      <h1>AI Content Publishing Pipeline</h1>
+      <p class="lede">
+        A fully automated daily content production system — from <strong>AI script generation</strong>
+        to cross-platform publishing on <strong>YouTube and Instagram</strong>, with conditional
+        logic, error handling, and logging built throughout.
+      </p>
+    </div>
+  </header>
+
+  <nav>
+    <a href="index.html">/home</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
+  </nav>
+
+  <div class="container">
+    <a href="projects.html" class="back-link">← back to projects</a>
+
+    <div class="status-badge"><span class="dot-warn"></span> Partially Operational — Blocked by Paid Tool Limits</div>
+
+    <div class="meta-row">
+      <span>Type: Automation Pipeline</span>
+      <span>Tools: Zapier · Visla · Gemini · YouTube · Instagram</span>
+      <span>Steps: 23</span>
+      <span>Status: In Progress</span>
+    </div>
+
+    <!-- Overview -->
+    <div class="section-block">
+      <h2>// overview</h2>
+      <p>
+        This pipeline was built to run a <strong>faceless content channel</strong> on autopilot —
+        generating, producing, and publishing short-form video content every day without
+        manual intervention. The system handles the full production chain: writing the script,
+        creating the video, generating a thumbnail, uploading to multiple platforms, logging
+        the result, and sending status notifications at each stage.
+      </p>
+      <p>
+        It uses <strong>conditional path logic</strong> throughout — so if a step succeeds,
+        the content moves forward to publishing; if something fails, a fallback path triggers
+        an email notification instead of silently breaking. This is not a linear automation —
+        it's a branching system with <strong>6 decision paths</strong> and real error handling.
+      </p>
+    </div>
+
+    <!-- Diagram -->
+    <div class="section-block">
+      <h2>// system diagram</h2>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 620 980" width="580" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', 'Fira Code', monospace">
+          <defs>
+            <marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M1,1 L7,4 L1,7 Z" fill="#26313c"/>
+            </marker>
+            <marker id="arr-signal" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M1,1 L7,4 L1,7 Z" fill="#5eead4"/>
+            </marker>
+            <marker id="arr-warn" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M1,1 L7,4 L1,7 Z" fill="#f0b86e"/>
+            </marker>
+          </defs>
+
+          <!-- ── NODES ── -->
+          <!-- 1. Schedule -->
+          <rect x="185" y="10" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="28" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">TRIGGER</text>
+          <text x="310" y="44" text-anchor="middle" fill="#dde3ea" font-size="11">1. Schedule by Zapier — Every Day</text>
+
+          <!-- arrow -->
+          <line x1="310" y1="54" x2="310" y2="74" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr)"/>
+
+          <!-- 2. AI Script -->
+          <rect x="185" y="76" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="94" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">AI GENERATION</text>
+          <text x="310" y="110" text-anchor="middle" fill="#dde3ea" font-size="11">2. AI by Zapier — Generate Script</text>
+
+          <line x1="310" y1="120" x2="310" y2="140" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr)"/>
+
+          <!-- 3. JavaScript -->
+          <rect x="185" y="142" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="160" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">DATA PROCESSING</text>
+          <text x="310" y="176" text-anchor="middle" fill="#dde3ea" font-size="11">3. Code by Zapier — Run JavaScript</text>
+
+          <line x1="310" y1="186" x2="310" y2="206" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr)"/>
+
+          <!-- 4. Visla -->
+          <rect x="185" y="208" width="250" height="44" rx="6" fill="#131a22" stroke="#f0b86e" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <text x="310" y="226" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">VIDEO CREATION · BLOCKED</text>
+          <text x="310" y="242" text-anchor="middle" fill="#f0b86e" font-size="11">4. Visla — Create Video from Script</text>
+
+          <line x1="310" y1="252" x2="310" y2="272" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr)"/>
+
+          <!-- 5. Split -->
+          <rect x="220" y="274" width="180" height="36" rx="18" fill="#131a22" stroke="#26313c" stroke-width="1.5"/>
+          <text x="310" y="296" text-anchor="middle" fill="#7d8b99" font-size="10">5. Split into Paths</text>
+
+          <!-- Path A line left -->
+          <line x1="220" y1="292" x2="130" y2="292" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="130" y1="292" x2="130" y2="336" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+          <text x="170" y="288" text-anchor="middle" fill="#5eead4" font-size="9">Path A</text>
+
+          <!-- Path B line right -->
+          <line x1="400" y1="292" x2="490" y2="292" stroke="#f0b86e" stroke-width="1.5"/>
+          <line x1="490" y1="292" x2="490" y2="336" stroke="#f0b86e" stroke-width="1.5" marker-end="url(#arr-warn)"/>
+          <text x="447" y="288" text-anchor="middle" fill="#f0b86e" font-size="9">Path B</text>
+
+          <!-- Path A: Google Drive -->
+          <rect x="30" y="338" width="200" height="40" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="130" y="354" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">STORAGE</text>
+          <text x="130" y="369" text-anchor="middle" fill="#dde3ea" font-size="11">7. Google Drive — Upload</text>
+
+          <!-- Path B: Email fallback -->
+          <rect x="390" y="338" width="200" height="40" rx="6" fill="#131a22" stroke="#f0b86e" stroke-width="1.5"/>
+          <text x="490" y="354" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">FALLBACK</text>
+          <text x="490" y="369" text-anchor="middle" fill="#f0b86e" font-size="11">23. Gmail — Error Notify</text>
+
+          <!-- Path A continues -->
+          <line x1="130" y1="378" x2="130" y2="400" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <!-- 8. AI title/desc -->
+          <rect x="30" y="402" width="200" height="40" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="130" y="418" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">AI GENERATION</text>
+          <text x="130" y="433" text-anchor="middle" fill="#dde3ea" font-size="11">8. AI — Title &amp; Description</text>
+
+          <line x1="130" y1="442" x2="130" y2="462" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <!-- 9. Gemini thumbnail -->
+          <rect x="30" y="464" width="200" height="40" rx="6" fill="#131a22" stroke="#f0b86e" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <text x="130" y="480" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">IMAGE GEN · BLOCKED</text>
+          <text x="130" y="495" text-anchor="middle" fill="#f0b86e" font-size="11">9. Gemini — Generate Thumbnail</text>
+
+          <line x1="130" y1="504" x2="130" y2="524" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <!-- 10. YouTube -->
+          <rect x="30" y="526" width="200" height="40" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="130" y="542" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">PUBLISH</text>
+          <text x="130" y="557" text-anchor="middle" fill="#dde3ea" font-size="11">10. YouTube — Upload Video</text>
+
+          <line x1="130" y1="566" x2="130" y2="586" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <!-- 11. Split C/D -->
+          <rect x="50" y="588" width="160" height="34" rx="17" fill="#131a22" stroke="#26313c" stroke-width="1.5"/>
+          <text x="130" y="609" text-anchor="middle" fill="#7d8b99" font-size="10">11. Split into Paths</text>
+
+          <!-- Path C left -->
+          <line x1="50" y1="605" x2="20" y2="605" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="20" y1="605" x2="20" y2="648" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+          <text x="33" y="600" text-anchor="middle" fill="#5eead4" font-size="8">C</text>
+
+          <!-- Path D right -->
+          <line x1="210" y1="605" x2="240" y2="605" stroke="#f0b86e" stroke-width="1.5"/>
+          <line x1="240" y1="605" x2="240" y2="648" stroke="#f0b86e" stroke-width="1.5" marker-end="url(#arr-warn)"/>
+          <text x="227" y="600" text-anchor="middle" fill="#f0b86e" font-size="8">D</text>
+
+          <!-- Path C: Instagram -->
+          <rect x="0" y="650" width="140" height="40" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="70" y="666" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">CROSS-POST</text>
+          <text x="70" y="681" text-anchor="middle" fill="#dde3ea" font-size="10">13. Instagram — Publish</text>
+
+          <!-- Path D: Email -->
+          <rect x="170" y="650" width="140" height="40" rx="6" fill="#131a22" stroke="#f0b86e" stroke-width="1.5"/>
+          <text x="240" y="666" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">NOTIFY</text>
+          <text x="240" y="681" text-anchor="middle" fill="#f0b86e" font-size="10">21. Gmail — Send Email</text>
+
+          <!-- Path C continues to split E/F -->
+          <line x1="70" y1="690" x2="70" y2="710" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <!-- 14. Split E/F -->
+          <rect x="0" y="712" width="140" height="34" rx="17" fill="#131a22" stroke="#26313c" stroke-width="1.5"/>
+          <text x="70" y="733" text-anchor="middle" fill="#7d8b99" font-size="10">14. Split into Paths</text>
+
+          <!-- Path E left -->
+          <line x1="0" y1="729" x2="0" y2="729" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="0" y1="729" x2="0" y2="772" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+          <text x="-8" y="724" text-anchor="start" fill="#5eead4" font-size="8">E</text>
+
+          <!-- Path F right -->
+          <line x1="140" y1="729" x2="148" y2="729" stroke="#f0b86e" stroke-width="1.5"/>
+          <line x1="148" y1="729" x2="148" y2="772" stroke="#f0b86e" stroke-width="1.5" marker-end="url(#arr-warn)"/>
+          <text x="140" y="724" text-anchor="start" fill="#f0b86e" font-size="8">F</text>
+
+          <!-- Path E: Sheets + Email -->
+          <rect x="0" y="774" width="0" height="0"/>
+          <rect x="-10" y="774" width="130" height="40" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="55" y="790" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">LOG</text>
+          <text x="55" y="805" text-anchor="middle" fill="#dde3ea" font-size="10">16. Sheets — Log Row</text>
+
+          <line x1="55" y1="814" x2="55" y2="830" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="-10" y="832" width="130" height="40" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="55" y="848" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">NOTIFY</text>
+          <text x="55" y="863" text-anchor="middle" fill="#dde3ea" font-size="10">17. Gmail — Publish Notify</text>
+
+          <!-- Path F: Email only -->
+          <rect x="130" y="774" width="130" height="40" rx="6" fill="#131a22" stroke="#f0b86e" stroke-width="1.5"/>
+          <text x="195" y="790" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">FALLBACK</text>
+          <text x="195" y="805" text-anchor="middle" fill="#f0b86e" font-size="10">19. Gmail — Send Email</text>
+
+          <!-- Legend -->
+          <rect x="350" y="760" width="250" height="100" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1"/>
+          <text x="365" y="780" fill="#7d8b99" font-size="9" letter-spacing="1">LEGEND</text>
+          <rect x="365" y="790" width="14" height="10" rx="2" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="385" y="800" fill="#dde3ea" font-size="10">Working step</text>
+          <rect x="365" y="808" width="14" height="10" rx="2" fill="none" stroke="#f0b86e" stroke-width="1.5" stroke-dasharray="4 2"/>
+          <text x="385" y="818" fill="#f0b86e" font-size="10">Blocked (paid limit)</text>
+          <line x1="365" y1="833" x2="379" y2="833" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="385" y="837" fill="#dde3ea" font-size="10">Success path</text>
+          <line x1="365" y1="848" x2="379" y2="848" stroke="#f0b86e" stroke-width="1.5"/>
+          <text x="385" y="852" fill="#f0b86e" font-size="10">Fallback / error path</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Step breakdown -->
+    <div class="section-block">
+      <h2>// step breakdown</h2>
+      <table class="step-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Step</th>
+            <th>Tool</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="step-num">1</td><td>Schedule trigger — fires every day</td><td class="step-tool">Zapier Schedule</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">2</td><td>AI generates video script from prompt</td><td class="step-tool">AI by Zapier</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">3</td><td>JavaScript formats and structures script output</td><td class="step-tool">Code by Zapier</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">4</td><td>Creates video project from script</td><td class="step-tool">Visla</td><td class="step-status-blocked">⚠ Blocked — paid plan required</td></tr>
+          <tr><td class="step-num">5</td><td>Splits into Path A (success) or Path B (fallback)</td><td class="step-tool">Zapier Paths</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">7</td><td>Uploads video file to Google Drive</td><td class="step-tool">Google Drive</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">8</td><td>AI generates title and description</td><td class="step-tool">AI by Zapier</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">9</td><td>Generates video thumbnail image</td><td class="step-tool">Google AI Studio (Gemini)</td><td class="step-status-blocked">⚠ Blocked — quota limit</td></tr>
+          <tr><td class="step-num">10</td><td>Uploads video to YouTube channel</td><td class="step-tool">YouTube</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">11</td><td>Splits into Path C (published) or Path D (failed)</td><td class="step-tool">Zapier Paths</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">13</td><td>Cross-posts video to Instagram for Business</td><td class="step-tool">Instagram for Business</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">14</td><td>Splits into Path E (logged) or Path F (fallback)</td><td class="step-tool">Zapier Paths</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">16</td><td>Logs publish record to Google Sheets</td><td class="step-tool">Google Sheets</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">17</td><td>Sends publish success notification</td><td class="step-tool">Gmail</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">19–23</td><td>Fallback email notifications on all error paths</td><td class="step-tool">Gmail</td><td class="step-status-ok">✓ Working</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Working vs Blocked -->
+    <div class="section-block">
+      <h2>// current status</h2>
+      <div class="two-col">
+        <div class="info-card working">
+          <h3>✓ Working</h3>
+          <ul>
+            <li>Daily schedule trigger</li>
+            <li>AI script generation</li>
+            <li>JavaScript data processing</li>
+            <li>Google Drive file upload</li>
+            <li>AI title &amp; description generation</li>
+            <li>YouTube video upload</li>
+            <li>Instagram cross-posting</li>
+            <li>Google Sheets publish logging</li>
+            <li>All email notifications</li>
+            <li>All 6 conditional path splits</li>
+          </ul>
+        </div>
+        <div class="info-card blocked">
+          <h3>⚠ Blocked</h3>
+          <ul>
+            <li>Visla video creation — requires paid plan</li>
+            <li>Gemini thumbnail generation — API quota limit</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- What it does at full capacity -->
+    <div class="section-block">
+      <h2>// full vision</h2>
+      <p>
+        At full capacity with paid tool access, this pipeline runs <strong>completely hands-off</strong>:
+        every day at a set time, it generates a script, produces a video with AI voiceover and visuals,
+        creates a custom thumbnail, uploads to YouTube with an optimized title and description,
+        cross-posts to Instagram, logs the result to a tracking sheet, and sends a confirmation email —
+        all without a single manual step.
+      </p>
+      <p>
+        The same architecture can be adapted for <strong>any content-driven business</strong> —
+        product updates, newsletters, social media scheduling, or client reporting pipelines.
+        The pattern is the same: trigger → generate → produce → publish → log → notify.
+      </p>
+    </div>
+
+    <div class="section-block">
+      <h2>// tools used</h2>
+      <div class="stack" style="font-family:var(--mono); font-size:.78rem; color:var(--muted);">
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Zapier</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Visla</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google AI Studio (Gemini)</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">YouTube</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Instagram for Business</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Sheets</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Drive</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Gmail</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">JavaScript (Code by Zapier)</span>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Dark' : 'Switch to Light';
+    };
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      setLabel();
+    });
+    setLabel();
+  </script>
+</body>
+</html>

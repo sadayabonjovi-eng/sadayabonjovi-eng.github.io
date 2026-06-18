@@ -1,70 +1,467 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AI Order & Customer Retention System</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Order & Customer Retention System — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border: 1px solid var(--signal);
+    color: var(--signal);
+    border-radius: 3px;
+    padding: .25rem .7rem;
+    margin-bottom: 1.5rem;
+  }
+  .status-badge .dot-signal {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--signal);
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    font-size: .78rem;
+    color: var(--muted);
+  }
+  .meta-row span { border: 1px solid var(--line); border-radius: 3px; padding: .2rem .6rem; background: var(--bg-2); }
+
+  .section-block {
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  .section-block h2 {
+    font-family: var(--mono);
+    font-size: .78rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 .6rem;
+  }
+  .section-block p {
+    color: var(--ink);
+    margin: 0 0 1rem;
+    max-width: 680px;
+  }
+  .section-block p strong { color: var(--signal); font-weight: 600; }
+
+  /* Diagram */
+  .diagram-wrap {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 2rem 1.5rem;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+  }
+  .diagram-wrap svg { display: block; margin: 0 auto; }
+
+  /* Step table */
+  .step-table {
+    width: 100%;
+    max-width: 820px;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: .80rem;
+    margin-bottom: 3rem;
+  }
+  .step-table th {
+    text-align: left;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-size: .70rem;
+    border-bottom: 1px solid var(--line);
+    padding: .5rem .8rem;
+  }
+  .step-table td {
+    padding: .65rem .8rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    vertical-align: top;
+  }
+  .step-table tr:last-child td { border-bottom: none; }
+  .step-table .step-num { color: var(--muted); width: 2.5rem; }
+  .step-table .step-tool { color: var(--signal); white-space: nowrap; }
+  .step-table .step-status-ok  { color: #5eead4; }
+
+  /* Feature / capability cards */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  @media (max-width: 580px) { .two-col { grid-template-columns: 1fr; } }
+
+  .info-card {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--bg-2);
+    padding: 1.1rem 1.2rem;
+  }
+  .info-card h3 {
+    font-family: var(--mono);
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin: 0 0 .8rem;
+    color: var(--signal);
+  }
+  .info-card ul {
+    list-style: none;
+    margin: 0; padding: 0;
+    font-family: var(--mono);
+    font-size: .80rem;
+    color: var(--ink);
+  }
+  .info-card ul li {
+    padding: .3rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .info-card ul li:last-child { border-bottom: none; }
+  .info-card ul li::before { content: "✓"; margin-right: .5rem; color: var(--signal); }
+
+  /* Demo video */
+  .demo-wrap {
+    max-width: 820px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-2);
+    padding: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .demo-wrap video {
+    width: 100%;
+    border-radius: 6px;
+    display: block;
+    border: 1px solid var(--line);
+  }
+  .demo-caption {
+    font-family: var(--mono);
+    font-size: .75rem;
+    color: var(--muted);
+    margin-top: .8rem;
+  }
+
+  .back-link {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1px;
+    transition: color .2s, border-color .2s;
+    display: inline-block;
+    margin-bottom: 2.5rem;
+  }
+  .back-link:hover { color: var(--signal); border-color: var(--signal); }
+</style>
 </head>
 <body>
-  <!-- Theme toggle -->
-  <button id="theme-toggle">🌙 Dark/Light</button>
-  <!-- Header -->
-  <header>
-    <h1>AI Order & Customer Retention System</h1>
-    <p>Processes orders, collects feedback, and re‑engages customers using <strong>Zapier AI</strong> + <strong>Google Sheets</strong>.</p>
-  </header>
-  <!-- Navigation -->
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="projects.html">Projects</a>
-    <a href="contact.html">Contact</a>
-  </nav>
-  <!-- Main Content -->
-  <div class="container">
-    <h2>Overview</h2>
-    <p>This automation system handles customer orders, tracks data, collects feedback, and sends retention emails to boost repeat business.</p>
-    <h2>Features</h2>
-    <ul>
-      <li>Filters incoming emails to detect customer orders</li>
-      <li>AI extracts order details naturally — no exact wording required</li>
-      <li>Matches orders against pricing database and calculates subtotals and totals</li>
-      <li>Duplicate order detection to prevent double recording</li>
-      <li>Logs structured data into Google Sheets with cost and profit tracking</li>
-      <li>Sends automated order confirmations with upsell suggestions</li>
-      <li>AI sentiment analysis on customer feedback — generates personalized responses based on positive, neutral or negative ratings</li>
-      <li>Retention automation — follow‑up email 24 hours after feedback</li>
-    </ul>
-    <h2>System Flow</h2>
-    <ol>
-      <li>Email trigger → detect new orders</li>
-      <li>AI extraction → parse order details naturally</li>
-      <li>Menu matching → calculate subtotals and grand total</li>
-      <li>Confirmation email → sent with upsell suggestions</li>
-      <li>Google Sheets logging → track costs and profits</li>
-      <li>Feedback loop → collect ratings via Tally survey</li>
-      <li>AI sentiment analysis → personalized response based on rating</li>
-      <li>Retention email → re‑engage customers after 24 hours</li>
-    </ol>
-    <h2>Demo Video</h2>
-    <!-- Local video file -->
-    <video class="screenshot" controls>
-      <source src="videos/order-automation-demo.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-    <!-- Or embed from YouTube -->
-    <!--
-    <iframe width="560" height="315"
-      src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
-      title="Order Automation Demo" frameborder="0" allowfullscreen></iframe>
-    -->
+
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
   </div>
-  <!-- Footer -->
-  <footer><p>© 2026 Bon Jovi F. Sadaya</p></footer>
-  <!-- Script for dark/light toggle -->
+
+  <header style="grid-template-columns:1fr;">
+    <div class="hero-text">
+      <p class="welcome">Project</p>
+      <div class="status-line"><span class="pulse"></span> Pipeline · order-automation · live</div>
+      <h1>AI Order & Customer Retention System</h1>
+      <p class="lede">
+        An end-to-end automation that captures incoming orders by email, parses them with
+        <strong>AI extraction</strong>, calculates pricing, logs cost and profit, and runs a
+        full <strong>feedback and retention loop</strong> — built on Zapier, AI, and Google Sheets.
+      </p>
+    </div>
+  </header>
+
+  <nav>
+    <a href="index.html">/home</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
+  </nav>
+
+  <div class="container">
+    <a href="projects.html" class="back-link">← back to projects</a>
+
+    <div class="status-badge"><span class="dot-signal"></span> Fully Operational</div>
+
+    <div class="meta-row">
+      <span>Type: Automation Pipeline</span>
+      <span>Tools: Zapier · AI by Zapier · Google Sheets · Tally · Gmail</span>
+      <span>Steps: 8 core stages</span>
+      <span>Status: Live</span>
+    </div>
+
+    <!-- Overview -->
+    <div class="section-block">
+      <h2>// overview</h2>
+      <p>
+        This system was built to remove manual order processing entirely. Instead of reading
+        every order email by hand, calculating totals, and following up with customers one by
+        one, the pipeline does it automatically — from the moment an order email lands to the
+        retention follow-up that brings the customer back.
+      </p>
+      <p>
+        It uses <strong>natural language AI extraction</strong>, so customers don't need to
+        format their orders a specific way — the AI reads the email the way a human would and
+        pulls out the structured order data. The system also closes the loop with
+        <strong>sentiment-aware feedback handling</strong> and an automated 24-hour retention
+        email, turning a one-time order into a chance at repeat business.
+      </p>
+    </div>
+
+    <!-- Diagram -->
+    <div class="section-block">
+      <h2>// system diagram</h2>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 620 900" width="580" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', 'Fira Code', monospace">
+          <defs>
+            <marker id="arr2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M1,1 L7,4 L1,7 Z" fill="#26313c"/>
+            </marker>
+            <marker id="arr2-signal" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M1,1 L7,4 L1,7 Z" fill="#5eead4"/>
+            </marker>
+          </defs>
+
+          <!-- 1. Email trigger -->
+          <rect x="185" y="10" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="28" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">TRIGGER</text>
+          <text x="310" y="44" text-anchor="middle" fill="#dde3ea" font-size="11">1. Gmail — New Order Email</text>
+
+          <line x1="310" y1="54" x2="310" y2="74" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+          <!-- 2. AI Extraction -->
+          <rect x="185" y="76" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="94" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">AI EXTRACTION</text>
+          <text x="310" y="110" text-anchor="middle" fill="#dde3ea" font-size="11">2. AI by Zapier — Parse Order Details</text>
+
+          <line x1="310" y1="120" x2="310" y2="140" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+          <!-- 3. Menu matching -->
+          <rect x="185" y="142" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="160" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">DATA PROCESSING</text>
+          <text x="310" y="176" text-anchor="middle" fill="#dde3ea" font-size="11">3. Code by Zapier — Match Pricing &amp; Totals</text>
+
+          <line x1="310" y1="186" x2="310" y2="206" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+          <!-- 4. Duplicate check -->
+          <rect x="185" y="208" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="226" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">VALIDATION</text>
+          <text x="310" y="242" text-anchor="middle" fill="#dde3ea" font-size="11">4. Filter — Duplicate Order Check</text>
+
+          <line x1="310" y1="252" x2="310" y2="272" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+          <!-- 5. Sheets logging -->
+          <rect x="185" y="274" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="292" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">LOG</text>
+          <text x="310" y="308" text-anchor="middle" fill="#dde3ea" font-size="11">5. Google Sheets — Log Cost &amp; Profit</text>
+
+          <line x1="310" y1="318" x2="310" y2="338" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+          <!-- 6. Confirmation email -->
+          <rect x="185" y="340" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="358" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">NOTIFY</text>
+          <text x="310" y="374" text-anchor="middle" fill="#dde3ea" font-size="11">6. Gmail — Confirmation + Upsell</text>
+
+          <line x1="310" y1="384" x2="310" y2="404" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+          <!-- 7. Tally feedback -->
+          <rect x="185" y="406" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="424" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">FEEDBACK COLLECTION</text>
+          <text x="310" y="440" text-anchor="middle" fill="#dde3ea" font-size="11">7. Tally — Customer Feedback Survey</text>
+
+          <line x1="310" y1="450" x2="310" y2="470" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+          <!-- 8. Sentiment analysis -->
+          <rect x="185" y="472" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="490" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">AI ANALYSIS</text>
+          <text x="310" y="506" text-anchor="middle" fill="#dde3ea" font-size="11">8. AI by Zapier — Sentiment Analysis</text>
+
+          <line x1="310" y1="516" x2="310" y2="536" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+          <!-- 9. Split by sentiment -->
+          <rect x="220" y="538" width="180" height="36" rx="18" fill="#131a22" stroke="#26313c" stroke-width="1.5"/>
+          <text x="310" y="560" text-anchor="middle" fill="#7d8b99" font-size="10">9. Split by Sentiment</text>
+
+          <!-- three branches -->
+          <line x1="260" y1="556" x2="160" y2="556" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="160" y1="556" x2="160" y2="600" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2-signal)"/>
+          <text x="200" y="552" text-anchor="middle" fill="#5eead4" font-size="9">Positive</text>
+
+          <line x1="310" y1="574" x2="310" y2="600" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2-signal)"/>
+          <text x="345" y="592" text-anchor="middle" fill="#5eead4" font-size="9">Neutral</text>
+
+          <line x1="360" y1="556" x2="460" y2="556" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="460" y1="556" x2="460" y2="600" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2-signal)"/>
+          <text x="420" y="552" text-anchor="middle" fill="#5eead4" font-size="9">Negative</text>
+
+          <!-- response cards -->
+          <rect x="80" y="602" width="160" height="42" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="160" y="618" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">RESPONSE</text>
+          <text x="160" y="634" text-anchor="middle" fill="#dde3ea" font-size="10">Thank-you + review ask</text>
+
+          <rect x="230" y="602" width="160" height="42" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="618" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">RESPONSE</text>
+          <text x="310" y="634" text-anchor="middle" fill="#dde3ea" font-size="10">Check-in message</text>
+
+          <rect x="380" y="602" width="160" height="42" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="460" y="618" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">RESPONSE</text>
+          <text x="460" y="634" text-anchor="middle" fill="#dde3ea" font-size="10">Service recovery reply</text>
+
+          <!-- converge to retention -->
+          <line x1="160" y1="644" x2="160" y2="664" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="310" y1="644" x2="310" y2="664" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="460" y1="644" x2="460" y2="664" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="160" y1="664" x2="460" y2="664" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="310" y1="664" x2="310" y2="684" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2-signal)"/>
+
+          <!-- 10. Retention email -->
+          <rect x="185" y="686" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="704" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">RETENTION</text>
+          <text x="310" y="720" text-anchor="middle" fill="#dde3ea" font-size="11">10. Delay 24h → Gmail Follow-up</text>
+
+          <!-- Legend -->
+          <rect x="60" y="780" width="250" height="70" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1"/>
+          <text x="75" y="800" fill="#7d8b99" font-size="9" letter-spacing="1">LEGEND</text>
+          <rect x="75" y="810" width="14" height="10" rx="2" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="95" y="820" fill="#dde3ea" font-size="10">Working step</text>
+          <line x1="75" y1="835" x2="89" y2="835" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="95" y="839" fill="#dde3ea" font-size="10">Data flow path</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Step breakdown -->
+    <div class="section-block">
+      <h2>// step breakdown</h2>
+      <table class="step-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Step</th>
+            <th>Tool</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="step-num">1</td><td>Detects new order email as it arrives</td><td class="step-tool">Gmail Trigger</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">2</td><td>AI reads the email naturally and extracts order details — no fixed format required</td><td class="step-tool">AI by Zapier</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">3</td><td>Matches items against pricing database, calculates subtotal and total</td><td class="step-tool">Code by Zapier</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">4</td><td>Checks for duplicate orders before logging</td><td class="step-tool">Zapier Filter</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">5</td><td>Logs structured order data with cost and profit tracking</td><td class="step-tool">Google Sheets</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">6</td><td>Sends order confirmation email with upsell suggestions</td><td class="step-tool">Gmail</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">7</td><td>Collects customer feedback via survey form</td><td class="step-tool">Tally</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">8</td><td>Analyzes sentiment of feedback response</td><td class="step-tool">AI by Zapier</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">9</td><td>Splits into positive, neutral, or negative response path</td><td class="step-tool">Zapier Paths</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">10</td><td>Sends personalized retention follow-up 24 hours later</td><td class="step-tool">Gmail Delay</td><td class="step-status-ok">✓ Working</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Capabilities -->
+    <div class="section-block">
+      <h2>// what it handles</h2>
+      <div class="two-col">
+        <div class="info-card">
+          <h3>Order Processing</h3>
+          <ul>
+            <li>Detects orders from natural email language</li>
+            <li>AI extraction — no exact wording required</li>
+            <li>Pricing database matching</li>
+            <li>Automatic subtotal &amp; total calculation</li>
+            <li>Duplicate order prevention</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h3>Retention &amp; Feedback</h3>
+          <ul>
+            <li>Automated confirmation with upsell suggestions</li>
+            <li>Feedback survey via Tally</li>
+            <li>AI sentiment analysis on ratings</li>
+            <li>Personalized response by sentiment type</li>
+            <li>24-hour automated retention follow-up</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Demo video -->
+    <div class="section-block">
+      <h2>// demo video</h2>
+      <div class="demo-wrap">
+        <video class="screenshot" controls>
+          <source src="videos/order-automation-demo.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <p class="demo-caption">Live walkthrough of the order detection, AI extraction, and retention flow.</p>
+        <!-- Or embed from YouTube -->
+        <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/YOUR_VIDEO_ID" title="Order Automation Demo" frameborder="0" allowfullscreen></iframe> -->
+      </div>
+    </div>
+
+    <!-- Full vision -->
+    <div class="section-block">
+      <h2>// impact</h2>
+      <p>
+        This system replaces what used to be manual reading, calculating, and follow-up for
+        every single order. Now, the moment an order email arrives, it's parsed, priced, logged,
+        and confirmed — and the customer is automatically brought back into the loop with a
+        feedback request and a retention email, without any manual touch.
+      </p>
+      <p>
+        The same pattern — <strong>detect → extract → process → confirm → collect feedback →
+        retain</strong> — can be adapted for service bookings, lead intake, or any business
+        that depends on repeat customers.
+      </p>
+    </div>
+
+    <div class="section-block">
+      <h2>// tools used</h2>
+      <div class="stack" style="font-family:var(--mono); font-size:.78rem; color:var(--muted);">
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Zapier</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">AI by Zapier</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Sheets</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Tally</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Gmail</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Code by Zapier</span>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
+
   <script>
-    document.getElementById('theme-toggle').addEventListener('click', () => {
+    const toggle = document.getElementById('theme-toggle');
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Dark' : 'Switch to Light';
+    };
+    toggle.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
+      setLabel();
     });
+    setLabel();
   </script>
 </body>
 </html>

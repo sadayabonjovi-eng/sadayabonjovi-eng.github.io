@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automation Builds — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .back-link {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1px;
+    transition: color .2s, border-color .2s;
+    display: inline-block;
+    margin-bottom: 2.5rem;
+  }
+  .back-link:hover { color: var(--signal); border-color: var(--signal); }
+</style>
+</head>
+<body>
+
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
+  </div>
+
+  <header>
+    <div class="hero-text">
+      <p class="welcome">Projects · Section 01</p>
+      <div class="status-line"><span class="pulse"></span> Automation · AI · Zapier Workflows</div>
+      <h1>Automation Builds</h1>
+      <p class="lede">
+        Working systems — a trigger, automated steps, decision logic, and a reliable
+        result at the end. Each one is a small pipeline built and tested end to end.
+      </p>
+    </div>
+  </header>
+
+  <nav>
+    <a href="index.html">/home</a>
+    <a href="projects.html">/projects</a>
+    <a href="va-skills.html">/va-skills</a>
+    <a href="contact.html">/contact</a>
+  </nav>
+
+  <div class="container">
+    <a href="projects.html" class="back-link">← back to all projects</a>
+
+    <!-- Project: Order Automation -->
+    <div class="project-card">
+      <div class="project-tag">Agent · order-retention-flow · live</div>
+      <h3>AI Order Processing & Customer Retention System</h3>
+      <p>
+        Filters incoming emails to catch new orders, uses <strong>AI to extract order
+        details</strong> from unstructured text, matches items against a pricing
+        database, and calculates totals and profit — then logs everything to
+        <strong>Google Sheets</strong>, follows up with a <strong>Tally</strong>
+        feedback form, applies <strong>AI sentiment analysis</strong> to generate
+        personalized responses based on the customer's rating, and sends a
+        personalized reorder invitation 24 hours later.
+      </p>
+      <div class="stack">
+        <span>Zapier</span><span>Tally</span><span>Google Sheets</span><span>Email</span><span>AI Sentiment Analysis</span>
+      </div>
+      <div class="project-links">
+        <a href="order-automation.html">→ details</a>
+        <a href="https://github.com/sadayabonjovi-eng/order-automation">→ github</a>
+      </div>
+    </div>
+
+    <!-- Project: Content Pipeline -->
+    <div class="project-card">
+      <div class="project-tag">Pipeline · content-automation · in progress</div>
+      <h3>AI Content Publishing Pipeline</h3>
+      <p>
+        A fully automated content production system that runs on a daily schedule —
+        using <strong>AI to generate scripts</strong>, JavaScript to process and format
+        the output, <strong>Visla</strong> to create video projects from the script,
+        and <strong>Google AI Studio (Gemini)</strong> to generate thumbnails.
+      </p>
+      <p>
+        From there, the pipeline cross-posts automatically to <strong>YouTube</strong>
+        and <strong>Instagram for Business</strong>, logs every publish to
+        <strong>Google Sheets</strong>, and sends email notifications at each stage —
+        with conditional path logic handling success, fallback, and error states
+        throughout the entire flow.
+      </p>
+      <div class="stack">
+        <span>Zapier</span><span>Visla</span><span>Google AI Studio</span><span>YouTube</span><span>Instagram</span><span>Google Sheets</span><span>JavaScript</span>
+      </div>
+      <div class="project-links">
+        <a href="content-pipeline.html">→ details</a>
+      </div>
+    </div>
+
+    <!-- Project: Weather Bot -->
+    <div class="project-card">
+      <div class="project-tag">Agent · weather-report-bot · live</div>
+      <h3>Email Weather Bot</h3>
+      <p>
+        Triggers every day at <strong>7 AM</strong>, checks the forecast, uses AI to
+        turn it into a short readable summary, and sends it straight to an inbox —
+        a small example of <strong>recurring reports that run themselves</strong>.
+      </p>
+      <div class="stack">
+        <span>Zapier</span><span>Email</span>
+      </div>
+      <div class="project-links">
+        <a href="weather-bot.html">→ details</a>
+        <a href="https://github.com/sadayabonjovi-eng/weather-bot">→ github</a>
+      </div>
+    </div>
+
+    <!-- Placeholder for future builds -->
+    <div class="project-card" style="opacity:.55;">
+      <div class="project-tag">More · coming soon</div>
+      <h3>Next Build In Progress</h3>
+      <p>
+        This list grows as new automations get built and tested. Check back soon,
+        or <a href="contact.html" style="color:var(--signal);">get in touch</a>
+        if there's a specific workflow you'd like built.
+      </p>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Dark' : 'Switch to Light';
+    };
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      setLabel();
+    });
+    setLabel();
+  </script>
+</body>
+</html>

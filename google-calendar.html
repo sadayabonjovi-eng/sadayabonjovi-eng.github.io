@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Calendar Management System — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
+  </div>
+
+  <header style="grid-template-columns:1fr;">
+    <div class="hero-text">
+      <p class="welcome">Project Detail</p>
+      <div class="status-line"><span class="pulse"></span> System · Google Calendar · Multi-Client</div>
+      <h1>Google Calendar Management System</h1>
+      <p class="lede">
+        A structured, fully operational calendar management system built for multi-client
+        scheduling — organizing meetings, deadlines, and recurring tasks without ever
+        losing track of which client is which.
+      </p>
+    </div>
+  </header>
+
+  <nav>
+    <a href="index.html">/home</a>
+    <a href="about.html">/about</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
+  </nav>
+
+  <div class="container">
+
+    <h2>// overview</h2>
+
+    <div class="pipeline">
+
+      <!-- Overview -->
+      <section class="project">
+        <span class="entry-tag">System · calendar-management</span>
+        <h3>Overview</h3>
+        <p>
+          This project demonstrates a complete Google Calendar management system built
+          around a real two-client VA scenario. Using Google Calendar's native tools —
+          separate calendars, color coding, recurring events, shared access, meeting
+          links, and task integration — a fully organized scheduling workspace was
+          built that can scale to any number of clients without confusion.
+        </p>
+        <p>
+          The system was designed so each client's schedule stays visually distinct,
+          recurring workflows run automatically, and the VA can toggle between clients
+          in seconds — no mixing, no missed meetings, no lost deadlines.
+        </p>
+      </section>
+
+      <!-- Architecture -->
+      <section class="project">
+        <span class="entry-tag">Architecture · calendar-structure</span>
+        <h3>Calendar Architecture</h3>
+        <p>
+          Each client gets their own dedicated calendar — color coded for instant
+          identification. Individual events are further distinguished using emoji
+          prefixes in the title so urgency and event type are visible at a glance,
+          without overriding the client color.
+        </p>
+        <ul style="padding-left:1.2rem;margin:0 0 1rem;">
+          <li><strong>🔵 CLIENT WORK</strong> — E-commerce business owner · Blue calendar</li>
+          <li><strong>🟣 CLIENT 2</strong> — Social media manager · Purple calendar</li>
+        </ul>
+        <p>
+          When managing one client, the other calendar is unchecked in the sidebar —
+          full focus, zero clutter. When a full overview is needed, both are checked
+          and the color difference makes every event instantly identifiable.
+        </p>
+        <p>
+          As the client list grows, a new calendar is added per client. The structure
+          scales without rebuilding anything.
+        </p>
+      </section>
+
+      <!-- Event Types -->
+      <section class="project">
+        <span class="entry-tag">System · event-types</span>
+        <h3>Event Type System</h3>
+        <p>
+          Emoji prefixes in event titles add a second layer of meaning on top of
+          calendar color — so the type and urgency of any event is readable without
+          opening it.
+        </p>
+        <ul style="padding-left:1.2rem;margin:0 0 1rem;">
+          <li><strong>📞</strong> — Call or video meeting</li>
+          <li><strong>⚡ URGENT</strong> — Needs immediate attention</li>
+          <li><strong>💰</strong> — Invoice or payment deadline</li>
+          <li><strong>🚫 Out of Office</strong> — Client unavailable, block time</li>
+          <li><strong>📝</strong> — Preparation task or agenda build</li>
+          <li><strong>📊</strong> — Report or review due</li>
+          <li><strong>✅</strong> — Completed milestone or review</li>
+          <li><strong>🔔</strong> — Daily check or engagement monitor</li>
+          <li><strong>🎯</strong> — Strategy or campaign planning</li>
+        </ul>
+      </section>
+
+      <!-- Recurring Schedules -->
+      <section class="project">
+        <span class="entry-tag">Scheduling · recurring-events</span>
+        <h3>Recurring Schedule Setup</h3>
+        <p>
+          Recurring events are the backbone of calendar management. Once set, they
+          run automatically — no manual entry every week, no missed meetings.
+          The system uses three recurrence patterns across both clients.
+        </p>
+        <ul style="padding-left:1.2rem;margin:0 0 1rem;">
+          <li><strong>Daily</strong> — 🔔 Engagement Check every morning at 7:00 AM</li>
+          <li><strong>Weekdays only</strong> — 🔁 Daily Standup Monday–Friday 8:00–8:15 AM</li>
+          <li><strong>Weekly</strong> — 📞 Weekly Check-in every Monday 9:00–9:30 AM</li>
+          <li><strong>Weekly</strong> — 📊 Send Weekly Report every Friday 4:00 PM</li>
+          <li><strong>Weekly</strong> — 📝 Prepare Weekly Agenda every Sunday 8:00 PM</li>
+          <li><strong>Bi-weekly</strong> — 📞 Strategy Meeting every other Wednesday 2:00–3:00 PM</li>
+          <li><strong>Bi-weekly</strong> — 📝 Social Media Scheduling every Tuesday & Thursday 10:00–11:00 AM</li>
+          <li><strong>Monthly</strong> — ✅ Content Batch Review last Friday of every month 2:00–3:00 PM</li>
+        </ul>
+      </section>
+
+      <!-- Shared Access -->
+      <section class="project">
+        <span class="entry-tag">Access · shared-calendar</span>
+        <h3>Shared Calendar Access</h3>
+        <p>
+          The VA manages the client's calendar through Google Calendar's sharing
+          feature — no password required. The client shares their calendar with
+          the VA's Google account and sets the permission level.
+        </p>
+        <ul style="padding-left:1.2rem;margin:0 0 1rem;">
+          <li>Client goes to <strong>Settings → Share with specific people</strong></li>
+          <li>Adds the VA's email with <strong>"Make changes to events"</strong> permission</li>
+          <li>VA sees the client's calendar instantly under <strong>Other Calendars</strong></li>
+          <li>VA can create, edit, and delete events on the client's behalf</li>
+          <li>Client stays the owner — access can be revoked instantly at any time</li>
+        </ul>
+        <p>
+          This is the same principle as Gmail delegation — the client stays in full
+          control, the VA does the work, and no passwords are ever shared.
+        </p>
+      </section>
+
+      <!-- Meeting Integration -->
+      <section class="project">
+        <span class="entry-tag">Integration · meeting-links</span>
+        <h3>Meeting Link Integration</h3>
+        <p>
+          Every meeting event includes a video conferencing link directly in the
+          event description so attendees can join with one click — no separate
+          email needed, no hunting for links before calls.
+        </p>
+        <ul style="padding-left:1.2rem;margin:0 0 1rem;">
+          <li><strong>Google Meet</strong> — generated at meet.google.com and embedded in event description</li>
+          <li><strong>Zoom</strong> — client's Zoom meeting link pasted directly into event description</li>
+          <li><strong>Meeting agenda</strong> — added below the link so attendees arrive prepared</li>
+        </ul>
+        <p>
+          Example event description format:
+        </p>
+        <pre style="background:var(--card);border:1px solid var(--line);padding:1rem;border-radius:6px;font-family:var(--mono);font-size:.82rem;line-height:1.7;overflow-x:auto;">
+📹 Meeting Link:
+meet.google.com/xxx-xxxx-xxx
+
+📋 Agenda:
+1. Review last week's tasks
+2. Discuss priorities
+3. Set goals for next week</pre>
+      </section>
+
+      <!-- Out of Office -->
+      <section class="project">
+        <span class="entry-tag">Scheduling · out-of-office</span>
+        <h3>Out of Office Blocking</h3>
+        <p>
+          When a client is unavailable — travel, holiday, or personal time — the
+          VA creates a full-day block event spanning the unavailable dates. This
+          prevents meetings from being scheduled during that period and gives the
+          VA immediate visibility when planning around the client's schedule.
+        </p>
+        <ul style="padding-left:1.2rem;margin:0 0 1rem;">
+          <li>🚫 <strong>Out of Office — Client Travel to Manila</strong> · June 23–24 · All day</li>
+          <li>🚫 <strong>Out of Office — Public Holiday</strong> · June 28 · All day</li>
+        </ul>
+        <p>
+          All-day blocks appear at the top of the calendar view — immediately visible
+          without scrolling through time slots.
+        </p>
+      </section>
+
+      <!-- Tasks -->
+      <section class="project">
+        <span class="entry-tag">Tasks · personal-workflow</span>
+        <h3>VA Task Integration</h3>
+        <p>
+          Google Tasks are personal — they can't be placed on a client's calendar.
+          The correct workflow separates what lives in the client's space from what
+          lives in the VA's space.
+        </p>
+        <ul style="padding-left:1.2rem;margin:0 0 1rem;">
+          <li><strong>Client's calendar</strong> — events only: meetings, deadlines, recurring schedules</li>
+          <li><strong>VA's Tasks</strong> — personal reminders to take action on behalf of the client</li>
+        </ul>
+        <p>
+          Example: a <em>Weekly Check-in Call</em> lives on the client's calendar as
+          an event. A reminder to <em>Send Follow Up Email after the call</em> lives
+          in the VA's own task list — invisible to the client, visible to the VA.
+        </p>
+      </section>
+
+      <!-- Daily Workflow -->
+      <section class="project">
+        <span class="entry-tag">Workflow · daily-process</span>
+        <h3>Daily Calendar Management Flow</h3>
+        <p>
+          The system follows a consistent daily workflow so no meeting is missed,
+          no deadline is forgotten, and both clients always have an up-to-date schedule.
+        </p>
+        <ol style="padding-left:1.2rem;margin:0 0 1rem;">
+          <li>Open Google Calendar → check both client calendars for today's events</li>
+          <li>Confirm all meeting links are in place for calls happening today</li>
+          <li>Check for any upcoming deadlines or urgent flags in the next 48 hours</li>
+          <li>Add or update any events requested by clients via email or message</li>
+          <li>Set reminders on time-sensitive events if not already set</li>
+          <li>Block Out of Office dates as soon as client travel or holidays are confirmed</li>
+          <li>End of day — both calendars are clean, current, and accurate</li>
+        </ol>
+      </section>
+
+      <!-- Tools -->
+      <section class="project">
+        <span class="entry-tag">Tools · google-calendar-native</span>
+        <h3>Tools Used</h3>
+        <ul style="padding-left:1.2rem;margin:0 0 1rem;">
+          <li><strong>Google Calendar</strong> — primary scheduling and calendar management</li>
+          <li><strong>Separate Calendars per Client</strong> — color-coded isolation</li>
+          <li><strong>Shared Calendar Access</strong> — delegated management without password sharing</li>
+          <li><strong>Recurring Events</strong> — daily, weekday, weekly, bi-weekly, monthly patterns</li>
+          <li><strong>All-Day Events</strong> — deadlines, holidays, Out of Office blocking</li>
+          <li><strong>Event Descriptions</strong> — meeting links and agenda embedded per event</li>
+          <li><strong>Google Meet</strong> — video conferencing link generation</li>
+          <li><strong>Zoom</strong> — client meeting link integration via description</li>
+          <li><strong>Google Tasks</strong> — VA personal task reminders alongside client calendar</li>
+          <li><strong>Emoji Prefix System</strong> — visual event type identification</li>
+          <li><strong>Calendar Toggle</strong> — single-client focus via sidebar show/hide</li>
+        </ul>
+
+        <div class="project-links" style="margin-top:1.5rem;">
+          <a href="va-skills.html" class="contact-btn">← back to projects</a>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Dark' : 'Switch to Light';
+    };
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      setLabel();
+    });
+    setLabel();
+  </script>
+
+</body>
+</html>

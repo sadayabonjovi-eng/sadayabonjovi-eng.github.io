@@ -183,9 +183,10 @@
       <div class="status-line"><span class="pulse"></span> Pipeline · order-automation · live</div>
       <h1>AI Order & Customer Retention System</h1>
       <p class="lede">
-        An end-to-end automation that captures incoming orders by email, parses them with
-        <strong>AI extraction</strong>, calculates pricing and profit, and runs a
-        full <strong>feedback and retention loop</strong> — built on Zapier, AI, Google Sheets, and Tally.
+        A complete, end-to-end automation that captures incoming orders by email, parses them
+        with <strong>AI extraction</strong>, tracks cost and profit in real time, and runs a
+        full <strong>feedback and retention loop</strong> — built on Zapier, AI, Google Sheets,
+        and Tally.
       </p>
     </div>
   </header>
@@ -204,7 +205,7 @@
     <div class="meta-row">
       <span>Type: Automation Pipeline</span>
       <span>Tools: Zapier · AI by Zapier · Google Sheets · Tally · Gmail · Code by Zapier</span>
-      <span>Steps: 16 core stages</span>
+      <span>Steps: 22 core stages</span>
       <span>Status: Live</span>
     </div>
 
@@ -214,22 +215,23 @@
       <p>
         This system was built to remove manual order processing entirely. The moment an order
         email arrives, <strong>AI extraction</strong> reads the message the way a human would,
-        matches each item against a pricing database, and calculates the order subtotal and
-        total — no fixed format required from the customer. A unique <strong>Order ID</strong>
-        is generated for every order, and a <strong>duplicate-order filter</strong> stops the
-        same email from being processed twice before a confirmation with upsell suggestions is
-        sent automatically.
+        pulling out the customer's name, email, ordered items, quantities, and order details
+        with no fixed format required. Each item is matched against a pricing database, a
+        subtotal, total payment, cost, and profit are calculated, and a unique
+        <strong>Order ID</strong> is generated — with a <strong>duplicate-order check</strong>
+        in place before anything is processed twice.
       </p>
       <p>
-        Every order is logged into Google Sheets with its Order ID, customer name, order
-        details, date, cost, and total payment, alongside a calculated <strong>profit</strong>
-        figure that continuously updates an accumulated profit total. Three hours after an
-        order is logged, the system reaches back out for feedback through a
-        <strong>Tally form</strong> — collecting a 1–5 star rating and optional comments — with
-        duplicate submissions filtered out before the verified response is logged. The rating
-        then drives an intelligent, tiered reply, and a <strong>personalized reorder
-        invitation</strong> goes out 24 hours later, with its tone shaped by how the customer
-        originally rated the experience.
+        Every order is logged into Google Sheets with its Order ID, customer name, customer
+        email, order details, date, total payment, cost, and profit, and the sheet
+        continuously updates a <strong>running profit total</strong> as orders come in. Gmail
+        then sends an order confirmation with personalized upsell recommendations. Three hours
+        later, the system follows up for feedback through a <strong>Tally form</strong> —
+        collecting a 1–5 star rating, suggestions, and comments — with duplicate submissions
+        filtered out before the verified response is logged. The rating drives a tiered reply,
+        and a <strong>personalized reorder invitation</strong> goes out 24 hours after that,
+        its tone matched to how the customer originally rated the experience, closing the loop
+        into repeat business.
       </p>
     </div>
 
@@ -237,7 +239,7 @@
     <div class="section-block">
       <h2>// system diagram</h2>
       <div class="diagram-wrap">
-        <svg viewBox="0 0 700 1300" width="640" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', 'Fira Code', monospace">
+        <svg viewBox="0 0 700 1700" width="640" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', 'Fira Code', monospace">
           <defs>
             <marker id="arr2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
               <path d="M1,1 L7,4 L1,7 Z" fill="#26313c"/>
@@ -256,144 +258,180 @@
           <!-- 2. AI Extraction -->
           <rect x="225" y="76" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
           <text x="350" y="94" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">AI EXTRACTION</text>
-          <text x="350" y="110" text-anchor="middle" fill="#dde3ea" font-size="11">2. AI by Zapier — Parse Order Details</text>
+          <text x="350" y="110" text-anchor="middle" fill="#dde3ea" font-size="11">2. AI by Zapier — Extract Order Data</text>
           <line x1="350" y1="120" x2="350" y2="140" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
 
           <!-- 3. Pricing match -->
           <rect x="225" y="142" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
           <text x="350" y="160" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">DATA PROCESSING</text>
-          <text x="350" y="176" text-anchor="middle" fill="#dde3ea" font-size="11">3. Code by Zapier — Match Pricing & Totals</text>
+          <text x="350" y="176" text-anchor="middle" fill="#dde3ea" font-size="11">3. Code by Zapier — Match Pricing</text>
           <line x1="350" y1="186" x2="350" y2="206" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
 
-          <!-- 4. Order ID -->
+          <!-- 4. Calculations -->
           <rect x="225" y="208" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="350" y="226" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">ORDER ID</text>
-          <text x="350" y="242" text-anchor="middle" fill="#dde3ea" font-size="11">4. Code by Zapier — Generate Unique Order ID</text>
+          <text x="350" y="226" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">CALCULATIONS</text>
+          <text x="350" y="242" text-anchor="middle" fill="#dde3ea" font-size="11">4. Code by Zapier — Calc Total & Profit</text>
           <line x1="350" y1="252" x2="350" y2="272" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
 
-          <!-- 5. Duplicate order check -->
+          <!-- 5. Order ID -->
           <rect x="225" y="274" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="350" y="292" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">VALIDATION</text>
-          <text x="350" y="308" text-anchor="middle" fill="#dde3ea" font-size="11">5. Filter — Duplicate Order Check</text>
+          <text x="350" y="292" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">ORDER ID</text>
+          <text x="350" y="308" text-anchor="middle" fill="#dde3ea" font-size="11">5. Code by Zapier — Generate Order ID</text>
           <line x1="350" y1="318" x2="350" y2="338" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
 
-          <!-- 6. Sheets log + profit -->
+          <!-- 6. Duplicate order check -->
           <rect x="225" y="340" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="350" y="358" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">LOG + PROFIT</text>
-          <text x="350" y="374" text-anchor="middle" fill="#dde3ea" font-size="11">6. Google Sheets — Log Order & Calc Profit</text>
+          <text x="350" y="358" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">VALIDATION</text>
+          <text x="350" y="374" text-anchor="middle" fill="#dde3ea" font-size="11">6. Filter — Duplicate Order Check</text>
           <line x1="350" y1="384" x2="350" y2="404" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
 
-          <!-- 7. Confirmation email -->
+          <!-- 7. Sheets log -->
           <rect x="225" y="406" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="350" y="424" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">NOTIFY</text>
-          <text x="350" y="440" text-anchor="middle" fill="#dde3ea" font-size="11">7. Gmail — Confirmation + Upsell</text>
+          <text x="350" y="424" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">LOG</text>
+          <text x="350" y="440" text-anchor="middle" fill="#dde3ea" font-size="11">7. Google Sheets — Log Full Order Record</text>
           <line x1="350" y1="450" x2="350" y2="470" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
 
-          <!-- 8. Sheets trigger -->
+          <!-- 8. Running profit -->
           <rect x="225" y="472" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="350" y="490" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">TRIGGER</text>
-          <text x="350" y="506" text-anchor="middle" fill="#dde3ea" font-size="11">8. Google Sheets — New/Updated Row</text>
+          <text x="350" y="490" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">PROFIT TRACKING</text>
+          <text x="350" y="506" text-anchor="middle" fill="#dde3ea" font-size="11">8. Google Sheets — Update Running Profit</text>
           <line x1="350" y1="516" x2="350" y2="536" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
 
-          <!-- 9. Delay 3h -->
+          <!-- 9. Confirmation email -->
           <rect x="225" y="538" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="350" y="556" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">DELAY</text>
-          <text x="350" y="572" text-anchor="middle" fill="#dde3ea" font-size="11">9. Wait 3 Hours</text>
+          <text x="350" y="556" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">NOTIFY</text>
+          <text x="350" y="572" text-anchor="middle" fill="#dde3ea" font-size="11">9. Gmail — Send Order Confirmation</text>
           <line x1="350" y1="582" x2="350" y2="602" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
 
-          <!-- 10. Feedback request email -->
+          <!-- 10. Upsell -->
           <rect x="225" y="604" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="350" y="622" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">NOTIFY</text>
-          <text x="350" y="638" text-anchor="middle" fill="#dde3ea" font-size="11">10. Gmail — Feedback Request (Tally Link)</text>
+          <text x="350" y="622" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">UPSELL</text>
+          <text x="350" y="638" text-anchor="middle" fill="#dde3ea" font-size="11">10. Gmail — Personalized Upsell Email</text>
           <line x1="350" y1="648" x2="350" y2="668" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
 
-          <!-- 11. Tally rating -->
+          <!-- 11. Sheets trigger -->
           <rect x="225" y="670" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="350" y="688" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">FEEDBACK COLLECTION</text>
-          <text x="350" y="704" text-anchor="middle" fill="#dde3ea" font-size="11">11. Tally — 1–5 Star Rating + Comments</text>
+          <text x="350" y="688" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">TRIGGER</text>
+          <text x="350" y="704" text-anchor="middle" fill="#dde3ea" font-size="11">11. Google Sheets — New Order Logged</text>
           <line x1="350" y1="714" x2="350" y2="734" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
 
-          <!-- 12. Duplicate feedback filter -->
+          <!-- 12. Delay 3h -->
           <rect x="225" y="736" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="350" y="754" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">VALIDATION</text>
-          <text x="350" y="770" text-anchor="middle" fill="#dde3ea" font-size="11">12. Filter — Duplicate Feedback Check</text>
+          <text x="350" y="754" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">DELAY</text>
+          <text x="350" y="770" text-anchor="middle" fill="#dde3ea" font-size="11">12. Zapier Delay — Wait 3 Hours</text>
           <line x1="350" y1="780" x2="350" y2="800" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
 
-          <!-- 13. Log verified feedback -->
+          <!-- 13. Feedback request -->
           <rect x="225" y="802" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="350" y="820" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">LOG</text>
-          <text x="350" y="836" text-anchor="middle" fill="#dde3ea" font-size="11">13. Google Sheets — Log Verified Feedback</text>
+          <text x="350" y="820" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">NOTIFY</text>
+          <text x="350" y="836" text-anchor="middle" fill="#dde3ea" font-size="11">13. Gmail — Feedback Request Email</text>
           <line x1="350" y1="846" x2="350" y2="866" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
 
-          <!-- 14. Split by rating -->
-          <rect x="240" y="868" width="220" height="36" rx="18" fill="#131a22" stroke="#26313c" stroke-width="1.5"/>
-          <text x="350" y="890" text-anchor="middle" fill="#7d8b99" font-size="10">14. Split by Star Rating</text>
+          <!-- 14. Tally link -->
+          <rect x="225" y="868" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="350" y="886" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">SURVEY LINK</text>
+          <text x="350" y="902" text-anchor="middle" fill="#dde3ea" font-size="11">14. Email Includes Tally Survey Link</text>
+          <line x1="350" y1="912" x2="350" y2="932" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+          <!-- 15. Tally rating -->
+          <rect x="225" y="934" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="350" y="952" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">FEEDBACK COLLECTION</text>
+          <text x="350" y="968" text-anchor="middle" fill="#dde3ea" font-size="11">15. Tally — Rating, Suggestions & Comments</text>
+          <line x1="350" y1="978" x2="350" y2="998" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+          <!-- 16. Duplicate feedback filter -->
+          <rect x="225" y="1000" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="350" y="1018" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">VALIDATION</text>
+          <text x="350" y="1034" text-anchor="middle" fill="#dde3ea" font-size="11">16. Filter — Duplicate Feedback Check</text>
+          <line x1="350" y1="1044" x2="350" y2="1064" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+          <!-- 17. Log verified feedback -->
+          <rect x="225" y="1066" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="350" y="1084" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">LOG</text>
+          <text x="350" y="1100" text-anchor="middle" fill="#dde3ea" font-size="11">17. Google Sheets — Log Verified Feedback</text>
+          <line x1="350" y1="1110" x2="350" y2="1130" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+          <!-- 18. Split by rating -->
+          <rect x="240" y="1132" width="220" height="36" rx="18" fill="#131a22" stroke="#26313c" stroke-width="1.5"/>
+          <text x="350" y="1154" text-anchor="middle" fill="#7d8b99" font-size="10">18. Split by Star Rating</text>
 
           <!-- trunk + bus -->
-          <line x1="350" y1="904" x2="350" y2="912" stroke="#5eead4" stroke-width="1.5"/>
-          <line x1="90" y1="912" x2="610" y2="912" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="350" y1="1168" x2="350" y2="1176" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="90" y1="1176" x2="610" y2="1176" stroke="#5eead4" stroke-width="1.5"/>
 
           <!-- 5 branch drops -->
-          <line x1="90" y1="912" x2="90" y2="940" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2-signal)"/>
-          <line x1="220" y1="912" x2="220" y2="940" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2-signal)"/>
-          <line x1="350" y1="912" x2="350" y2="940" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2-signal)"/>
-          <line x1="480" y1="912" x2="480" y2="940" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2-signal)"/>
-          <line x1="610" y1="912" x2="610" y2="940" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2-signal)"/>
+          <line x1="90" y1="1176" x2="90" y2="1204" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2-signal)"/>
+          <line x1="220" y1="1176" x2="220" y2="1204" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2-signal)"/>
+          <line x1="350" y1="1176" x2="350" y2="1204" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2-signal)"/>
+          <line x1="480" y1="1176" x2="480" y2="1204" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2-signal)"/>
+          <line x1="610" y1="1176" x2="610" y2="1204" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2-signal)"/>
 
-          <text x="90" y="930" text-anchor="middle" fill="#5eead4" font-size="9">5★</text>
-          <text x="220" y="930" text-anchor="middle" fill="#5eead4" font-size="9">4★</text>
-          <text x="350" y="930" text-anchor="middle" fill="#5eead4" font-size="9">3★</text>
-          <text x="480" y="930" text-anchor="middle" fill="#5eead4" font-size="9">2★</text>
-          <text x="610" y="930" text-anchor="middle" fill="#5eead4" font-size="9">1★</text>
+          <text x="90" y="1194" text-anchor="middle" fill="#5eead4" font-size="9">5★</text>
+          <text x="220" y="1194" text-anchor="middle" fill="#5eead4" font-size="9">4★</text>
+          <text x="350" y="1194" text-anchor="middle" fill="#5eead4" font-size="9">3★</text>
+          <text x="480" y="1194" text-anchor="middle" fill="#5eead4" font-size="9">2★</text>
+          <text x="610" y="1194" text-anchor="middle" fill="#5eead4" font-size="9">1★</text>
 
           <!-- response cards -->
-          <rect x="30" y="942" width="120" height="42" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="90" y="958" text-anchor="middle" fill="#7d8b99" font-size="8" letter-spacing="1">RESPONSE</text>
-          <text x="90" y="974" text-anchor="middle" fill="#dde3ea" font-size="9">5★ — Thank-You</text>
+          <rect x="30" y="1206" width="120" height="42" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="90" y="1222" text-anchor="middle" fill="#7d8b99" font-size="8" letter-spacing="1">RESPONSE</text>
+          <text x="90" y="1238" text-anchor="middle" fill="#dde3ea" font-size="9">5★ — Thank-You</text>
 
-          <rect x="160" y="942" width="120" height="42" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="220" y="958" text-anchor="middle" fill="#7d8b99" font-size="8" letter-spacing="1">RESPONSE</text>
-          <text x="220" y="974" text-anchor="middle" fill="#dde3ea" font-size="9">4★ — Reinforcement</text>
+          <rect x="160" y="1206" width="120" height="42" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="220" y="1222" text-anchor="middle" fill="#7d8b99" font-size="8" letter-spacing="1">RESPONSE</text>
+          <text x="220" y="1238" text-anchor="middle" fill="#dde3ea" font-size="9">4★ — Reinforcement</text>
 
-          <rect x="290" y="942" width="120" height="42" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="350" y="958" text-anchor="middle" fill="#7d8b99" font-size="8" letter-spacing="1">RESPONSE</text>
-          <text x="350" y="974" text-anchor="middle" fill="#dde3ea" font-size="9">3★ — Follow-Up</text>
+          <rect x="290" y="1206" width="120" height="42" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="350" y="1222" text-anchor="middle" fill="#7d8b99" font-size="8" letter-spacing="1">RESPONSE</text>
+          <text x="350" y="1238" text-anchor="middle" fill="#dde3ea" font-size="9">3★ — Follow-Up</text>
 
-          <rect x="420" y="942" width="120" height="42" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="480" y="958" text-anchor="middle" fill="#7d8b99" font-size="8" letter-spacing="1">RESPONSE</text>
-          <text x="480" y="974" text-anchor="middle" fill="#dde3ea" font-size="9">2★ — Apology</text>
+          <rect x="420" y="1206" width="120" height="42" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="480" y="1222" text-anchor="middle" fill="#7d8b99" font-size="8" letter-spacing="1">RESPONSE</text>
+          <text x="480" y="1238" text-anchor="middle" fill="#dde3ea" font-size="9">2★ — Apology</text>
 
-          <rect x="550" y="942" width="120" height="42" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="610" y="958" text-anchor="middle" fill="#7d8b99" font-size="8" letter-spacing="1">RESPONSE</text>
-          <text x="610" y="974" text-anchor="middle" fill="#dde3ea" font-size="9">1★ — Recovery</text>
+          <rect x="550" y="1206" width="120" height="42" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="610" y="1222" text-anchor="middle" fill="#7d8b99" font-size="8" letter-spacing="1">RESPONSE</text>
+          <text x="610" y="1238" text-anchor="middle" fill="#dde3ea" font-size="9">1★ — Recovery</text>
 
           <!-- converge -->
-          <line x1="90" y1="984" x2="90" y2="996" stroke="#5eead4" stroke-width="1.5"/>
-          <line x1="220" y1="984" x2="220" y2="996" stroke="#5eead4" stroke-width="1.5"/>
-          <line x1="350" y1="984" x2="350" y2="996" stroke="#5eead4" stroke-width="1.5"/>
-          <line x1="480" y1="984" x2="480" y2="996" stroke="#5eead4" stroke-width="1.5"/>
-          <line x1="610" y1="984" x2="610" y2="996" stroke="#5eead4" stroke-width="1.5"/>
-          <line x1="90" y1="996" x2="610" y2="996" stroke="#5eead4" stroke-width="1.5"/>
-          <line x1="350" y1="996" x2="350" y2="1016" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2-signal)"/>
+          <line x1="90" y1="1248" x2="90" y2="1260" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="220" y1="1248" x2="220" y2="1260" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="350" y1="1248" x2="350" y2="1260" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="480" y1="1248" x2="480" y2="1260" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="610" y1="1248" x2="610" y2="1260" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="90" y1="1260" x2="610" y2="1260" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="350" y1="1260" x2="350" y2="1280" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2-signal)"/>
 
-          <!-- 15. Delay 24h -->
-          <rect x="225" y="1018" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="350" y="1036" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">RETENTION</text>
-          <text x="350" y="1052" text-anchor="middle" fill="#dde3ea" font-size="11">15. Delay 24 Hours</text>
-          <line x1="350" y1="1062" x2="350" y2="1082" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <!-- 19. Delay 24h -->
+          <rect x="225" y="1282" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="350" y="1300" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">DELAY</text>
+          <text x="350" y="1316" text-anchor="middle" fill="#dde3ea" font-size="11">19. Zapier Delay — Wait 24 Hours</text>
+          <line x1="350" y1="1326" x2="350" y2="1346" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
 
-          <!-- 16. Reorder invitation -->
-          <rect x="225" y="1084" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="350" y="1102" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">RETENTION</text>
-          <text x="350" y="1118" text-anchor="middle" fill="#dde3ea" font-size="11">16. Gmail — Personalized Reorder Invitation</text>
+          <!-- 20. Reorder invitation -->
+          <rect x="225" y="1348" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="350" y="1366" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">RETENTION</text>
+          <text x="350" y="1382" text-anchor="middle" fill="#dde3ea" font-size="11">20. Gmail — Personalized Reorder Invite</text>
+          <line x1="350" y1="1392" x2="350" y2="1412" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+          <!-- 21. Tone matched -->
+          <rect x="225" y="1414" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="350" y="1432" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">RETENTION</text>
+          <text x="350" y="1448" text-anchor="middle" fill="#dde3ea" font-size="11">21. Tone Matched to Original Rating</text>
+          <line x1="350" y1="1458" x2="350" y2="1478" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+          <!-- 22. Loop closed -->
+          <rect x="225" y="1480" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="350" y="1498" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">RETENTION</text>
+          <text x="350" y="1514" text-anchor="middle" fill="#dde3ea" font-size="11">22. Retention Loop Closed</text>
 
           <!-- Legend -->
-          <rect x="60" y="1175" width="250" height="70" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1"/>
-          <text x="75" y="1195" fill="#7d8b99" font-size="9" letter-spacing="1">LEGEND</text>
-          <rect x="75" y="1205" width="14" height="10" rx="2" fill="none" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="95" y="1215" fill="#dde3ea" font-size="10">Working step</text>
-          <line x1="75" y1="1230" x2="89" y2="1230" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="95" y="1234" fill="#dde3ea" font-size="10">Data flow path</text>
+          <rect x="60" y="1575" width="250" height="70" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1"/>
+          <text x="75" y="1595" fill="#7d8b99" font-size="9" letter-spacing="1">LEGEND</text>
+          <rect x="75" y="1605" width="14" height="10" rx="2" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="95" y="1615" fill="#dde3ea" font-size="10">Working step</text>
+          <line x1="75" y1="1630" x2="89" y2="1630" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="95" y="1634" fill="#dde3ea" font-size="10">Data flow path</text>
         </svg>
       </div>
     </div>
@@ -412,21 +450,27 @@
         </thead>
         <tbody>
           <tr><td class="step-num">1</td><td>Detects new order email as it arrives</td><td class="step-tool">Gmail Trigger</td><td class="step-status-ok">✓ Working</td></tr>
-          <tr><td class="step-num">2</td><td>AI reads the email naturally and extracts order details — no fixed format required</td><td class="step-tool">AI by Zapier</td><td class="step-status-ok">✓ Working</td></tr>
-          <tr><td class="step-num">3</td><td>Matches items against pricing database, calculates subtotal and total</td><td class="step-tool">Code by Zapier</td><td class="step-status-ok">✓ Working</td></tr>
-          <tr><td class="step-num">4</td><td>Generates a unique Order ID for the order</td><td class="step-tool">Code by Zapier</td><td class="step-status-ok">✓ Working</td></tr>
-          <tr><td class="step-num">5</td><td>Checks for duplicate orders/confirmations before proceeding</td><td class="step-tool">Zapier Filter</td><td class="step-status-ok">✓ Working</td></tr>
-          <tr><td class="step-num">6</td><td>Logs Order ID, customer name, order details, date, cost, and total payment; calculates profit</td><td class="step-tool">Google Sheets</td><td class="step-status-ok">✓ Working</td></tr>
-          <tr><td class="step-num">7</td><td>Sends order confirmation email with upsell suggestions</td><td class="step-tool">Gmail</td><td class="step-status-ok">✓ Working</td></tr>
-          <tr><td class="step-num">8</td><td>Watches for new or updated rows in the order log</td><td class="step-tool">Google Sheets Trigger</td><td class="step-status-ok">✓ Working</td></tr>
-          <tr><td class="step-num">9</td><td>Waits 3 hours before requesting feedback</td><td class="step-tool">Zapier Delay</td><td class="step-status-ok">✓ Working</td></tr>
-          <tr><td class="step-num">10</td><td>Sends feedback request email with Tally survey link</td><td class="step-tool">Gmail</td><td class="step-status-ok">✓ Working</td></tr>
-          <tr><td class="step-num">11</td><td>Collects 1–5 star rating and optional comments</td><td class="step-tool">Tally</td><td class="step-status-ok">✓ Working</td></tr>
-          <tr><td class="step-num">12</td><td>Filters out duplicate feedback submissions</td><td class="step-tool">Zapier Filter</td><td class="step-status-ok">✓ Working</td></tr>
-          <tr><td class="step-num">13</td><td>Logs verified feedback into Google Sheets</td><td class="step-tool">Google Sheets</td><td class="step-status-ok">✓ Working</td></tr>
-          <tr><td class="step-num">14</td><td>Splits into a tiered response path by star rating (5★–1★)</td><td class="step-tool">Zapier Paths</td><td class="step-status-ok">✓ Working</td></tr>
-          <tr><td class="step-num">15</td><td>Waits 24 hours after the feedback response</td><td class="step-tool">Zapier Delay</td><td class="step-status-ok">✓ Working</td></tr>
-          <tr><td class="step-num">16</td><td>Sends a personalized reorder invitation, tone matched to the original rating</td><td class="step-tool">Gmail</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">2</td><td>Extracts customer name, email, ordered items, quantities, and order details from natural language</td><td class="step-tool">AI by Zapier</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">3</td><td>Matches items against the pricing database</td><td class="step-tool">Code by Zapier</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">4</td><td>Calculates subtotal, total payment, cost, and profit</td><td class="step-tool">Code by Zapier</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">5</td><td>Generates a unique Order ID for the order</td><td class="step-tool">Code by Zapier</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">6</td><td>Checks for duplicate orders before processing</td><td class="step-tool">Zapier Filter</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">7</td><td>Logs Order ID, customer name, customer email, order details, date, total payment, cost, and profit</td><td class="step-tool">Google Sheets</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">8</td><td>Automatically updates the accumulated/running profit total</td><td class="step-tool">Google Sheets</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">9</td><td>Sends the order confirmation email</td><td class="step-tool">Gmail</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">10</td><td>Includes personalized upsell recommendations in the confirmation</td><td class="step-tool">Gmail</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">11</td><td>Triggers when a new order row is logged</td><td class="step-tool">Google Sheets Trigger</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">12</td><td>Waits 3 hours before requesting feedback</td><td class="step-tool">Zapier Delay</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">13</td><td>Sends the feedback request email</td><td class="step-tool">Gmail</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">14</td><td>Includes the Tally survey link in the email</td><td class="step-tool">Gmail · Tally</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">15</td><td>Customer submits a 1–5 star rating, suggestions, and comments</td><td class="step-tool">Tally</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">16</td><td>Checks for duplicate feedback submissions</td><td class="step-tool">Zapier Filter</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">17</td><td>Logs the verified feedback into Google Sheets</td><td class="step-tool">Google Sheets</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">18</td><td>Splits into 5★, 4★, 3★, 2★, and 1★ response paths</td><td class="step-tool">Zapier Paths</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">19</td><td>Waits 24 hours after the feedback response is sent</td><td class="step-tool">Zapier Delay</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">20</td><td>Sends a personalized reorder invitation</td><td class="step-tool">Gmail</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">21</td><td>Matches reorder email tone to the customer's original star rating</td><td class="step-tool">Gmail</td><td class="step-status-ok">✓ Working</td></tr>
+          <tr><td class="step-num">22</td><td>Closes the retention loop and encourages repeat business</td><td class="step-tool">Zapier</td><td class="step-status-ok">✓ Working</td></tr>
         </tbody>
       </table>
     </div>
@@ -438,52 +482,74 @@
         <div class="info-card">
           <h3>Order Processing</h3>
           <ul>
-            <li>Detects orders from natural email language</li>
-            <li>AI extraction — no exact wording required</li>
-            <li>Pricing database matching</li>
-            <li>Automatic subtotal &amp; total calculation</li>
-            <li>Confirmation email with upsell suggestions</li>
+            <li>AI extraction</li>
+            <li>Pricing matching</li>
+            <li>Order ID generation</li>
+            <li>Duplicate order protection</li>
+            <li>Automatic calculations</li>
           </ul>
         </div>
         <div class="info-card">
-          <h3>Order Management & Tracking</h3>
+          <h3>Business Tracking</h3>
           <ul>
-            <li>Unique Order ID generated per order</li>
-            <li>Duplicate order/confirmation protection</li>
-            <li>Full order log in Google Sheets</li>
-            <li>Per-order profit calculation</li>
-            <li>Continuously updated accumulated profit</li>
+            <li>Cost tracking</li>
+            <li>Profit tracking</li>
+            <li>Running profit totals</li>
+            <li>Order logging</li>
+            <li>Customer tracking</li>
           </ul>
         </div>
         <div class="info-card">
-          <h3>Customer Feedback Automation</h3>
+          <h3>Feedback Automation</h3>
           <ul>
-            <li>Triggered from new/updated Sheets rows</li>
-            <li>3-hour delay before feedback request</li>
-            <li>Tally form — 1–5 star rating + comments</li>
-            <li>Duplicate feedback submissions filtered</li>
-            <li>Verified feedback logged to Sheets</li>
+            <li>3-hour delay</li>
+            <li>Feedback requests</li>
+            <li>Tally form</li>
+            <li>Suggestions collection</li>
+            <li>Comment collection</li>
+            <li>Duplicate feedback protection</li>
           </ul>
         </div>
         <div class="info-card">
-          <h3>Intelligent Response System</h3>
+          <h3>Response Automation</h3>
           <ul>
-            <li>5-star → thank-you message</li>
-            <li>4-star → positive reinforcement</li>
-            <li>3-star → neutral follow-up</li>
-            <li>2-star → improvement / apology</li>
-            <li>1-star → service recovery message</li>
+            <li>5-star path</li>
+            <li>4-star path</li>
+            <li>3-star path</li>
+            <li>2-star path</li>
+            <li>1-star path</li>
           </ul>
         </div>
         <div class="info-card">
           <h3>Customer Retention</h3>
           <ul>
-            <li>24-hour delay after feedback response</li>
-            <li>Personalized reorder invitation by email</li>
-            <li>Message tone adapts to original rating</li>
-            <li>Closes the loop into repeat business</li>
+            <li>Personalized follow-ups</li>
+            <li>Rating-based messaging</li>
+            <li>Reorder invitations</li>
+            <li>Repeat customer automation</li>
           </ul>
         </div>
+      </div>
+    </div>
+
+    <!-- System Outputs -->
+    <div class="section-block">
+      <h2>// system outputs</h2>
+      <p>
+        Everything the pipeline produces rolls up into a single live record per order — what
+        gets tracked, end to end:
+      </p>
+      <div class="info-card">
+        <h3>Tracked &amp; Reported</h3>
+        <ul>
+          <li>Order ID tracking</li>
+          <li>Revenue tracking</li>
+          <li>Profit tracking</li>
+          <li>Customer satisfaction tracking</li>
+          <li>Feedback tracking</li>
+          <li>Retention tracking</li>
+          <li>Duplicate prevention</li>
+        </ul>
       </div>
     </div>
 
@@ -495,7 +561,7 @@
           <source src="videos/order-automation-demo.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
-        <p class="demo-caption">Live walkthrough of the order detection, AI extraction, profit logging, and feedback-driven retention flow.</p>
+        <p class="demo-caption">Live walkthrough of order detection, AI extraction, profit logging, feedback collection, and the retention follow-up.</p>
         <!-- Or embed from YouTube -->
         <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/YOUR_VIDEO_ID" title="Order Automation Demo" frameborder="0" allowfullscreen></iframe> -->
       </div>
@@ -506,23 +572,29 @@
       <h2>// impact</h2>
       <p>
         This system replaces what used to be manual reading, calculating, logging, and
-        following up on every single order. Now, the moment an order email arrives, it's
-        parsed by AI, priced against the catalog, assigned a unique Order ID, checked for
-        duplicates, logged into Google Sheets with full cost and profit detail, and confirmed
-        by email — all without a manual touch. The accumulated profit figure updates
-        automatically with every order, giving a live read on the business's bottom line.
+        following up on every single order. Work that once took minutes per order — copying
+        details into a sheet, doing the math by hand, writing a confirmation, remembering to
+        check back in — now happens the instant the email lands, freeing up hours every week
+        that used to go into repetitive admin.
       </p>
       <p>
-        On the customer side, a 3-hour delayed Tally survey collects a star rating and
-        comments, duplicate submissions are filtered out, and the verified feedback drives a
-        tiered, rating-matched reply — from a thank-you at five stars to a recovery message at
-        one star. A personalized reorder invitation follows 24 hours later, its tone shaped by
-        the original rating, turning a single order into the start of a retention cycle.
+        Every order is parsed by AI, priced against the catalog, assigned a unique Order ID,
+        checked for duplicates, and logged into Google Sheets with full cost and profit
+        detail. The running profit total updates automatically with every order, giving a live,
+        always-current read on the business's bottom line instead of a number that's only
+        accurate after someone sits down to reconcile it.
+      </p>
+      <p>
+        On the customer side, a 3-hour delayed Tally survey collects a star rating, suggestions,
+        and comments; duplicate submissions are filtered out, and the verified feedback drives a
+        tiered, rating-matched reply. A personalized reorder invitation follows 24 hours later,
+        its tone shaped by the original rating — turning customer retention from something that
+        has to be remembered into something that happens automatically, every time.
       </p>
       <p>
         The same pattern — <strong>detect → extract → process → confirm → collect feedback →
-        respond → retain</strong> — can be adapted for service bookings, lead intake, or any
-        business that depends on repeat customers.
+        respond → retain</strong> — is a fully end-to-end loop that can be adapted for service
+        bookings, lead intake, or any business that depends on repeat customers.
       </p>
     </div>
 

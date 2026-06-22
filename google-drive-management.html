@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Drive Management — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border: 1px solid var(--signal);
+    color: var(--signal);
+    border-radius: 3px;
+    padding: .25rem .7rem;
+    margin-bottom: 1.5rem;
+  }
+  .status-badge .dot-signal {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--signal);
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    font-size: .78rem;
+    color: var(--muted);
+  }
+  .meta-row span {
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: .2rem .6rem;
+    background: var(--bg-2);
+  }
+
+  .section-block {
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  .section-block h2 {
+    font-family: var(--mono);
+    font-size: .78rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 .6rem;
+  }
+  .section-block p {
+    color: var(--ink);
+    margin: 0 0 1rem;
+    max-width: 680px;
+  }
+  .section-block p strong { color: var(--signal); font-weight: 600; }
+
+  /* Folder tree diagram */
+  .diagram-wrap {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 2rem 1.5rem;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+  }
+  .folder-tree {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--ink);
+    line-height: 1.9;
+    white-space: pre;
+  }
+  .folder-tree .root   { color: var(--signal); font-weight: 700; }
+  .folder-tree .utility { color: #f0b86e; }
+  .folder-tree .folder  { color: #dde3ea; }
+  .folder-tree .file    { color: var(--muted); }
+  .folder-tree .label   { color: var(--signal); font-size: .72rem; letter-spacing: .1em; }
+
+  /* Step table */
+  .step-table {
+    width: 100%;
+    max-width: 820px;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: .80rem;
+    margin-bottom: 3rem;
+  }
+  .step-table th {
+    text-align: left;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-size: .70rem;
+    border-bottom: 1px solid var(--line);
+    padding: .5rem .8rem;
+  }
+  .step-table td {
+    padding: .65rem .8rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    vertical-align: top;
+  }
+  .step-table tr:last-child td { border-bottom: none; }
+  .step-table .step-num  { color: var(--muted); width: 2.5rem; }
+  .step-table .step-tool { color: var(--signal); white-space: nowrap; }
+  .step-table .step-ok   { color: #5eead4; }
+
+  /* Skill cards */
+  .three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.2rem;
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  @media (max-width: 700px) { .three-col { grid-template-columns: 1fr; } }
+  @media (max-width: 900px) and (min-width: 701px) { .three-col { grid-template-columns: 1fr 1fr; } }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  @media (max-width: 580px) { .two-col { grid-template-columns: 1fr; } }
+
+  .info-card {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--bg-2);
+    padding: 1.1rem 1.2rem;
+  }
+  .info-card h3 {
+    font-family: var(--mono);
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin: 0 0 .8rem;
+    color: var(--signal);
+  }
+  .info-card ul {
+    list-style: none;
+    margin: 0; padding: 0;
+    font-family: var(--mono);
+    font-size: .80rem;
+    color: var(--ink);
+  }
+  .info-card ul li {
+    padding: .3rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .info-card ul li:last-child { border-bottom: none; }
+  .info-card ul li::before { content: "✓"; margin-right: .5rem; color: var(--signal); }
+
+  /* Rule card */
+  .rule-card {
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--signal);
+    border-radius: 0 6px 6px 0;
+    background: var(--bg-2);
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+    max-width: 680px;
+  }
+  .rule-card .rule-label {
+    font-family: var(--mono);
+    font-size: .70rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: .4rem;
+  }
+  .rule-card p {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .back-link {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1px;
+    transition: color .2s, border-color .2s;
+    display: inline-block;
+    margin-bottom: 2.5rem;
+  }
+  .back-link:hover { color: var(--signal); border-color: var(--signal); }
+
+  /* Permission table */
+  .perm-table {
+    width: 100%;
+    max-width: 680px;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: .78rem;
+    margin-bottom: 2rem;
+  }
+  .perm-table th {
+    text-align: left;
+    color: var(--muted);
+    font-size: .70rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+    padding: .5rem .8rem;
+  }
+  .perm-table td {
+    padding: .55rem .8rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+  }
+  .perm-table tr:last-child td { border-bottom: none; }
+  .perm-table .yes { color: #5eead4; }
+  .perm-table .no  { color: #f0b86e; }
+  .perm-table .role { color: var(--signal); }
+</style>
+</head>
+<body>
+
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
+  </div>
+
+  <header style="grid-template-columns:1fr;">
+    <div class="hero-text">
+      <p class="welcome">Project</p>
+      <div class="status-line"><span class="pulse"></span> VA Skill · google-drive · operational</div>
+      <h1>Google Drive Management</h1>
+      <p class="lede">
+        A fully structured, permission-controlled, and documented Google Drive system
+        built for a small business client — covering <strong>folder architecture</strong>,
+        <strong>access management</strong>, <strong>version recovery</strong>,
+        <strong>template workflows</strong>, and <strong>search strategies</strong>
+        used daily by professional Virtual Assistants.
+      </p>
+    </div>
+  </header>
+
+  <nav>
+    <a href="index.html">/home</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
+  </nav>
+
+  <div class="container">
+    <a href="projects.html" class="back-link">← back to projects</a>
+
+    <div class="status-badge"><span class="dot-signal"></span> Fully Operational</div>
+
+    <div class="meta-row">
+      <span>Type: VA Skill — File Management</span>
+      <span>Tools: Google Drive · Google Docs · Google Sheets</span>
+      <span>Client: Sarah's Bakery (simulated)</span>
+      <span>Exercises: 5 completed</span>
+      <span>Status: Live</span>
+    </div>
+
+    <!-- Overview -->
+    <div class="section-block">
+      <h2>// overview</h2>
+      <p>
+        This project documents the full Google Drive setup and management workflow built
+        for a simulated small business client — <strong>Sarah's Bakery</strong> — covering
+        everything a VA handles on day one and ongoing: building a clean folder structure
+        from scratch, setting granular permissions for each team member, recovering accidentally
+        deleted content, organizing files for fast retrieval, and maintaining a template system
+        for recurring documents.
+      </p>
+      <p>
+        Every decision was made with a real business context in mind — protecting sensitive
+        financial data from the wider team, enabling the social media manager to work without
+        overstepping, and building a structure scalable enough to still make sense 12 months
+        and dozens of files later.
+      </p>
+    </div>
+
+    <!-- Folder Structure -->
+    <div class="section-block">
+      <h2>// folder architecture</h2>
+      <p>
+        The Drive was built with a <strong>two-layer system</strong>: utility folders at the
+        top (prefixed 00A–00C) for meta-management, and numbered content folders (01–05)
+        for client work. Color coding and emojis make the structure scannable at a glance
+        without opening anything.
+      </p>
+      <div class="diagram-wrap">
+        <div class="folder-tree">
+<span class="root">📁 Sarah's Bakery/</span>
+├── <span class="utility">00A 📥 _INBOX</span>              <span class="label">← unsorted files land here first</span>
+├── <span class="utility">00B 📋 _README — How This Drive is Organized</span>
+├── <span class="utility">00C 📁 _TEMPLATES</span>           <span class="label">← root-level blank templates</span>
+│
+├── <span class="folder">🔴 01_Events/</span>
+│   ├── <span class="folder">00_Archive/</span>
+│   └── <span class="folder">01_Templates/</span>
+│
+├── <span class="folder">🟢 02_Invoices/</span>
+│   ├── <span class="folder">00_Archive/</span>
+│   └── <span class="folder">01_Templates/</span>
+│
+├── <span class="folder">🔵 03_Marketing/</span>
+│   ├── <span class="folder">00_Archive/</span>
+│   ├── <span class="folder">01_Templates/</span>
+│   │   └── <span class="file">Marketing Plan Template</span>   <span class="label">← master, never edited directly</span>
+│   ├── <span class="folder">02_Photos/</span>
+│   ├── <span class="folder">03_Social Media/</span>
+│   └── <span class="folder">04_Marketing Plan/</span>
+│       └── <span class="folder">Marketing Plan 2026/</span>
+│           ├── <span class="file">06_Marketing Plan June 2026</span>
+│           └── <span class="file">07_Marketing Plan July 2026</span>
+│
+├── <span class="folder">🟡 04_Reports/</span>
+│   ├── <span class="folder">00_Archive/</span>
+│   └── <span class="folder">01_Templates/</span>
+│
+└── <span class="folder">🟠 05_Suppliers/</span>
+    ├── <span class="folder">00_Archive/</span>
+    └── <span class="folder">01_Templates/</span>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-label">// naming convention</div>
+        <p>Numbers control sort order. Emojis signal folder type. Utility folders use 00A/B/C prefix to float above content folders. Subfolders inherit parent color for instant visual grouping.</p>
+      </div>
+    </div>
+
+    <!-- Exercises -->
+    <div class="section-block">
+      <h2>// exercises completed</h2>
+      <table class="step-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Exercise</th>
+            <th>Skill</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="step-num">1</td>
+            <td>Built complete folder structure for Sarah's Bakery from scratch</td>
+            <td class="step-tool">Google Drive</td>
+            <td class="step-ok">✓ Passed</td>
+          </tr>
+          <tr>
+            <td class="step-num">2</td>
+            <td>Shared 04_Reports (Viewer) and 03_Marketing (Editor) with restricted resharing</td>
+            <td class="step-tool">Drive Permissions</td>
+            <td class="step-ok">✓ Passed</td>
+          </tr>
+          <tr>
+            <td class="step-num">3</td>
+            <td>Recovered accidentally deleted content using Version History and named version checkpoints</td>
+            <td class="step-tool">Version History</td>
+            <td class="step-ok">✓ Passed</td>
+          </tr>
+          <tr>
+            <td class="step-num">4</td>
+            <td>Located all spreadsheet files using file-type filter; starred Marketing Plan for quick access</td>
+            <td class="step-tool">Drive Search</td>
+            <td class="step-ok">✓ Passed</td>
+          </tr>
+          <tr>
+            <td class="step-num">5</td>
+            <td>Created template system and produced July copy from master template without touching original</td>
+            <td class="step-tool">Template Workflow</td>
+            <td class="step-ok">✓ Passed</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Permissions -->
+    <div class="section-block">
+      <h2>// permission management</h2>
+      <p>
+        Every team member gets the minimum access they need — no more. Resharing is
+        disabled for all external collaborators so only the VA and client owner can
+        control who gets in.
+      </p>
+      <table class="perm-table">
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Folder</th>
+            <th>Permission</th>
+            <th>Can Edit</th>
+            <th>Can Reshare</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="role">Accountant</td>
+            <td>04_Reports</td>
+            <td>Viewer</td>
+            <td class="no">✗</td>
+            <td class="no">✗</td>
+          </tr>
+          <tr>
+            <td class="role">Social Media Manager</td>
+            <td>03_Marketing</td>
+            <td>Editor</td>
+            <td class="yes">✓</td>
+            <td class="no">✗</td>
+          </tr>
+          <tr>
+            <td class="role">Business Partner</td>
+            <td>Case by case</td>
+            <td>Editor</td>
+            <td class="yes">✓</td>
+            <td class="no">✗</td>
+          </tr>
+          <tr>
+            <td class="role">Client (Owner)</td>
+            <td>Everything</td>
+            <td>Owner</td>
+            <td class="yes">✓</td>
+            <td class="yes">✓</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="rule-card">
+        <div class="rule-label">// security rule</div>
+        <p>Always uncheck "Allow editors to change permissions and share." Use "Limit access" on sensitive folders (Invoices, Contracts, HR) so parent-folder access doesn't cascade down.</p>
+      </div>
+    </div>
+
+    <!-- Skills demonstrated -->
+    <div class="section-block">
+      <h2>// skills demonstrated</h2>
+      <div class="three-col">
+        <div class="info-card">
+          <h3>Organization</h3>
+          <ul>
+            <li>Numbered folder ordering</li>
+            <li>Color coding by category</li>
+            <li>Emoji utility folders</li>
+            <li>Archive system</li>
+            <li>INBOX workflow</li>
+            <li>README documentation</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h3>Access Control</h3>
+          <ul>
+            <li>Viewer vs Editor roles</li>
+            <li>Restricted resharing</li>
+            <li>Folder-level privacy lock</li>
+            <li>General access control</li>
+            <li>Permission auditing</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h3>File Management</h3>
+          <ul>
+            <li>Version history recovery</li>
+            <li>Named version checkpoints</li>
+            <li>Template + copy workflow</li>
+            <li>File type search filters</li>
+            <li>Starred quick access</li>
+            <li>Naming conventions</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key strategies -->
+    <div class="section-block">
+      <h2>// key strategies</h2>
+      <div class="two-col">
+        <div class="info-card">
+          <h3>Folder Design Rules</h3>
+          <ul>
+            <li>Numbers force sort order</li>
+            <li>Utility folders float with 00A/B/C</li>
+            <li>Subfolders match parent color</li>
+            <li>Archive inside every folder</li>
+            <li>Templates folder per category</li>
+            <li>Year subfolders for scalability</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h3>VA Daily Habits</h3>
+          <ul>
+            <li>All unsorted files → INBOX first</li>
+            <li>Never edit original templates</li>
+            <li>Name versions before big edits</li>
+            <li>Share at folder level, not file</li>
+            <li>Always set General Access = Restricted</li>
+            <li>Use filter search, not keyword search</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Impact -->
+    <div class="section-block">
+      <h2>// impact</h2>
+      <p>
+        A disorganized client Drive is one of the most common pain points VAs are hired to fix.
+        Files named "Final_FINAL_v2," folders with no structure, and shared links set to
+        "Anyone with the link" are security and productivity risks most clients don't even
+        know they have.
+      </p>
+      <p>
+        This system gives Sarah's Bakery a Drive that any team member can navigate without
+        asking questions, any sensitive folder locked down from the wrong eyes, and any
+        accidentally deleted content recoverable in under a minute. The numbered + color-coded
+        structure scales to hundreds of files without ever needing a reorganization — new
+        months go into the year subfolder, old files go to Archive, and the root always looks
+        exactly the same.
+      </p>
+      <p>
+        The same pattern — <strong>structure → access → recover → search → template</strong>
+        — applies to any client Drive regardless of industry. It's a reusable system, not a
+        one-time setup.
+      </p>
+    </div>
+
+    <!-- Tools used -->
+    <div class="section-block">
+      <h2>// tools used</h2>
+      <div class="stack" style="font-family:var(--mono); font-size:.78rem; color:var(--muted);">
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Drive</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Docs</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Sheets</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Version History</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Drive Sharing & Permissions</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Advanced Search Filters</span>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Dark' : 'Switch to Light';
+    };
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      setLabel();
+    });
+    setLabel();
+  </script>
+</body>
+</html>

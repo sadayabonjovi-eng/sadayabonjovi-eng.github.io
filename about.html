@@ -38,6 +38,42 @@
     margin-bottom: .75rem;
   }
   .embed-label strong { color: var(--signal); }
+
+  .cert-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-top: 1rem;
+    max-width: 820px;
+  }
+  @media (max-width: 580px) {
+    .cert-grid { grid-template-columns: 1fr; }
+  }
+
+  .cert-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg-2);
+  }
+  .cert-card img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+  }
+  .cert-card-label {
+    font-family: var(--mono);
+    font-size: .72rem;
+    color: var(--muted);
+    padding: .6rem .8rem;
+    border-top: 1px solid var(--line);
+  }
+  .cert-card-label strong {
+    color: var(--signal);
+    display: block;
+    margin-bottom: .2rem;
+    font-size: .75rem;
+  }
 </style>
 </head>
 <body>
@@ -119,7 +155,7 @@
         <!-- Facebook Embed -->
         <div class="embed-wrap">
           <p class="embed-label">
-            // official recognition — <strong>Coast Guard WCEIS Training Institute</strong> · January 2025
+            // official recognition — <strong>Coast Guard WCEIS Training Institute</strong> · January 2026
           </p>
           <iframe
             src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fweb.facebook.com%2FCGWCEISTrainingInstitute%2Fposts%2Fpfbid0RKh8Wy2msZMbKyn6vjeDqQkoCqPJGSnLYsuJwmqzVWNUtEQtAezJ3LmmWPT3nSMMl&show_text=true&width=500"
@@ -167,7 +203,74 @@
 
     </div>
 
-    <h2 style="margin-top:1rem;">// skills</h2>
+    <!-- Certificates & Awards -->
+    <h2 style="margin-top:1rem;">// certificates & awards</h2>
+    <p class="container-intro">
+      Verified credentials — government issued and platform certified.
+    </p>
+
+    <h3 style="font-family:var(--mono);font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:1.5rem 0 .75rem;">
+      // coast guard specialization · class 04-2025 "klever"
+    </h3>
+    <div class="cert-grid">
+      <div class="cert-card">
+        <img src="files/cert-award-excellence.png.png" alt="Award of Excellence — Highest Overall Grade Academic and Non-Academic" />
+        <div class="cert-card-label">
+          <strong>Award of Excellence</strong>
+          Highest Overall Grade · Academic & Non-Academic · 96.77%
+        </div>
+      </div>
+      <div class="cert-card">
+        <img src="files/cert-recognition-academic.png.png" alt="Certificate of Recognition — Highest Academic Grade" />
+        <div class="cert-card-label">
+          <strong>Certificate of Recognition</strong>
+          Highest Overall Grade in Academic Subject · 97.77%
+        </div>
+      </div>
+      <div class="cert-card">
+        <img src="files/cert-distinction.png.png" alt="Certificate of Distinction — 96.77% no grade below 85%" />
+        <div class="cert-card-label">
+          <strong>Certificate of Distinction</strong>
+          Course Final Grade 96.77% · No grade below 85%
+        </div>
+      </div>
+      <div class="cert-card">
+        <img src="files/cert-completion.png.png" alt="Certificate of Completion — Coast Guard Information System Technician Specialization Course" />
+        <div class="cert-card-label">
+          <strong>Certificate of Completion</strong>
+          Coast Guard Information System Technician Specialization Course
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family:var(--mono);font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:2rem 0 .75rem;">
+      // technical certifications
+    </h3>
+    <div class="cert-grid">
+      <div class="cert-card">
+        <img src="files/cert-tesda-nc2.png.png" alt="TESDA National Certificate II in Computer Systems Servicing" />
+        <div class="cert-card-label">
+          <strong>TESDA NC II — Computer Systems Servicing</strong>
+          Republic of the Philippines · Valid until January 13, 2031
+        </div>
+      </div>
+      <div class="cert-card">
+        <img src="files/cert-zapier-intermediate.png.png" alt="Zapier Academy — Building Intermediate Zaps" />
+        <div class="cert-card-label">
+          <strong>Zapier Academy — Building Intermediate Zaps</strong>
+          Issued June 21, 2026 · ID 0380C161
+        </div>
+      </div>
+      <div class="cert-card">
+        <img src="files/cert-zapier-ai-agents.png.png" alt="Zapier Academy — Building AI Agents" />
+        <div class="cert-card-label">
+          <strong>Zapier Academy — Building AI Agents</strong>
+          Issued June 21, 2026 · ID D275D86B
+        </div>
+      </div>
+    </div>
+
+    <h2 style="margin-top:2rem;">// skills</h2>
     <p class="container-intro">
       Core areas I cover as an Administrative & Operational VA.
     </p>

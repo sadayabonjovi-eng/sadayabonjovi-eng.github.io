@@ -60,7 +60,6 @@
   }
   .section-block p strong { color: var(--signal); font-weight: 600; }
 
-  /* Folder tree diagram */
   .diagram-wrap {
     background: var(--bg-2);
     border: 1px solid var(--line);
@@ -82,7 +81,6 @@
   .folder-tree .file    { color: var(--muted); }
   .folder-tree .label   { color: var(--signal); font-size: .72rem; letter-spacing: .1em; }
 
-  /* Step table */
   .step-table {
     width: 100%;
     max-width: 820px;
@@ -112,7 +110,6 @@
   .step-table .step-tool { color: var(--signal); white-space: nowrap; }
   .step-table .step-ok   { color: #5eead4; }
 
-  /* Skill cards */
   .three-col {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -160,7 +157,6 @@
   .info-card ul li:last-child { border-bottom: none; }
   .info-card ul li::before { content: "✓"; margin-right: .5rem; color: var(--signal); }
 
-  /* Rule card */
   .rule-card {
     border: 1px solid var(--line);
     border-left: 3px solid var(--signal);
@@ -198,7 +194,6 @@
   }
   .back-link:hover { color: var(--signal); border-color: var(--signal); }
 
-  /* Permission table */
   .perm-table {
     width: 100%;
     max-width: 680px;
@@ -225,6 +220,18 @@
   .perm-table .yes { color: #5eead4; }
   .perm-table .no  { color: #f0b86e; }
   .perm-table .role { color: var(--signal); }
+
+  .screenshot-caption {
+    font-family: var(--mono);
+    font-size: .78rem;
+    color: var(--muted);
+    margin-bottom: .5rem;
+  }
+  .screenshot-img {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
 </style>
 </head>
 <body>
@@ -285,6 +292,22 @@
         overstepping, and building a structure scalable enough to still make sense 12 months
         and dozens of files later.
       </p>
+    </div>
+
+    <!-- Live Screenshot -->
+    <div class="section-block">
+      <h2>// live screenshot</h2>
+      <p>
+        The actual Google Drive folder structure built for Sarah's Bakery —
+        showing the numbered folder system, color coding, and utility folders
+        in a real working Drive.
+      </p>
+      <p class="screenshot-caption">// Sarah's Bakery Drive — numbered folders · color-coded categories · utility system</p>
+      <img
+        src="files/google-drive-sarah-bakery.png.png"
+        alt="Google Drive showing Sarah's Bakery folder structure with numbered and color-coded folders"
+        class="screenshot-img"
+      />
     </div>
 
     <!-- Folder Structure -->

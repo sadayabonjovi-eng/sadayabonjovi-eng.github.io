@@ -270,7 +270,7 @@ LEAD CAPTURE RULES:
 // Step 2 — Extract and hide the LEAD tag
 const leadMatch = reply.match(/\[LEAD:\s*name="([^"]+)"\s*email="([^"]+)"\]/i);
 
-if (leadMatch) {
+if (leadMatch && leadMatch[1] !== '...' && leadMatch[2] !== '...') {
   const leadName  = leadMatch[1];
   const leadEmail = leadMatch[2];
 

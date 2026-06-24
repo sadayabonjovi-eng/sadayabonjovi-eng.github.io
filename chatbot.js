@@ -76,7 +76,7 @@ LEAD CAPTURE RULES:
 - If a visitor asks about hiring you, working together, your rates, your availability for a project, or wants to get in touch, that's a signal they are interested.
 - After answering their question naturally, ask for their name and email so you can follow up personally. Do this once — don't repeat it if they've already shared it.
 - When you have both a name AND an email from the visitor, end your reply with this exact tag on a new line (replace with actual values):
-  [Name="..." Email="..."]
+  [LEAD: name="..." email="..."]
 - Never fabricate a name or email. Only output the tag if the visitor explicitly gave both.`;
 
   /* ─────────────────────────────────────────
@@ -264,12 +264,26 @@ LEAD CAPTURE RULES:
         throw new Error(data.error?.message || "API error");
       }
 
-      const reply = data.choices?.[0]?.message?.content ||
-        "Sorry, I didn't catch that — please try again!";
+      let reply = data.choices?.[0]?.message?.content ||
+  "Sorry, I didn't catch that — please try again!";
 
-      history.push({ role: "assistant", content: reply });
-      typing.remove();
-      addMsg("bot", reply);
+// Step 2 — Extract and hide the LEAD tag
+const leadMatch = reply.match(/\[LEAD:\s*name="([^"]+)"\s*email="([^"]+)"\]/i);
+
+if (leadMatch) {
+  const leadName  = leadMatch[1];
+  const leadEmail = leadMatch[2];
+
+  // We'll send this to Google Sheets in Step 3
+  console.log("Lead captured:", leadName, leadEmail);
+
+  // Strip the tag so visitor never sees it
+  reply = reply.replace(/\[LEAD:[^\]]+\]/gi, "").trim();
+}
+
+history.push({ role: "assistant", content: reply });
+typing.remove();
+addMsg("bot", reply);
 
     } catch (err) {
       typing.remove();

@@ -77,7 +77,7 @@ LEAD CAPTURE RULES:
 - After answering their question naturally, ask for their name and email so you can follow up personally. Do this once — don't repeat it if they've already shared it.
 - When you have both a name AND an email from the visitor, end your reply with this exact tag on a new line (replace with actual values):
   [LEAD: name="..." email="..."]
-- Never fabricate a name or email. Only output the tag if the visitor explicitly gave both.`;
+- Never fabricate a name or email. Only output the [LEAD:] tag if the visitor explicitly gave both. Never output any other tags, brackets, or placeholders like [waiting...] or [Name="..."] in your replies. Just speak naturally.`;
 
   /* ─────────────────────────────────────────
      QUICK REPLY BUTTONS

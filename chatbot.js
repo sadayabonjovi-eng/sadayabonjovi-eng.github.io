@@ -275,7 +275,7 @@ if (leadMatch) {
   const leadEmail = leadMatch[2];
 
   // Step 3 — Send to Google Sheets + Gmail
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby81jronJXHIwAi4YT8O4ecnajv0ZhWFv7zBYbxS7aWolSHWJC4GBzEixidXvt-7Hlu/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxM55F07elrmDVaKucuy1J-QQHbVCslY3gcJHMx-YSQz_elgPL5L65ti1X_wi4_Nt-F/exec';
 
 fetch(APPS_SCRIPT_URL, {
   method: 'POST',

@@ -23,7 +23,7 @@
      CONFIG — edit these two values
   ───────────────────────────────────────── */
   // API key is now safely hidden inside Cloudflare Worker — no key needed here!
-  const PHOTO_PATH   = "profile-photo.png"; // filename of your profile photo
+  const PHOTO_PATH   = "files/profile-photo.png.png"; // path to your profile photo
 
   /* ─────────────────────────────────────────
      SYSTEM PROMPT — who Bon is

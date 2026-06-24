@@ -274,8 +274,23 @@ if (leadMatch) {
   const leadName  = leadMatch[1];
   const leadEmail = leadMatch[2];
 
-  // We'll send this to Google Sheets in Step 3
-  console.log("Lead captured:", leadName, leadEmail);
+  // Step 3 — Send to Google Sheets + Gmail
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby81jronJXHIwAi4YT8O4ecnajv0ZhWFv7zBYbxS7aWolSHWJC4GBzEixidXvt-7Hlu/exec';
+
+fetch(APPS_SCRIPT_URL, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    name: leadName,
+    email: leadEmail,
+    message: text,
+    page: window.location.href
+  })
+}).then(() => {
+  console.log("Lead sent to Google Sheets!", leadName, leadEmail);
+}).catch(err => {
+  console.error("Failed to send lead:", err);
+});
 
   // Strip the tag so visitor never sees it
   reply = reply.replace(/\[LEAD:[^\]]+\]/gi, "").trim();

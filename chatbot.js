@@ -22,8 +22,31 @@
   /* ─────────────────────────────────────────
      CONFIG — edit these two values
   ───────────────────────────────────────── */
-  // API key is now safely hidden inside Cloudflare Worker — no key needed here!
-  const PHOTO_PATH   = "files/profile-photo.png.png"; // path to your profile photo
+  const PHOTO_PATH   = "files/profile-photo.png.png";
+
+  /* ─────────────────────────────────────────
+     SESSION STORAGE HELPERS
+     Saves/restores chat history across page navigations.
+     sessionStorage clears when the tab is closed — perfect for a visit session.
+  ───────────────────────────────────────── */
+  const STORAGE_KEY = "bon_chat_history";
+
+  function saveHistory(hist) {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(hist));
+    } catch (e) { /* storage full — fail silently */ }
+  }
+
+  function loadHistory() {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch { return []; }
+  }
+
+  function clearHistory() {
+    sessionStorage.removeItem(STORAGE_KEY);
+  }
 
   /* ─────────────────────────────────────────
      SYSTEM PROMPT — who Bon is
@@ -77,8 +100,8 @@ LEAD CAPTURE RULES:
 - After answering their question naturally, ask for their name and email so you can follow up personally. Do this once — don't repeat it if they've already shared it.
 - When you have both a name AND an email from the visitor, end your reply with this exact tag on a new line (replace with actual values):
   [LEAD: name="..." email="..."]
-- Never fabricate a name or email. Only output the [LEAD:] tag if the visitor explicitly gave both. Never output any other tags, brackets, or placeholders like [waiting...] or [Name="..."] in your replies. Just speak naturally.`;
-   - Never suggest visiting the portfolio website or contact page if the visitor is already on the site. They are already here!
+- Never fabricate a name or email. Only output the [LEAD:] tag if the visitor explicitly gave both. Never output any other tags, brackets, or placeholders like [waiting...] or [Name="..."] in your replies. Just speak naturally.
+- Never suggest visiting the portfolio website or contact page if the visitor is already on the site. They are already here!`;
 
   /* ─────────────────────────────────────────
      QUICK REPLY BUTTONS
@@ -144,11 +167,26 @@ LEAD CAPTURE RULES:
 
   /* ─────────────────────────────────────────
      STATE
+     history is loaded from sessionStorage on start.
   ───────────────────────────────────────── */
-  let history    = [];
+  let history    = loadHistory(); // ← CHANGED: was `let history = [];`
   let isOpen     = false;
   let quickShown = false;
   let isTyping   = false;
+
+  /* ─────────────────────────────────────────
+     RESTORE PREVIOUS MESSAGES ON PAGE LOAD
+     If there's saved history, render all bubbles
+     and skip the greeting + quick replies.
+  ───────────────────────────────────────── */
+  function restoreChatUI() {
+    if (history.length === 0) return;
+    history.forEach(msg => {
+      const role = msg.role === "user" ? "user" : "bot";
+      addMsg(role, msg.content);
+    });
+    quickShown = true; // don't show quick replies again mid-conversation
+  }
 
   /* ─────────────────────────────────────────
      OPEN / CLOSE
@@ -160,7 +198,8 @@ LEAD CAPTURE RULES:
     notifDot.style.display = "none";
     input.focus();
 
-    if (messages.children.length === 0) {
+    // Only show greeting if there's no saved history
+    if (messages.children.length === 0 && history.length === 0) {
       addMsg("bot", "Hi there! 👋 I'm Bon — feel free to ask me about my skills, projects, or how to work together.");
       showQuickReplies();
     }
@@ -240,6 +279,7 @@ LEAD CAPTURE RULES:
 
     addMsg("user", text);
     history.push({ role: "user", content: text });
+    saveHistory(history); // ← ADDED: save after user message
 
     const typing = showTyping();
 
@@ -268,39 +308,38 @@ LEAD CAPTURE RULES:
       let reply = data.choices?.[0]?.message?.content ||
   "Sorry, I didn't catch that — please try again!";
 
-// Step 2 — Extract and hide the LEAD tag
-const leadMatch = reply.match(/\[LEAD:\s*name="([^"]+)"\s*email="([^"]+)"\]/i);
+      // Extract and hide the LEAD tag
+      const leadMatch = reply.match(/\[LEAD:\s*name="([^"]+)"\s*email="([^"]+)"\]/i);
 
-if (leadMatch && leadMatch[1] !== '...' && leadMatch[2] !== '...') {
-  const leadName  = leadMatch[1];
-  const leadEmail = leadMatch[2];
+      if (leadMatch && leadMatch[1] !== '...' && leadMatch[2] !== '...') {
+        const leadName  = leadMatch[1];
+        const leadEmail = leadMatch[2];
 
-  // Step 3 — Send to Google Sheets + Gmail
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxM55F07elrmDVaKucuy1J-QQHbVCslY3gcJHMx-YSQz_elgPL5L65ti1X_wi4_Nt-F/exec';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxM55F07elrmDVaKucuy1J-QQHbVCslY3gcJHMx-YSQz_elgPL5L65ti1X_wi4_Nt-F/exec';
 
-fetch(APPS_SCRIPT_URL, {
-  method: 'POST',
-   mode: 'no-cors',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    name: leadName,
-    email: leadEmail,
-    message: text,
-    page: window.location.href
-  })
-}).then(() => {
-  console.log("Lead sent to Google Sheets!", leadName, leadEmail);
-}).catch(err => {
-  console.error("Failed to send lead:", err);
-});
+        fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: leadName,
+            email: leadEmail,
+            message: text,
+            page: window.location.href
+          })
+        }).then(() => {
+          console.log("Lead sent to Google Sheets!", leadName, leadEmail);
+        }).catch(err => {
+          console.error("Failed to send lead:", err);
+        });
 
-  // Strip the tag so visitor never sees it
-  reply = reply.replace(/\[LEAD:[^\]]+\]/gi, "").trim();
-}
+        reply = reply.replace(/\[LEAD:[^\]]+\]/gi, "").trim();
+      }
 
-history.push({ role: "assistant", content: reply });
-typing.remove();
-addMsg("bot", reply);
+      history.push({ role: "assistant", content: reply });
+      saveHistory(history); // ← ADDED: save after assistant reply
+      typing.remove();
+      addMsg("bot", reply);
 
     } catch (err) {
       typing.remove();
@@ -323,6 +362,13 @@ addMsg("bot", reply);
       sendMessage();
     }
   });
+
+  /* ─────────────────────────────────────────
+     RESTORE SAVED CHAT ON LOAD
+     Called here so bubbles are ready before
+     the visitor opens the widget.
+  ───────────────────────────────────────── */
+  restoreChatUI(); // ← ADDED
 
   /* Show notif dot after 3s if chat hasn't been opened */
   setTimeout(() => {

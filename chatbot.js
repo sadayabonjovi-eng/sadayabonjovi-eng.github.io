@@ -22,7 +22,7 @@
   /* ─────────────────────────────────────────
      CONFIG — edit these two values
   ───────────────────────────────────────── */
-  const GROQ_API_KEY = "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";
+  // API key is now safely hidden inside Cloudflare Worker — no key needed here!
   const PHOTO_PATH   = "profile-photo.png"; // filename of your profile photo
 
   /* ─────────────────────────────────────────
@@ -236,11 +236,10 @@ TONE RULES:
     const typing = showTyping();
 
     try {
-      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      const res = await fetch("https://small-frost-9a1a.oliverbqueen2026.workers.dev", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + GROQ_API_KEY
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           model: "llama-3.3-70b-versatile",

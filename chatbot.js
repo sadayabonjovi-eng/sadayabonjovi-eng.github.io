@@ -279,6 +279,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxM55F07elrmDVa
 
 fetch(APPS_SCRIPT_URL, {
   method: 'POST',
+   mode: 'no-cors',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     name: leadName,

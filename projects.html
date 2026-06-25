@@ -87,7 +87,7 @@
 
   <div class="topstrip">
     <span><span class="dot">●</span> system status: available for new workflows</span>
-    <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode"></button>
   </div>
 
   <header>
@@ -122,6 +122,7 @@
           reliable result at the end. Built with Zapier, AI tools, and connected apps.
         </p>
         <ul class="preview-list">
+          <li>Live AI Lead Qualification Agent</li>
           <li>AI Order Processing & Customer Retention System</li>
           <li>AI Content Publishing Pipeline</li>
           <li>Email Weather Bot</li>
@@ -172,17 +173,23 @@
 
   <script>
     const toggle = document.getElementById('theme-toggle');
-    const setLabel = () => {
-      toggle.textContent = document.body.classList.contains('dark-mode')
-        ? 'Switch to Dark' : 'Switch to Light';
-    };
+
+    function isDark() {
+      return document.body.classList.contains('dark-mode');
+    }
+
+    function setLabel() {
+      toggle.textContent = isDark() ? 'Switch to Light' : 'Switch to Dark';
+    }
+
     toggle.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
       setLabel();
     });
+
     setLabel();
   </script>
   <link rel="stylesheet" href="chatbot.css">
-<script src="chatbot.js"></script>
+  <script src="chatbot.js"></script>
 </body>
 </html>

@@ -75,9 +75,10 @@ AUTOMATION PROJECTS:
 1. Order Processing System — fully live, 50+ steps across 3 Zaps
 2. Content Pipeline — 23 steps, 6 conditional paths (System Design Showcase due to paid plan limits on Visla/Gemini)
 3. Client Expense & Income Tracker — built from scratch in Google Sheets (SUMIFS, dashboard, charts)
+4. Trello Client Onboarding Automation — fully live on Trello, built with Trello Butler (free plan, no external tools). 7-stage automated pipeline: Lead → Proposal Sent → Contract Signed → Onboarding → Active → Offboarding → Completed. 8+ Butler rules handle auto checklist swaps per stage, due date resets, urgent flagging (cards due in <2 days auto-moved to URGENT list), label colors per stage, audit trail comments, and email alerts via Gmail. Zero manual input after setup.
 
 PORTFOLIO: sadayabonjovi-eng.github.io
-Pages: About, Projects (Order Automation, Content Pipeline, Expense Tracker), Contact
+Pages: About, Projects (Order Automation, Content Pipeline, Expense Tracker, Trello Client Onboarding), Contact
 
 AVAILABILITY & RATES:
 - Open to entry-level Administrative/Operations VA roles

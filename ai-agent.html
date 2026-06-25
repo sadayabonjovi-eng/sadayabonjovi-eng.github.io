@@ -178,7 +178,7 @@
 
   <div class="topstrip">
     <span><span class="dot">●</span> system status: available for new workflows</span>
-    <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode"></button>
   </div>
 
   <header style="grid-template-columns:1fr;">
@@ -189,7 +189,7 @@
       <p class="lede">
         A fully deployed <strong>conversational AI agent</strong> built on this portfolio —
         answering visitor questions 24/7, detecting hiring interest through natural conversation,
-        capturing leads automatically, and triggering a <strong>complete 6-step pipeline</strong>
+        capturing leads automatically, and triggering a <strong>complete 10-step pipeline</strong>
         across Google Sheets, Gmail, and Cloudflare Workers — all without any manual work.
       </p>
     </div>
@@ -209,7 +209,7 @@
     <div class="meta-row">
       <span>Type: AI Agent + Automation Pipeline</span>
       <span>Tools: Groq · Cloudflare Workers · Google Apps Script · Sheets · Gmail</span>
-      <span>Steps: 6</span>
+      <span>Steps: 10</span>
       <span>Status: Live</span>
     </div>
 
@@ -226,7 +226,7 @@
       <p>
         When a visitor shows interest, the agent naturally collects their <strong>name,
         project, and email</strong> through conversation. The moment both are confirmed,
-        a <strong>6-step automated pipeline fires</strong> — logging the lead to Google Sheets,
+        a <strong>10-step automated pipeline fires</strong> — logging the lead to Google Sheets,
         sending an instant notification, and delivering a personalized follow-up email to
         the lead — all before the conversation even ends.
       </p>
@@ -319,10 +319,10 @@
           <text x="110" y="460" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">LOG</text>
           <text x="110" y="476" text-anchor="middle" fill="#dde3ea" font-size="11">Google Sheets — Log lead</text>
 
-          <!-- Output B: Notify me -->
+          <!-- Output B: Notify owner -->
           <rect x="215" y="442" width="150" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
           <text x="290" y="460" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">NOTIFY</text>
-          <text x="290" y="476" text-anchor="middle" fill="#dde3ea" font-size="11">Gmail — Alert to Bon</text>
+          <text x="290" y="476" text-anchor="middle" fill="#dde3ea" font-size="11">Gmail — Owner Alert</text>
 
           <!-- Output C: Follow up -->
           <rect x="380" y="442" width="180" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
@@ -466,14 +466,21 @@
 
   <script>
     const toggle = document.getElementById('theme-toggle');
-    const setLabel = () => {
-      toggle.textContent = document.body.classList.contains('dark-mode')
-        ? 'Switch to Dark' : 'Switch to Light';
-    };
+
+    function isDark() {
+      return document.body.classList.contains('dark-mode');
+    }
+
+    function setLabel() {
+      toggle.textContent = isDark() ? 'Switch to Light' : 'Switch to Dark';
+    }
+
     toggle.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
       setLabel();
     });
+
+    // Set correct label on page load based on actual current mode
     setLabel();
   </script>
   <link rel="stylesheet" href="chatbot.css">

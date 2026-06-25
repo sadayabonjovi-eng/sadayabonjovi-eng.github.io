@@ -24,7 +24,7 @@
 
   <div class="topstrip">
     <span><span class="dot">●</span> system status: available for new workflows</span>
-    <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode"></button>
   </div>
 
   <header>
@@ -114,6 +114,33 @@
       </div>
     </div>
 
+    <!-- Project: AI Lead Qualification Agent -->
+    <div class="project-card">
+      <div class="project-tag">Agent · lead-qualification · live</div>
+      <h3>Live AI Lead Qualification Agent</h3>
+      <p>
+        A fully deployed <strong>conversational AI agent</strong> running on this
+        portfolio — answering visitor questions 24/7, detecting hiring interest through
+        natural conversation, and triggering a <strong>10-step automated pipeline</strong>
+        the moment a lead is qualified. No forms. No manual work.
+      </p>
+      <p>
+        When a visitor shows interest, the agent collects their <strong>name, project,
+        and email</strong> through conversation. A pipeline fires automatically —
+        logging the lead to <strong>Google Sheets</strong>, sending an instant
+        <strong>owner alert</strong>, and delivering a personalized
+        <strong>follow-up email</strong> to the lead — all before the chat ends.
+        Built entirely on a free stack: Groq AI, Cloudflare Workers, and Google
+        Apps Script.
+      </p>
+      <div class="stack">
+        <span>Groq AI</span><span>Cloudflare Workers</span><span>Google Apps Script</span><span>Google Sheets</span><span>Gmail</span><span>JavaScript</span>
+      </div>
+      <div class="project-links">
+        <a href="lead-qualification.html">→ details</a>
+      </div>
+    </div>
+
     <!-- Placeholder for future builds -->
     <div class="project-card" style="opacity:.55;">
       <div class="project-tag">More · coming soon</div>
@@ -134,17 +161,23 @@
 
   <script>
     const toggle = document.getElementById('theme-toggle');
-    const setLabel = () => {
-      toggle.textContent = document.body.classList.contains('dark-mode')
-        ? 'Switch to Dark' : 'Switch to Light';
-    };
+
+    function isDark() {
+      return document.body.classList.contains('dark-mode');
+    }
+
+    function setLabel() {
+      toggle.textContent = isDark() ? 'Switch to Light' : 'Switch to Dark';
+    }
+
     toggle.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
       setLabel();
     });
+
     setLabel();
   </script>
   <link rel="stylesheet" href="chatbot.css">
-<script src="chatbot.js"></script>
+  <script src="chatbot.js"></script>
 </body>
 </html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Bon Jovi F. Sadaya</title>
+<style>
+  :root{
+    --bg:#0d1117;
+    --bg-2:#131a22;
+    --ink:#dde3ea;
+    --muted:#7d8b99;
+    --line:#26313c;
+    --signal:#5eead4;
+    --signal-dim:#2b5c54;
+    --warn:#f0b86e;
+    --mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --sans: "Helvetica Neue", Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.65;
+    transition:background .3s ease, color .3s ease;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--line) 60%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--line) 60%, transparent) 1px, transparent 1px);
+    background-size:42px 42px;
+    background-attachment:fixed;
+    background-position:-1px -1px;
+    position:relative;
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    opacity:.5;
+    background:
+      radial-gradient(ellipse 700px 500px at 85% -5%, color-mix(in srgb, var(--signal) 18%, transparent), transparent 70%),
+      radial-gradient(ellipse 600px 500px at 0% 90%, color-mix(in srgb, var(--warn) 12%, transparent), transparent 70%);
+  }
+  body.dark-mode{
+    --bg:#f5f2ea;
+    --bg-2:#ebe6da;
+    --ink:#1b232c;
+    --muted:#6b7682;
+    --line:#d6cfbf;
+    --signal:#0f8f7e;
+    --signal-dim:#bfe6df;
+    --warn:#b9701f;
+  }
+
+  .topstrip{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:.65rem 1.5rem;
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.12em;
+    border-bottom:1px solid var(--line);
+    color:var(--muted);
+  }
+  .topstrip .dot{ color:var(--signal); }
+
+  #theme-toggle{
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.1em;
+    background:transparent;
+    border:1px solid var(--line);
+    color:var(--ink);
+    padding:.35rem .8rem;
+    cursor:pointer;
+    border-radius:3px;
+    transition:border-color .2s, color .2s;
+  }
+  #theme-toggle:hover{ border-color:var(--signal); color:var(--signal); }
+  #theme-toggle:focus-visible{ outline:2px solid var(--signal); outline-offset:2px; }
+
+  nav{
+    max-width:920px;
+    margin:0 auto;
+    display:flex;
+    gap:2.2rem;
+    padding:1.1rem 1.5rem;
+    font-family:var(--mono);
+    font-size:.85rem;
+    border-bottom:1px solid var(--line);
+  }
+  nav a{
+    color:var(--muted);
+    text-decoration:none;
+    transition:color .2s ease;
+  }
+  nav a:hover, nav a:focus-visible{ color:var(--signal); }
+
+  .container{
+    max-width:920px;
+    margin:0 auto;
+    padding:4rem 1.5rem 3rem;
+  }
+
+  .page-label{
+    font-family:var(--mono);
+    font-size:.78rem;
+    letter-spacing:.25em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:.4rem;
+  }
+
+  .page-title{
+    font-family:var(--sans);
+    font-weight:700;
+    font-size:clamp(2rem, 5vw, 3rem);
+    line-height:1.05;
+    margin:0 0 .5rem;
+    letter-spacing:-.02em;
+  }
+
+  .updated{
+    font-family:var(--mono);
+    font-size:.75rem;
+    color:var(--muted);
+    margin-bottom:3rem;
+  }
+
+  .section{
+    margin-bottom:2.5rem;
+    padding-bottom:2.5rem;
+    border-bottom:1px solid var(--line);
+  }
+  .section:last-child{
+    border-bottom:none;
+  }
+
+  .section h2{
+    font-family:var(--mono);
+    font-size:.78rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--signal);
+    margin:0 0 .8rem;
+  }
+
+  .section p{
+    margin:0 0 1rem;
+    max-width:660px;
+    color:var(--ink);
+  }
+
+  .section ul{
+    margin:0 0 1rem;
+    padding-left:1.4rem;
+    max-width:660px;
+    color:var(--ink);
+  }
+
+  .section ul li{
+    margin-bottom:.4rem;
+  }
+
+  .stack{
+    font-family:var(--mono);
+    font-size:.72rem;
+    color:var(--muted);
+    margin:1rem 0 0;
+  }
+  .stack span{
+    display:inline-block;
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:.15rem .5rem;
+    margin:0 .3rem .3rem 0;
+  }
+
+  .contact-link{
+    font-family:var(--mono);
+    font-size:.85rem;
+    color:var(--signal);
+    text-decoration:none;
+    border-bottom:1px solid var(--signal-dim);
+    padding-bottom:1px;
+    transition:border-color .2s;
+  }
+  .contact-link:hover{ border-color:var(--signal); }
+
+  footer{
+    max-width:920px;
+    margin:0 auto;
+    padding:2.5rem 1.5rem 3rem;
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.08em;
+    color:var(--muted);
+    border-top:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:.5rem;
+  }
+</style>
+</head>
+<body>
+
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode"></button>
+  </div>
+
+  <nav>
+    <a href="index.html">/home</a>
+    <a href="about.html">/about</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
+  </nav>
+
+  <div class="container">
+
+    <p class="page-label">// legal · privacy</p>
+    <h1 class="page-title">Privacy Policy</h1>
+    <p class="updated">Last updated: June 26, 2026</p>
+
+    <div class="section">
+      <h2>// overview</h2>
+      <p>This privacy policy covers all AI agents and automated systems deployed by Bon Jovi F. Sadaya, including the AI Lead Qualification Agent on this portfolio website (sadayabonjovi-eng.github.io) and the Automate with Bon Facebook Page Messenger AI Agent.</p>
+      <p>Your privacy is important. This policy explains what information is collected, how it is used, and how it is protected.</p>
+    </div>
+
+    <div class="section">
+      <h2>// information we collect</h2>
+      <p>When you interact with any of our AI agents, we may collect the following information if you voluntarily provide it during conversation:</p>
+      <ul>
+        <li>Your name</li>
+        <li>Your email address</li>
+        <li>The content of your messages</li>
+        <li>Information about your project or hiring interest</li>
+        <li>Timestamp and source page of your interaction</li>
+      </ul>
+      <p>We do not collect any information without your direct participation in the conversation. No cookies or tracking scripts are used beyond what GitHub Pages provides by default.</p>
+    </div>
+
+    <div class="section">
+      <h2>// how we use your information</h2>
+      <p>Information collected through our AI agents is used solely for the following purposes:</p>
+      <ul>
+        <li>To respond to your inquiries about services and availability</li>
+        <li>To follow up on potential collaboration or hiring opportunities</li>
+        <li>To send a personalized follow-up email if you expressed interest</li>
+        <li>To improve the quality and accuracy of AI responses</li>
+      </ul>
+      <p>Your information is never sold, shared with third parties for marketing purposes, or used for any purpose beyond direct communication with you.</p>
+    </div>
+
+    <div class="section">
+      <h2>// data storage</h2>
+      <p>Collected information is logged in a secure Google Sheets document accessible only to Bon Jovi F. Sadaya. Data is retained only as long as necessary to follow up on your inquiry and is not shared with any outside party.</p>
+    </div>
+
+    <div class="section">
+      <h2>// third party services</h2>
+      <p>Our AI agents use the following third party services, each with their own privacy policies:</p>
+      <div class="stack">
+        <span>Groq AI</span>
+        <span>Cloudflare Workers</span>
+        <span>Make.com</span>
+        <span>Google Apps Script</span>
+        <span>Google Sheets</span>
+        <span>Gmail</span>
+        <span>Meta Messenger API</span>
+      </div>
+      <p style="margin-top:1rem;">We recommend reviewing the privacy policies of these services if you have concerns about how they handle data independently.</p>
+    </div>
+
+    <div class="section">
+      <h2>// facebook messenger agent</h2>
+      <p>The Automate with Bon Facebook Page Messenger AI Agent is built on the Meta Messenger Platform. When you send a message to the Automate with Bon Facebook Page, Meta processes your message through their platform before it reaches our system. Meta's data handling is governed by their own privacy policy at facebook.com/privacy/policy.</p>
+      <p>Our Messenger agent only uses your message content to generate a relevant response and to collect your contact details if you express hiring interest — with your voluntary participation.</p>
+    </div>
+
+    <div class="section">
+      <h2>// your rights</h2>
+      <p>You have the right to:</p>
+      <ul>
+        <li>Request access to any personal data collected about you</li>
+        <li>Request deletion of your personal data at any time</li>
+        <li>Opt out of follow-up communications at any time</li>
+      </ul>
+      <p>To exercise any of these rights, contact us directly at the email below.</p>
+    </div>
+
+    <div class="section">
+      <h2>// contact</h2>
+      <p>For any privacy concerns, data requests, or questions about this policy, please reach out directly:</p>
+      <p><a href="mailto:sadayabonjovi@gmail.com" class="contact-link">sadayabonjovi@gmail.com</a></p>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    function isDark() { return document.body.classList.contains('dark-mode'); }
+    function setLabel() { toggle.textContent = isDark() ? 'Switch to Light' : 'Switch to Dark'; }
+    toggle.addEventListener('click', () => { document.body.classList.toggle('dark-mode'); setLabel(); });
+    setLabel();
+  </script>
+
+</body>
+</html>

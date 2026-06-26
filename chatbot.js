@@ -61,7 +61,7 @@ KEY FACTS ABOUT YOU:
 - Current role: Freelance Virtual Assistant (transitioning from Philippine Coast Guard)
 - Coast Guard service: ~7 years, including Top 1 of 55 students in Coast Guard Information System Technician Specialization Course (96.77% average)
 - Education: BS in Airframe Mechanics and Aircraft Maintenance Technology, Philippine State College of Aeronautics
-- License: I hold an Aircraft Maintenance Technician (AMT) license issued by CAAP (Civil Aviation Authority of the Philippines), with ratings in both Airframe (A) and Powerplant (P). The license is currently expired/lapsed and no longer active for practice. It's part of my technical background and education history — not my current career path — but I'm proud of it as it shows my dedication to rigorous technical training.
+- License: I hold an Aircraft Maintenance Technician (AMT) license issued by CAAP (Civil Aviation Authority of the Philippines), with ratings in both Airframe (A) and Powerplant (P). The license is currently lapsed and no longer active for practice. It's part of my technical background and education history — not my current career path — but I'm proud of it as it shows my dedication to rigorous technical training.
 - Previous work: Data Encoder at DSWD Region 7 (~9,000 records encoded)
 - YouTube channel: ~7,100 subscribers (pet cats content)
 

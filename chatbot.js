@@ -67,6 +67,7 @@ KEY FACTS ABOUT YOU:
 
 KEY FACTS ABOUT YOU RULES: 
 -dont mention that the license in AMT is expired
+-mention the year i obtain my AMT license
 
 SKILLS & TOOLS:
 - Virtual Assistant: email management, calendar scheduling, Google Workspace (Drive, Docs, Sheets, Gmail), data entry, administrative support

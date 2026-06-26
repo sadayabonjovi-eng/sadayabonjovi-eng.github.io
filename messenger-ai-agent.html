@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messenger AI Agent — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border: 1px solid var(--signal);
+    color: var(--signal);
+    border-radius: 3px;
+    padding: .25rem .7rem;
+    margin-bottom: 1.5rem;
+  }
+  .status-badge .dot-ok {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--signal);
+    animation: blink 1.4s infinite;
+  }
+  .status-badge.pending {
+    border-color: var(--warn);
+    color: var(--warn);
+  }
+  .status-badge.pending .dot-ok {
+    background: var(--warn);
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    font-size: .78rem;
+    color: var(--muted);
+  }
+  .meta-row span { border: 1px solid var(--line); border-radius: 3px; padding: .2rem .6rem; background: var(--bg-2); }
+
+  .section-block {
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  .section-block h2 {
+    font-family: var(--mono);
+    font-size: .78rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 .6rem;
+  }
+  .section-block p {
+    color: var(--ink);
+    margin: 0 0 1rem;
+    max-width: 680px;
+  }
+  .section-block p strong { color: var(--signal); font-weight: 600; }
+
+  .diagram-wrap {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 2rem 1.5rem;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+  }
+  .diagram-wrap svg { display: block; margin: 0 auto; }
+
+  .step-table {
+    width: 100%;
+    max-width: 820px;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: .80rem;
+    margin-bottom: 3rem;
+  }
+  .step-table th {
+    text-align: left;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-size: .70rem;
+    border-bottom: 1px solid var(--line);
+    padding: .5rem .8rem;
+  }
+  .step-table td {
+    padding: .65rem .8rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    vertical-align: top;
+  }
+  .step-table tr:last-child td { border-bottom: none; }
+  .step-table .step-num { color: var(--muted); width: 2.5rem; }
+  .step-table .step-tool { color: var(--signal); white-space: nowrap; }
+  .step-table .step-status-ok { color: #5eead4; }
+  .step-table .step-status-pending { color: var(--warn); }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  @media (max-width: 580px) { .two-col { grid-template-columns: 1fr; } }
+
+  .info-card {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--bg-2);
+    padding: 1.1rem 1.2rem;
+  }
+  .info-card h3 {
+    font-family: var(--mono);
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin: 0 0 .8rem;
+  }
+  .info-card.working h3 { color: var(--signal); }
+  .info-card.highlight h3 { color: #a78bfa; }
+  .info-card.warning h3 { color: var(--warn); }
+  .info-card ul {
+    list-style: none;
+    margin: 0; padding: 0;
+    font-family: var(--mono);
+    font-size: .80rem;
+    color: var(--ink);
+  }
+  .info-card ul li {
+    padding: .3rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .info-card ul li:last-child { border-bottom: none; }
+  .info-card ul li::before { margin-right: .5rem; }
+  .info-card.working ul li::before { content: "✓"; color: var(--signal); }
+  .info-card.highlight ul li::before { content: "→"; color: #a78bfa; }
+  .info-card.warning ul li::before { content: "⚠"; color: var(--warn); }
+
+  .demo-box {
+    border: 1px solid var(--signal);
+    border-radius: 8px;
+    background: var(--bg-2);
+    padding: 1.5rem;
+    max-width: 820px;
+    margin-bottom: 3rem;
+    font-family: var(--mono);
+    font-size: .82rem;
+  }
+  .demo-box h3 {
+    color: var(--signal);
+    font-size: .75rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    margin: 0 0 .8rem;
+  }
+  .demo-box p { color: var(--ink); margin: 0 0 1rem; font-family: var(--mono); font-size: .82rem; }
+  .demo-box .hint { color: var(--muted); font-size: .75rem; margin-top: .5rem; }
+  .demo-box .warn-note { color: var(--warn); font-size: .75rem; margin-top: .5rem; }
+
+  .demo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--bg);
+    background: var(--signal);
+    padding: .7rem 1.4rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: transform .15s ease, opacity .2s ease;
+    margin-top: .5rem;
+  }
+  .demo-link:hover { transform: translateY(-2px); opacity: .9; }
+
+  .back-link {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1px;
+    transition: color .2s, border-color .2s;
+    display: inline-block;
+    margin-bottom: 2.5rem;
+  }
+  .back-link:hover { color: var(--signal); border-color: var(--signal); }
+
+  .notice-box {
+    border: 1px solid var(--warn);
+    border-radius: 8px;
+    background: var(--bg-2);
+    padding: 1.2rem 1.5rem;
+    max-width: 820px;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    font-size: .80rem;
+    color: var(--warn);
+  }
+  .notice-box strong { color: var(--warn); }
+</style>
+</head>
+<body>
+
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode"></button>
+  </div>
+
+  <header style="grid-template-columns:1fr;">
+    <div class="hero-text">
+      <p class="welcome">Project</p>
+      <div class="status-line"><span class="pulse"></span> Agent · messenger · live</div>
+      <h1>Messenger AI Agent</h1>
+      <p class="lede">
+        A fully deployed <strong>conversational AI agent</strong> running on the Automate with Bon Facebook Page —
+        answering Messenger messages 24/7, responding naturally as Bon, and handling inquiries
+        automatically without any manual work. Built with <strong>Make.com, Groq AI, and the Meta Messenger API</strong>.
+      </p>
+    </div>
+  </header>
+
+  <nav>
+    <a href="index.html">/home</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
+    <a href="privacy-policy.html">/privacy</a>
+  </nav>
+
+  <div class="container">
+    <a href="projects.html" class="back-link">← back to projects</a>
+
+    <div class="status-badge"><span class="dot-ok"></span> Live — Automate with Bon Facebook Page</div>
+    <div class="status-badge pending" style="margin-left:.5rem;"><span class="dot-ok"></span> Meta App Review — In Progress</div>
+
+    <div class="meta-row">
+      <span>Type: AI Agent + Messenger Automation</span>
+      <span>Tools: Make.com · Groq AI · Meta Messenger API · Google Sheets</span>
+      <span>Steps: 5</span>
+      <span>Platform: Facebook Messenger</span>
+      <span>Status: Live (dev mode)</span>
+    </div>
+
+    <!-- Notice -->
+    <div class="notice-box">
+      ⚠ <strong>App Review in progress.</strong> This agent is fully functional but currently limited to admins and testers while awaiting Meta's App Review approval. Once approved, it will be publicly accessible to all Messenger users.
+    </div>
+
+    <!-- Overview -->
+    <div class="section-block">
+      <h2>// overview</h2>
+      <p>
+        AI Agent #2 extends the same lead qualification concept from the portfolio website into
+        <strong>Facebook Messenger</strong> — where most people already are. Instead of waiting for
+        someone to visit a website, this agent meets them on the platform they use every day.
+      </p>
+      <p>
+        The agent is trained on Bon's full background — his 7 years in the Philippine Coast Guard,
+        his Top 1 of 55 ranking, his transition into VA and automation work, his projects, his
+        personality, and his availability. It speaks <strong>as Bon</strong>, not as a generic assistant.
+      </p>
+      <p>
+        When someone messages the Automate with Bon Facebook page, the agent responds instantly —
+        answering questions about services, background, and availability — and naturally collects
+        contact details when hiring interest is detected. <strong>Zero manual work. 24/7.</strong>
+      </p>
+    </div>
+
+    <!-- Diagram -->
+    <div class="section-block">
+      <h2>// system diagram</h2>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 580 560" width="560" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', 'Fira Code', monospace">
+          <defs>
+            <marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M1,1 L7,4 L1,7 Z" fill="#26313c"/>
+            </marker>
+            <marker id="arr-signal" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M1,1 L7,4 L1,7 Z" fill="#5eead4"/>
+            </marker>
+          </defs>
+
+          <!-- 1. User sends message -->
+          <rect x="165" y="10" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="290" y="28" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">TRIGGER</text>
+          <text x="290" y="44" text-anchor="middle" fill="#dde3ea" font-size="11">1. User messages Facebook Page</text>
+
+          <line x1="290" y1="54" x2="290" y2="74" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr)"/>
+
+          <!-- 2. Meta Messenger API -->
+          <rect x="165" y="76" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="290" y="94" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">WEBHOOK</text>
+          <text x="290" y="110" text-anchor="middle" fill="#dde3ea" font-size="11">2. Meta API fires webhook to Make.com</text>
+
+          <line x1="290" y1="120" x2="290" y2="140" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr)"/>
+
+          <!-- 3. Make.com receives -->
+          <rect x="165" y="142" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="290" y="160" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">AUTOMATION</text>
+          <text x="290" y="176" text-anchor="middle" fill="#dde3ea" font-size="11">3. Make.com — Watch Messages</text>
+
+          <line x1="290" y1="186" x2="290" y2="206" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <!-- 4. Groq AI -->
+          <rect x="165" y="208" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="290" y="226" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">AI PROCESSING</text>
+          <text x="290" y="242" text-anchor="middle" fill="#dde3ea" font-size="11">4. Groq AI — Generate response as Bon</text>
+
+          <line x1="290" y1="252" x2="290" y2="272" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <!-- 5. Send reply -->
+          <rect x="165" y="274" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="290" y="292" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">RESPONSE</text>
+          <text x="290" y="308" text-anchor="middle" fill="#dde3ea" font-size="11">5. Make.com — Send reply to user</text>
+
+          <!-- Coming soon branch -->
+          <line x1="290" y1="318" x2="290" y2="338" stroke="#26313c" stroke-width="1.5" stroke-dasharray="4 2"/>
+          <line x1="290" y1="338" x2="110" y2="338" stroke="#26313c" stroke-width="1.5" stroke-dasharray="4 2"/>
+          <line x1="290" y1="338" x2="470" y2="338" stroke="#26313c" stroke-width="1.5" stroke-dasharray="4 2"/>
+          <line x1="110" y1="338" x2="110" y2="370" stroke="#26313c" stroke-width="1.5" stroke-dasharray="4 2" marker-end="url(#arr)"/>
+          <line x1="470" y1="338" x2="470" y2="370" stroke="#26313c" stroke-width="1.5" stroke-dasharray="4 2" marker-end="url(#arr)"/>
+
+          <!-- Coming soon outputs -->
+          <rect x="20" y="372" width="180" height="44" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1.5" stroke-dasharray="4 2"/>
+          <text x="110" y="390" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">COMING SOON</text>
+          <text x="110" y="406" text-anchor="middle" fill="#7d8b99" font-size="11">Google Sheets — Log lead</text>
+
+          <rect x="380" y="372" width="180" height="44" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1.5" stroke-dasharray="4 2"/>
+          <text x="470" y="390" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">COMING SOON</text>
+          <text x="470" y="406" text-anchor="middle" fill="#7d8b99" font-size="11">Gmail — Follow-up email</text>
+
+          <!-- Legend -->
+          <rect x="20" y="460" width="250" height="80" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1"/>
+          <text x="35" y="480" fill="#7d8b99" font-size="9" letter-spacing="1">LEGEND</text>
+          <rect x="35" y="490" width="14" height="10" rx="2" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="55" y="500" fill="#dde3ea" font-size="10">Live and working</text>
+          <rect x="35" y="510" width="14" height="10" rx="2" fill="none" stroke="#26313c" stroke-width="1.5" stroke-dasharray="4 2"/>
+          <text x="55" y="520" fill="#7d8b99" font-size="10">Planned — coming soon</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Step breakdown -->
+    <div class="section-block">
+      <h2>// step breakdown</h2>
+      <table class="step-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Step</th>
+            <th>Tool</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="step-num">1</td><td>User sends a message to the Automate with Bon Facebook Page</td><td class="step-tool">Facebook Messenger</td><td class="step-status-ok">✓ Live</td></tr>
+          <tr><td class="step-num">2</td><td>Meta Messenger API fires a webhook event to Make.com</td><td class="step-tool">Meta Messenger API</td><td class="step-status-ok">✓ Live</td></tr>
+          <tr><td class="step-num">3</td><td>Make.com Watch Messages module receives the message and sender ID</td><td class="step-tool">Make.com</td><td class="step-status-ok">✓ Live</td></tr>
+          <tr><td class="step-num">4</td><td>HTTP module sends message to Groq AI with full Bon profile as system prompt</td><td class="step-tool">Groq AI (llama-3.3-70b)</td><td class="step-status-ok">✓ Live</td></tr>
+          <tr><td class="step-num">5</td><td>Make.com Send Message module replies to the user on Messenger automatically</td><td class="step-tool">Make.com + Meta API</td><td class="step-status-ok">✓ Live</td></tr>
+          <tr><td class="step-num">6</td><td>Lead detection — if hiring interest is shown, collect name and email</td><td class="step-tool">Groq AI + System Prompt</td><td class="step-status-pending">⚠ Coming Soon</td></tr>
+          <tr><td class="step-num">7</td><td>Log lead details to Google Sheets with timestamp</td><td class="step-tool">Make.com + Google Sheets</td><td class="step-status-pending">⚠ Coming Soon</td></tr>
+          <tr><td class="step-num">8</td><td>Send automated follow-up email to the lead</td><td class="step-tool">Make.com + Gmail</td><td class="step-status-pending">⚠ Coming Soon</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Status cards -->
+    <div class="section-block">
+      <h2>// current status</h2>
+      <div class="two-col">
+        <div class="info-card working">
+          <h3>✓ Fully Working</h3>
+          <ul>
+            <li>Receives all Messenger messages</li>
+            <li>AI responds as Bon — 24/7</li>
+            <li>Knows Bon's full background</li>
+            <li>Handles any question naturally</li>
+            <li>Instant automated replies</li>
+            <li>Zero manual work</li>
+          </ul>
+        </div>
+        <div class="info-card warning">
+          <h3>⚠ Limitations</h3>
+          <ul>
+            <li>Meta App Review in progress</li>
+            <li>Currently limited to testers</li>
+            <li>Lead logging coming soon</li>
+            <li>Follow-up email coming soon</li>
+            <li>Public access pending approval</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- What makes it different -->
+    <div class="section-block">
+      <h2>// what makes it different</h2>
+      <div class="info-card highlight" style="max-width:820px;">
+        <h3>→ Not a generic chatbot</h3>
+        <ul>
+          <li>Trained on Bon's real background — Coast Guard, projects, certifications</li>
+          <li>Speaks in first person as Bon — warm, genuine, and natural</li>
+          <li>Knows his exact services, availability, and personality</li>
+          <li>Built on free tools — Make.com free tier + Groq AI free tier</li>
+          <li>Meets people where they already are — on Messenger, not a portfolio</li>
+          <li>Same architecture can be deployed for any business page</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Demo box -->
+    <div class="section-block">
+      <h2>// try it</h2>
+      <div class="demo-box">
+        <h3>⚡ Talk to the agent</h3>
+        <p>
+          Message the <strong>Automate with Bon</strong> Facebook Page directly and the AI will respond automatically.
+          Ask about services, background, availability, or anything else.
+        </p>
+        <p class="warn-note">// note: currently limited to admins and testers while Meta App Review is in progress. Public access coming soon.</p>
+        <a href="https://www.facebook.com/profile.php?id=61577060529095" target="_blank" class="demo-link">→ Visit Automate with Bon on Facebook</a>
+      </div>
+    </div>
+
+    <!-- Tools used -->
+    <div class="section-block">
+      <h2>// tools used</h2>
+      <div class="stack" style="font-family:var(--mono); font-size:.78rem; color:var(--muted);">
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Make.com</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Groq AI (llama-3.3-70b-versatile)</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Meta Messenger API</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Meta for Developers</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Sheets (planned)</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Gmail (planned)</span>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    function isDark() { return document.body.classList.contains('dark-mode'); }
+    function setLabel() { toggle.textContent = isDark() ? 'Switch to Light' : 'Switch to Dark'; }
+    toggle.addEventListener('click', () => { document.body.classList.toggle('dark-mode'); setLabel(); });
+    setLabel();
+  </script>
+  <link rel="stylesheet" href="chatbot.css">
+  <script src="chatbot.js"></script>
+</body>
+</html>

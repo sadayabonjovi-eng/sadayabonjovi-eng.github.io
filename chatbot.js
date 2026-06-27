@@ -22,19 +22,17 @@
   /* ─────────────────────────────────────────
      CONFIG — edit these two values
   ───────────────────────────────────────── */
-  const PHOTO_PATH   = "files/profile-photo.png.png";
+  const PHOTO_PATH = "files/profile-photo.png.png";
 
   /* ─────────────────────────────────────────
      SESSION STORAGE HELPERS
-     Saves/restores chat history across page navigations.
-     sessionStorage clears when the tab is closed — perfect for a visit session.
   ───────────────────────────────────────── */
   const STORAGE_KEY = "bon_chat_history";
 
   function saveHistory(hist) {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(hist));
-    } catch (e) { /* storage full — fail silently */ }
+    } catch (e) {}
   }
 
   function loadHistory() {
@@ -53,7 +51,7 @@
   ───────────────────────────────────────── */
   const SYSTEM = `You are Bon — Bon Jovi F. Sadaya — speaking in the first person as a friendly, professional digital version of yourself on your portfolio website. You're a Filipino freelancer based in Cebu, Philippines, transitioning from ~7 years of Philippine Coast Guard service into remote work as a Virtual Assistant.
 
-Your personality: warm, confident, helpful, slightly informal but always professional. You're proud of your background and excited about your automation skills. Use "I" — not "Bon" — when referring to yourself. Keep answers concise (2–4 sentences) unless the visitor asks for detail.
+Your personality: warm, confident, helpful, slightly informal but always professional. You're proud of your background and excited about your automation skills. Use "I" — not "Bon" — when referring to yourself. Keep answers to 1–2 sentences maximum. Only expand if the visitor asks for more detail.
 
 KEY FACTS ABOUT YOU:
 - Name: Bon Jovi F. Sadaya (go by "Bon")
@@ -61,13 +59,14 @@ KEY FACTS ABOUT YOU:
 - Current role: Freelance Virtual Assistant (transitioning from Philippine Coast Guard)
 - Coast Guard service: ~7 years, including Top 1 of 55 students in Coast Guard Information System Technician Specialization Course (96.77% average)
 - Education: BS in Aircraft Maintenance Technology, Philippine State College of Aeronautics
-- License: I hold an Aircraft Maintenance Technician (AMT) license issued by CAAP (Civil Aviation Authority of the Philippines) on 2014, with ratings in both Airframe (A) and Powerplant (P). The license is currently lapsed and no longer active for practice. It's part of my technical background and education history — not my current career path — but I'm proud of it as it shows my dedication to rigorous technical training.
+- License: I hold an Aircraft Maintenance Technician (AMT) license issued by CAAP (Civil Aviation Authority of the Philippines) obtained in 2014, with ratings in both Airframe (A) and Powerplant (P). It is part of my technical background and education history — not my current career path — but I'm proud of it as it shows my dedication to rigorous technical training. If asked about its current status, simply say it is not currently active and redirect to your VA and automation career.
 - Previous work: Data Encoder at DSWD Region 7 (~9,000 records encoded)
 - YouTube channel: ~7,100 subscribers (pet cats content)
 
-KEY FACTS ABOUT YOU RULES: 
--dont mention that the license in AMT is expired
--mention the year i obtain my AMT license
+KEY FACTS RULES:
+- Never use the words "expired" or "lapsed" when referring to the AMT license
+- Always mention 2014 as the year the AMT license was obtained if it comes up
+- Never mention the license status unless directly asked
 
 SKILLS & TOOLS:
 - Virtual Assistant: email management, calendar scheduling, Google Workspace (Drive, Docs, Sheets, Gmail), data entry, administrative support
@@ -81,9 +80,10 @@ AUTOMATION PROJECTS:
 2. Content Pipeline — 23 steps, 6 conditional paths (System Design Showcase due to paid plan limits on Visla/Gemini)
 3. Client Expense & Income Tracker — built from scratch in Google Sheets (SUMIFS, dashboard, charts)
 4. Trello Client Onboarding Automation — fully live on Trello, built with Trello Butler (free plan, no external tools). 7-stage automated pipeline: Lead → Proposal Sent → Contract Signed → Onboarding → Active → Offboarding → Completed. 8+ Butler rules handle auto checklist swaps per stage, due date resets, urgent flagging (cards due in <2 days auto-moved to URGENT list), label colors per stage, audit trail comments, and email alerts via Gmail. Zero manual input after setup.
+5. Facebook Messenger AI Agent — fully live and public on the Automate with Bon Facebook Page. Built with Make.com, Groq AI, and the Meta Messenger API. Responds 24/7 as Bon, handles inquiries automatically, and qualifies leads with zero manual input.
 
 PORTFOLIO: sadayabonjovi-eng.github.io
-Pages: About, Projects (Order Automation, Content Pipeline, Expense Tracker, Trello Client Onboarding), Contact
+Pages: About, Projects (Order Automation, Content Pipeline, Expense Tracker, Trello Client Onboarding, Messenger AI Agent), Contact
 
 AVAILABILITY & RATES:
 - Open to entry-level Administrative/Operations VA roles
@@ -125,6 +125,8 @@ LEAD CAPTURE RULES:
 
   /* ─────────────────────────────────────────
      BUILD THE WIDGET HTML
+     ⚠️ Input changed to textarea so long
+     messages wrap instead of scrolling sideways
   ───────────────────────────────────────── */
   const widget = document.createElement("div");
   widget.id = "bon-chat-widget";
@@ -143,14 +145,14 @@ LEAD CAPTURE RULES:
       <div id="bon-chat-messages" role="log" aria-live="polite" aria-label="Chat messages"></div>
       <div id="bon-quick-replies" aria-label="Quick questions"></div>
       <div id="bon-chat-input-row">
-        <input
+        <textarea
           id="bon-chat-input"
-          type="text"
           placeholder="Ask me anything…"
           autocomplete="off"
           aria-label="Your message"
           maxlength="500"
-        />
+          rows="1"
+        ></textarea>
         <button id="bon-chat-send" aria-label="Send message">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
         </button>
@@ -175,18 +177,25 @@ LEAD CAPTURE RULES:
   const notifDot  = document.getElementById("bon-notif-dot");
 
   /* ─────────────────────────────────────────
-     STATE
-     history is loaded from sessionStorage on start.
+     AUTO-GROW TEXTAREA
+     Grows as the user types, up to max-height
+     set in CSS — no more sideways scrolling
   ───────────────────────────────────────── */
-  let history    = loadHistory(); // ← CHANGED: was `let history = [];`
+  input.addEventListener("input", () => {
+    input.style.height = "auto";
+    input.style.height = input.scrollHeight + "px";
+  });
+
+  /* ─────────────────────────────────────────
+     STATE
+  ───────────────────────────────────────── */
+  let history    = loadHistory();
   let isOpen     = false;
   let quickShown = false;
   let isTyping   = false;
 
   /* ─────────────────────────────────────────
      RESTORE PREVIOUS MESSAGES ON PAGE LOAD
-     If there's saved history, render all bubbles
-     and skip the greeting + quick replies.
   ───────────────────────────────────────── */
   function restoreChatUI() {
     if (history.length === 0) return;
@@ -194,7 +203,7 @@ LEAD CAPTURE RULES:
       const role = msg.role === "user" ? "user" : "bot";
       addMsg(role, msg.content);
     });
-    quickShown = true; // don't show quick replies again mid-conversation
+    quickShown = true;
   }
 
   /* ─────────────────────────────────────────
@@ -207,7 +216,6 @@ LEAD CAPTURE RULES:
     notifDot.style.display = "none";
     input.focus();
 
-    // Only show greeting if there's no saved history
     if (messages.children.length === 0 && history.length === 0) {
       addMsg("bot", "Hi there! 👋 I'm Bon — feel free to ask me about my skills, projects, or how to work together.");
       showQuickReplies();
@@ -275,29 +283,28 @@ LEAD CAPTURE RULES:
   }
 
   /* ─────────────────────────────────────────
-     SEND MESSAGE → GROQ API (free)
+     SEND MESSAGE → GROQ API
      Model: llama-3.3-70b-versatile
   ───────────────────────────────────────── */
   async function sendMessage(text) {
     text = (text || input.value).trim();
     if (!text || isTyping) return;
     input.value = "";
+    input.style.height = "auto"; // reset textarea height after send
     isTyping = true;
     sendBtn.disabled = true;
     clearQuickReplies();
 
     addMsg("user", text);
     history.push({ role: "user", content: text });
-    saveHistory(history); // ← ADDED: save after user message
+    saveHistory(history);
 
     const typing = showTyping();
 
     try {
       const res = await fetch("https://small-frost-9a1a.oliverbqueen2026.workers.dev", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "llama-3.3-70b-versatile",
           max_tokens: 500,
@@ -315,7 +322,7 @@ LEAD CAPTURE RULES:
       }
 
       let reply = data.choices?.[0]?.message?.content ||
-  "Sorry, I didn't catch that — please try again!";
+        "Sorry, I didn't catch that — please try again!";
 
       // Extract and hide the LEAD tag
       const leadMatch = reply.match(/\[LEAD:\s*name="([^"]+)"\s*email="([^"]+)"\]/i);
@@ -346,7 +353,7 @@ LEAD CAPTURE RULES:
       }
 
       history.push({ role: "assistant", content: reply });
-      saveHistory(history); // ← ADDED: save after assistant reply
+      saveHistory(history);
       typing.remove();
       addMsg("bot", reply);
 
@@ -363,6 +370,7 @@ LEAD CAPTURE RULES:
 
   /* ─────────────────────────────────────────
      INPUT EVENTS
+     Enter = send, Shift+Enter = new line
   ───────────────────────────────────────── */
   sendBtn.addEventListener("click", () => sendMessage());
   input.addEventListener("keydown", e => {
@@ -374,10 +382,8 @@ LEAD CAPTURE RULES:
 
   /* ─────────────────────────────────────────
      RESTORE SAVED CHAT ON LOAD
-     Called here so bubbles are ready before
-     the visitor opens the widget.
   ───────────────────────────────────────── */
-  restoreChatUI(); // ← ADDED
+  restoreChatUI();
 
   /* Show notif dot after 3s if chat hasn't been opened */
   setTimeout(() => {

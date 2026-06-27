@@ -312,6 +312,7 @@
 /* ── Input row ── */
 #bon-chat-input-row {
   display: flex;
+  align-items: flex-end;
   gap: 0.5rem;
   padding: 0.75rem;
   border-top: 1px solid #26313c;
@@ -319,6 +320,7 @@
   flex-shrink: 0;
 }
 
+/* ── FIX: textarea instead of input for wrapping text ── */
 #bon-chat-input {
   flex: 1;
   background: #131a22;
@@ -326,11 +328,18 @@
   border-radius: 4px;
   color: #dde3ea;
   font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 0.875rem;
+  font-size: 16px; /* 16px prevents iOS auto-zoom */
   padding: 0.55rem 0.8rem;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
   min-width: 0;
+  resize: none;          /* no manual resize handle */
+  overflow-y: auto;
+  min-height: 38px;
+  max-height: 100px;     /* grows up to ~4 lines then scrolls */
+  line-height: 1.5;
+  word-break: break-word;
+  white-space: pre-wrap;
 }
 
 #bon-chat-input::placeholder {
@@ -354,6 +363,7 @@
   align-items: center;
   justify-content: center;
   transition: opacity 0.2s, transform 0.15s;
+  align-self: flex-end; /* stays at bottom when input grows */
 }
 
 #bon-chat-send:hover {
@@ -480,7 +490,16 @@ body.dark-mode #bon-chat-send svg { fill: #f5f2ea; }
     width: calc(100vw - 2rem);
     right: 0;
     bottom: 66px;
-    max-height: 70vh;
+    max-height: 75vh;
+  }
+
+  #bon-chat-messages {
+    max-height: 50vh;
+  }
+
+  #bon-chat-input {
+    font-size: 16px;
+    min-height: 44px;
   }
 }
 

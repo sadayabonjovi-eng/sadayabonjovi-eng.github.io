@@ -165,7 +165,6 @@
   }
   .demo-box p { color: var(--ink); margin: 0 0 1rem; font-family: var(--mono); font-size: .82rem; }
   .demo-box .hint { color: var(--muted); font-size: .75rem; margin-top: .5rem; }
-  .demo-box .warn-note { color: var(--warn); font-size: .75rem; margin-top: .5rem; }
 
   .demo-link {
     display: inline-flex;
@@ -197,7 +196,7 @@
   .back-link:hover { color: var(--signal); border-color: var(--signal); }
 
   .notice-box {
-    border: 1px solid var(--warn);
+    border: 1px solid var(--signal);
     border-radius: 8px;
     background: var(--bg-2);
     padding: 1.2rem 1.5rem;
@@ -205,9 +204,9 @@
     margin-bottom: 2rem;
     font-family: var(--mono);
     font-size: .80rem;
-    color: var(--warn);
+    color: var(--signal);
   }
-  .notice-box strong { color: var(--warn); }
+  .notice-box strong { color: var(--signal); }
 </style>
 </head>
 <body>
@@ -240,20 +239,19 @@
   <div class="container">
     <a href="projects.html" class="back-link">← back to projects</a>
 
-    <div class="status-badge"><span class="dot-ok"></span> Live — Automate with Bon Facebook Page</div>
-    <div class="status-badge pending" style="margin-left:.5rem;"><span class="dot-ok"></span> Meta App Review — In Progress</div>
+    <div class="status-badge"><span class="dot-ok"></span> Live — Public · Automate with Bon Facebook Page</div>
 
     <div class="meta-row">
       <span>Type: AI Agent + Messenger Automation</span>
       <span>Tools: Make.com · Groq AI · Meta Messenger API · Google Sheets</span>
       <span>Steps: 5</span>
       <span>Platform: Facebook Messenger</span>
-      <span>Status: Live (dev mode)</span>
+      <span>Status: Live · Public</span>
     </div>
 
     <!-- Notice -->
     <div class="notice-box">
-      ⚠ <strong>App Review in progress.</strong> This agent is fully functional but currently limited to admins and testers while awaiting Meta's App Review approval. Once approved, it will be publicly accessible to all Messenger users.
+      ✓ <strong>Now fully public.</strong> Meta App Review approved. This agent is live and accessible to all Messenger users on the Automate with Bon Facebook Page. Message the page and the AI responds instantly — 24/7, zero manual work.
     </div>
 
     <!-- Overview -->
@@ -388,16 +386,18 @@
             <li>Handles any question naturally</li>
             <li>Instant automated replies</li>
             <li>Zero manual work</li>
+            <li>Now live and public</li>
           </ul>
         </div>
-        <div class="info-card warning">
-          <h3>⚠ Limitations</h3>
+        <div class="info-card working">
+          <h3>✓ Meta App Approved</h3>
           <ul>
-            <li>Meta App Review in progress</li>
-            <li>Currently limited to testers</li>
-            <li>Lead logging coming soon</li>
-            <li>Follow-up email coming soon</li>
-            <li>Public access pending approval</li>
+            <li>App review completed</li>
+            <li>Publicly accessible to all users</li>
+            <li>No tester restrictions</li>
+            <li>Anyone can message the page</li>
+            <li>Lead logging — coming soon</li>
+            <li>Follow-up email — coming soon</li>
           </ul>
         </div>
       </div>
@@ -423,13 +423,13 @@
     <div class="section-block">
       <h2>// try it</h2>
       <div class="demo-box">
-        <h3>⚡ Talk to the agent</h3>
+        <h3>⚡ Talk to the agent — live now</h3>
         <p>
           Message the <strong>Automate with Bon</strong> Facebook Page directly and the AI will respond automatically.
-          Ask about services, background, availability, or anything else.
+          Ask about services, background, availability, or anything else. No signup. No waiting. Just message.
         </p>
-        <p class="warn-note">// note: currently limited to admins and testers while Meta App Review is in progress. Public access coming soon.</p>
-        <a href="https://www.facebook.com/profile.php?id=61577060529095" target="_blank" class="demo-link">→ Visit Automate with Bon on Facebook</a>
+        <p class="hint">// tip: try asking "what services do you offer?" or "tell me about yourself"</p>
+        <a href="https://www.facebook.com/profile.php?id=61577060529095" target="_blank" class="demo-link">→ Message Automate with Bon on Facebook</a>
       </div>
     </div>
 

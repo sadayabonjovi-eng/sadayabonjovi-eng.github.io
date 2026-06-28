@@ -217,70 +217,73 @@
     color:var(--muted);
   }
 
-  .pipeline{
-    position:relative;
-    padding-left:2.2rem;
+  /* ── Featured builds grid ── */
+  .featured-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+    gap:1.5rem;
+    margin-bottom:2.5rem;
   }
-  .pipeline::before{
+  .feat-card{
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:var(--bg-2);
+    padding:1.6rem 1.4rem 1.4rem;
+    display:flex;
+    flex-direction:column;
+    gap:.75rem;
+    transition:border-color .2s ease, transform .15s ease;
+    position:relative;
+    overflow:hidden;
+  }
+  .feat-card::before{
     content:"";
     position:absolute;
-    left:7px; top:10px; bottom:10px;
-    width:1px;
-    background:var(--line);
+    top:0; left:0; right:0;
+    height:2px;
+    background:var(--signal);
+    opacity:.6;
   }
-  .project{
-    position:relative;
-    padding:0 0 2.4rem 1.4rem;
+  .feat-card:hover{
+    border-color:var(--signal-dim);
+    transform:translateY(-3px);
   }
-  .project::before{
-    content:"";
-    position:absolute;
-    left:-2.2rem;
-    top:6px;
-    width:14px; height:14px;
-    border-radius:50%;
-    background:var(--bg);
-    border:2px solid var(--signal);
-  }
-  .project.is-service::before{
-    border-color:var(--warn);
-    border-radius:3px;
-  }
-  .entry-tag{
+  .feat-tag{
     font-family:var(--mono);
-    font-size:.72rem;
-    letter-spacing:.1em;
+    font-size:.68rem;
+    letter-spacing:.12em;
     text-transform:uppercase;
     color:var(--signal);
-    display:block;
-    margin-bottom:.4rem;
   }
-  .project.is-service .entry-tag{ color:var(--warn); }
-
-  .project h3{
+  .feat-card h3{
     font-family:var(--sans);
     font-weight:700;
-    font-size:1.4rem;
-    margin:0 0 .6rem;
+    font-size:1.15rem;
+    margin:0;
+    line-height:1.25;
   }
-  .project p{ margin:0 0 1rem; max-width:560px; color:var(--ink); }
-  .project p strong{ color:var(--signal); font-weight:600; }
-  .project.is-service p strong{ color:var(--warn); }
-
+  .feat-card p{
+    font-size:.92rem;
+    color:var(--muted);
+    margin:0;
+    flex:1;
+  }
+  .feat-card p strong{ color:var(--ink); font-weight:600; }
   .stack{
     font-family:var(--mono);
-    font-size:.72rem;
+    font-size:.68rem;
     color:var(--muted);
-    margin:0 0 1rem;
+    margin:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:.3rem;
   }
   .stack span{
     display:inline-block;
     border:1px solid var(--line);
     border-radius:3px;
-    padding:.15rem .5rem;
-    margin:0 .3rem .3rem 0;
+    padding:.15rem .45rem;
   }
-
   .contact-btn{
     font-family:var(--mono);
     font-size:.78rem;
@@ -289,10 +292,65 @@
     border-bottom:1px solid var(--signal-dim);
     padding-bottom:1px;
     transition:border-color .2s;
+    align-self:flex-start;
   }
-  .project.is-service .contact-btn{ color:var(--warn); border-color:var(--signal-dim); }
   .contact-btn:hover{ border-color:currentColor; }
 
+  /* view all link */
+  .view-all-wrap{
+    text-align:right;
+    margin-bottom:2.5rem;
+  }
+  .view-all-wrap a{
+    font-family:var(--mono);
+    font-size:.78rem;
+    color:var(--muted);
+    text-decoration:none;
+    border-bottom:1px solid var(--line);
+    padding-bottom:1px;
+    transition:color .2s, border-color .2s;
+  }
+  .view-all-wrap a:hover{ color:var(--signal); border-color:var(--signal-dim); }
+
+  /* ── Service block ── */
+  .service-block{
+    border:1px solid var(--warn);
+    border-radius:8px;
+    background:var(--bg-2);
+    padding:1.6rem 1.4rem 1.4rem;
+    margin-bottom:3rem;
+    position:relative;
+    overflow:hidden;
+  }
+  .service-block::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:2px;
+    background:var(--warn);
+    opacity:.6;
+  }
+  .service-tag{
+    font-family:var(--mono);
+    font-size:.68rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--warn);
+    display:block;
+    margin-bottom:.6rem;
+  }
+  .service-block h3{
+    font-family:var(--sans);
+    font-weight:700;
+    font-size:1.15rem;
+    margin:0 0 .6rem;
+  }
+  .service-block p{
+    font-size:.92rem;
+    color:var(--muted);
+    margin:0 0 1rem;
+    max-width:560px;
+  }
   .services-list{
     list-style:none;
     margin:0 0 1rem;
@@ -302,14 +360,24 @@
     gap:.5rem 1rem;
     max-width:600px;
     font-family:var(--mono);
-    font-size:.85rem;
+    font-size:.82rem;
   }
   .services-list li{
     padding:.4rem .6rem;
     border:1px solid var(--line);
     border-radius:4px;
-    background:var(--bg-2);
+    background:var(--bg);
   }
+  .warn-btn{
+    font-family:var(--mono);
+    font-size:.78rem;
+    text-decoration:none;
+    color:var(--warn);
+    border-bottom:1px solid var(--signal-dim);
+    padding-bottom:1px;
+    transition:border-color .2s;
+  }
+  .warn-btn:hover{ border-color:var(--warn); }
 
   footer{
     max-width:920px;
@@ -324,12 +392,6 @@
     justify-content:space-between;
     flex-wrap:wrap;
     gap:.5rem;
-  }
-
-  @media (max-width:600px){
-    .pipeline{ padding-left:1.6rem; }
-    .project{ padding-left:1rem; }
-    .project::before{ left:-1.6rem; }
   }
 </style>
 </head>
@@ -410,101 +472,74 @@
 
   <div class="container">
 
-    <h2>// active builds</h2>
+    <h2>// featured builds</h2>
     <p class="container-intro">
-      Real systems built for real business problems — each one combining live VA oversight with automation running in the background.
+      Three systems built and deployed — each one solving a real business problem end-to-end.
     </p>
 
-    <div class="pipeline">
+    <div class="featured-grid">
 
-      <!-- AI Lead Qualification Agent — featured first -->
-      <section class="project">
-        <span class="entry-tag">Agent · lead-qualification · live</span>
-        <h3>Live AI Lead Qualification Agent</h3>
+      <!-- 1. Messenger AI Lead Agent -->
+      <article class="feat-card">
+        <span class="feat-tag">Agent · Messenger · Live</span>
+        <h3>Messenger AI Lead Agent</h3>
         <p>
-          A fully deployed <strong>conversational AI agent</strong> running on this
-          portfolio — answering visitor questions 24/7, detecting hiring interest through
-          natural conversation, and triggering a <strong>10-step automated pipeline</strong>
-          the moment a lead is qualified. No forms. No manual work.
+          An AI agent running inside <strong>Facebook Messenger</strong> — qualifying leads 24/7 through natural conversation, then firing an automated pipeline that logs to <strong>Google Sheets</strong> and sends instant email alerts. No forms. No manual work.
         </p>
-        <p>
-          When a visitor shows interest, the agent collects their <strong>name, project,
-          and email</strong> through conversation. A pipeline fires automatically —
-          logging the lead to <strong>Google Sheets</strong>, sending an instant owner
-          alert, and delivering a personalized <strong>follow-up email</strong> to the
-          lead — all before the chat ends. Built entirely on a free stack: Groq AI,
-          Cloudflare Workers, and Google Apps Script.
-        </p>
-        <div class="stack"><span>Groq AI</span><span>Cloudflare Workers</span><span>Google Apps Script</span><span>Google Sheets</span><span>Gmail</span><span>JavaScript</span></div>
-        <a href="lead-qualification.html" class="contact-btn">→ view_project</a>
-      </section>
+        <div class="stack">
+          <span>Make.com</span><span>Groq AI</span><span>Facebook API</span><span>Google Sheets</span><span>Gmail</span>
+        </div>
+        <a href="messenger-ai-agent.html" class="contact-btn">→ view_project</a>
+      </article>
 
-      <!-- Order Automation -->
-      <section class="project">
-        <span class="entry-tag">Agent · order-retention-flow</span>
-        <h3>AI Order Processing & Customer Retention System</h3>
+      <!-- 2. Order Processing & Retention -->
+      <article class="feat-card">
+        <span class="feat-tag">Agent · Order · Retention</span>
+        <h3>AI Order Processing & Retention System</h3>
         <p>
-          Filters incoming emails to catch new orders, then uses <strong>AI to extract
-          order details</strong> from unstructured text and match each item against a
-          pricing database — calculating subtotals, totals, and profit automatically.
+          Filters incoming emails, uses <strong>AI to extract order details</strong>, calculates totals against a pricing database, then triggers a full retention loop — confirmation, feedback request, and personalized reorder invite — all automated.
         </p>
-        <p>
-          Confirmed orders get a unique <strong>Order ID</strong>, an automated
-          confirmation email with upsell suggestions, and a logged row in
-          <strong>Google Sheets</strong> (customer, order details, date, cost, total
-          payment, profit), with duplicate-confirmation filtering so the same order
-          never gets processed twice.
-        </p>
-        <p>
-          A few hours later, the system follows up with a 1–5 star feedback request
-          linked to a pre-filled <strong>Tally</strong> form, filters duplicate
-          submissions, and logs verified responses back to Sheets. Based on the rating,
-          it sends one of several tailored replies — from thank-you notes to apology
-          and recovery messages — then, a day after that, sends a personalized
-          reorder invitation shaped by how the customer rated their experience.
-        </p>
-        <div class="stack"><span>Zapier</span><span>Tally</span><span>Google Sheets</span><span>Email</span></div>
+        <div class="stack">
+          <span>Zapier</span><span>Tally</span><span>Google Sheets</span><span>Gmail</span>
+        </div>
         <a href="order-automation.html" class="contact-btn">→ view_project</a>
-      </section>
+      </article>
 
-      <!-- Expense Tracker -->
-      <section class="project">
-        <span class="entry-tag">Tracker · google-sheets</span>
-        <h3>Client Expense & Income Tracker</h3>
+      <!-- 3. Trello Client Onboarding -->
+      <article class="feat-card">
+        <span class="feat-tag">Automation · Trello · Live</span>
+        <h3>Trello Client Onboarding Pipeline</h3>
         <p>
-          A professional financial tracker built in <strong>Google Sheets</strong> to
-          help small business owners and freelancers monitor their monthly cash flow
-          without manual calculation. Every transaction is logged once — the sheet
-          handles totals, summaries, and charts automatically.
+          A 7-stage automated client pipeline built entirely in Trello — <strong>checklists swap per stage, due dates reset automatically, urgent cards get flagged</strong>, and every transition is logged with an audit comment. Zero manual input after setup.
         </p>
-        <p>
-          Features <strong>dropdown data validation</strong> for clean consistent entries,
-          <strong>conditional formatting</strong> that color-codes transaction status at a glance,
-          and <strong>SUMIFS formulas</strong> that automatically separate and total income
-          vs expenses by month — all feeding into a <strong>visual dashboard</strong>
-          with summary boxes and a bar chart showing financial performance instantly.
-        </p>
-        <div class="stack"><span>Google Sheets</span><span>SUMIFS</span><span>Data Validation</span><span>Dashboard</span></div>
-        <a href="expense-tracker.html" class="contact-btn">→ view_project</a>
-      </section>
-
-      <!-- Service block -->
-      <section class="project is-service">
-        <span class="entry-tag">Service · always-on</span>
-        <h3>Virtual Assistant Support</h3>
-        <p>The automation handles the routine. I handle the rest — live, during working hours, so nothing ever falls through the cracks.</p>
-        <ul class="services-list">
-          <li>Inbox management & monitoring</li>
-          <li>Calendar scheduling & reminders</li>
-          <li>Data entry & spreadsheet tracking</li>
-          <li>Documentation & reporting</li>
-          <li>Customer support & feedback handling</li>
-          <li>Zapier workflow builds & maintenance</li>
-        </ul>
-        <a href="contact.html" class="contact-btn">→ get_in_touch</a>
-      </section>
+        <div class="stack">
+          <span>Trello Butler</span><span>Gmail</span><span>No-Code</span>
+        </div>
+        <a href="trello-onboarding.html" class="contact-btn">→ view_project</a>
+      </article>
 
     </div>
+
+    <div class="view-all-wrap">
+      <a href="projects.html">→ view all projects</a>
+    </div>
+
+    <!-- Service block -->
+    <div class="service-block">
+      <span class="service-tag">Service · always-on</span>
+      <h3>Virtual Assistant Support</h3>
+      <p>The automation handles the routine. I handle the rest — live, during working hours, so nothing ever falls through the cracks.</p>
+      <ul class="services-list">
+        <li>Inbox management & monitoring</li>
+        <li>Calendar scheduling & reminders</li>
+        <li>Data entry & spreadsheet tracking</li>
+        <li>Documentation & reporting</li>
+        <li>Customer support & feedback handling</li>
+        <li>Make.com & Zapier workflow builds</li>
+      </ul>
+      <a href="contact.html" class="warn-btn">→ get_in_touch</a>
+    </div>
+
   </div>
 
   <footer>
@@ -514,20 +549,9 @@
 
   <script>
     const toggle = document.getElementById('theme-toggle');
-
-    function isDark() {
-      return document.body.classList.contains('dark-mode');
-    }
-
-    function setLabel() {
-      toggle.textContent = isDark() ? 'Switch to Light' : 'Switch to Dark';
-    }
-
-    toggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      setLabel();
-    });
-
+    function isDark() { return document.body.classList.contains('dark-mode'); }
+    function setLabel() { toggle.textContent = isDark() ? 'Switch to Light' : 'Switch to Dark'; }
+    toggle.addEventListener('click', () => { document.body.classList.toggle('dark-mode'); setLabel(); });
     setLabel();
   </script>
   <link rel="stylesheet" href="chatbot.css">

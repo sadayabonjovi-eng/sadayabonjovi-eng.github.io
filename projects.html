@@ -119,14 +119,15 @@
         <h2>Automation Builds</h2>
         <p>
           Working systems — a trigger, automated steps, decision logic, and a
-          reliable result at the end. Built with Zapier, AI tools, and connected apps.
+          reliable result at the end. Built with Make.com, Zapier, AI tools, and connected apps.
         </p>
         <ul class="preview-list">
-          <li>Live AI Lead Qualification Agent</li>
+          <li>Messenger AI Lead Agent</li>
+          <li>Live AI Lead Qualification Agent (Portfolio)</li>
           <li>AI Order Processing & Customer Retention System</li>
+          <li>Trello Client Onboarding Automation</li>
           <li>AI Content Publishing Pipeline</li>
           <li>Email Weather Bot</li>
-          <li>Trello Client Onboarding Automation</li>
         </ul>
         <a href="automation.html" class="view-all">→ view_all_automation()</a>
       </div>
@@ -174,20 +175,14 @@
 
   <script>
     const toggle = document.getElementById('theme-toggle');
-
-    function isDark() {
-      return document.body.classList.contains('dark-mode');
-    }
-
-    function setLabel() {
-      toggle.textContent = isDark() ? 'Switch to Light' : 'Switch to Dark';
-    }
-
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Light' : 'Switch to Dark';
+    };
     toggle.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
       setLabel();
     });
-
     setLabel();
   </script>
   <link rel="stylesheet" href="chatbot.css">

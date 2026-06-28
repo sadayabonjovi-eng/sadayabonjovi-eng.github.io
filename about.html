@@ -80,7 +80,7 @@
 
   <div class="topstrip">
     <span><span class="dot">●</span> system status: available for new workflows</span>
-    <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode"></button>
   </div>
 
   <header style="grid-template-columns:1fr;">
@@ -177,14 +177,17 @@
           I work as an <strong>Administrative & Operational Virtual Assistant</strong>
           who builds automation systems alongside the day-to-day work. Clients get
           the reliability of a real person monitoring operations live during working
-          hours — plus the efficiency of <strong>Zapier workflows and AI tools</strong>
+          hours — plus the efficiency of <strong>Make.com, Zapier, and AI tools</strong>
           running in the background handling the routine, so their business moves
           faster and more reliably without adding to their workload.
         </p>
         <p>
-          Before my VA work, I handled <strong>20,000+ government records</strong>
-          at the Department of Social Welfare and Development — building the
-          data discipline and accuracy that I bring to every client engagement today.
+          I've deployed live AI agents on <strong>Facebook Messenger</strong> and
+          portfolio websites that qualify leads 24/7 through natural conversation —
+          logging to Google Sheets and sending instant alerts without any manual
+          input. Before my VA work, I handled <strong>20,000+ government records</strong>
+          at the Department of Social Welfare and Development — building the data
+          discipline and accuracy that I bring to every client engagement today.
         </p>
       </section>
 
@@ -281,8 +284,8 @@
       <li><strong>Data Entry & Tracking</strong> — structured logging in Google Sheets and CRM systems</li>
       <li><strong>Documentation & Reporting</strong> — reports, SOPs, summaries, and official records</li>
       <li><strong>Customer Support</strong> — feedback collection, tailored responses, and retention</li>
-      <li><strong>Zapier Automation</strong> — workflow builds, maintenance, and live monitoring</li>
-      <li><strong>AI Tools Integration</strong> — ChatGPT, Gemini, Claude for operational efficiency</li>
+      <li><strong>Make.com & Zapier Automation</strong> — workflow builds, AI agent pipelines, and live monitoring</li>
+      <li><strong>AI Tools Integration</strong> — Groq, ChatGPT, Gemini, Claude for operational efficiency</li>
       <li><strong>Google Workspace</strong> — Docs, Sheets, Drive, Calendar, Gmail, Meet</li>
     </ul>
 
@@ -297,7 +300,7 @@
     const toggle = document.getElementById('theme-toggle');
     const setLabel = () => {
       toggle.textContent = document.body.classList.contains('dark-mode')
-        ? 'Switch to Dark' : 'Switch to Light';
+        ? 'Switch to Light' : 'Switch to Dark';
     };
     toggle.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
@@ -306,6 +309,6 @@
     setLabel();
   </script>
   <link rel="stylesheet" href="chatbot.css">
-<script src="chatbot.js"></script>
+  <script src="chatbot.js"></script>
 </body>
 </html>

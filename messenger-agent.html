@@ -223,8 +223,9 @@
       <h1>Messenger AI Agent</h1>
       <p class="lede">
         A fully deployed <strong>conversational AI agent</strong> running on the Automate with Bon Facebook Page —
-        answering Messenger messages 24/7, responding naturally as Bon, and handling inquiries
-        automatically without any manual work. Built with <strong>Make.com, Groq AI, and the Meta Messenger API</strong>.
+        answering Messenger messages 24/7, responding naturally as Bon, qualifying leads automatically,
+        logging them to Google Sheets, and sending follow-up emails — all without any manual work.
+        Built with <strong>Make.com, Groq AI, Meta Messenger API, Google Sheets, and Gmail</strong>.
       </p>
     </div>
   </header>
@@ -242,25 +243,25 @@
     <div class="status-badge"><span class="dot-ok"></span> Live — Public · Automate with Bon Facebook Page</div>
 
     <div class="meta-row">
-      <span>Type: AI Agent + Messenger Automation</span>
-      <span>Tools: Make.com · Groq AI · Meta Messenger API · Google Sheets</span>
-      <span>Steps: 5</span>
+      <span>Type: AI Agent + Lead Qualification + Messenger Automation</span>
+      <span>Tools: Make.com · Groq AI · Meta Messenger API · Google Sheets · Gmail</span>
+      <span>Steps: 8</span>
       <span>Platform: Facebook Messenger</span>
-      <span>Status: Live · Public</span>
+      <span>Status: Live · Fully Deployed</span>
     </div>
 
     <!-- Notice -->
     <div class="notice-box">
-      ✓ <strong>Now fully public.</strong> Meta App Review approved. This agent is live and accessible to all Messenger users on the Automate with Bon Facebook Page. Message the page and the AI responds instantly — 24/7, zero manual work.
+      ✓ <strong>Fully deployed end-to-end.</strong> Meta App Review approved. This agent is live and accessible to all Messenger users on the Automate with Bon Facebook Page. It responds instantly as Bon, qualifies leads naturally, logs them to Google Sheets, and sends automated follow-up emails — 24/7, zero manual work.
     </div>
 
     <!-- Overview -->
     <div class="section-block">
       <h2>// overview</h2>
       <p>
-        AI Agent #2 extends the same lead qualification concept from the portfolio website into
-        <strong>Facebook Messenger</strong> — where most people already are. Instead of waiting for
-        someone to visit a website, this agent meets them on the platform they use every day.
+        A complete AI Lead Qualification Agent deployed on Facebook Messenger — where most people already are.
+        Instead of waiting for someone to visit a website, this agent meets them on the platform they use every day
+        and handles the entire qualification flow automatically.
       </p>
       <p>
         The agent is trained on Bon's full background — his 7 years in the Philippine Coast Guard,
@@ -270,7 +271,9 @@
       <p>
         When someone messages the Automate with Bon Facebook page, the agent responds instantly —
         answering questions about services, background, and availability — and naturally collects
-        contact details when hiring interest is detected. <strong>Zero manual work. 24/7.</strong>
+        name, project details, and email when hiring interest is detected. All lead data is automatically
+        logged to <strong>Google Sheets</strong> and a follow-up notification is sent via <strong>Gmail</strong>.
+        <strong>Zero manual work. 24/7.</strong>
       </p>
     </div>
 
@@ -278,7 +281,7 @@
     <div class="section-block">
       <h2>// system diagram</h2>
       <div class="diagram-wrap">
-        <svg viewBox="0 0 580 560" width="560" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', 'Fira Code', monospace">
+        <svg viewBox="0 0 580 600" width="560" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', 'Fira Code', monospace">
           <defs>
             <marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
               <path d="M1,1 L7,4 L1,7 Z" fill="#26313c"/>
@@ -293,14 +296,14 @@
           <text x="290" y="28" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">TRIGGER</text>
           <text x="290" y="44" text-anchor="middle" fill="#dde3ea" font-size="11">1. User messages Facebook Page</text>
 
-          <line x1="290" y1="54" x2="290" y2="74" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line x1="290" y1="54" x2="290" y2="74" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
 
           <!-- 2. Meta Messenger API -->
           <rect x="165" y="76" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
           <text x="290" y="94" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">WEBHOOK</text>
           <text x="290" y="110" text-anchor="middle" fill="#dde3ea" font-size="11">2. Meta API fires webhook to Make.com</text>
 
-          <line x1="290" y1="120" x2="290" y2="140" stroke="#26313c" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line x1="290" y1="120" x2="290" y2="140" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
 
           <!-- 3. Make.com receives -->
           <rect x="165" y="142" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
@@ -321,29 +324,27 @@
           <text x="290" y="292" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">RESPONSE</text>
           <text x="290" y="308" text-anchor="middle" fill="#dde3ea" font-size="11">5. Make.com — Send reply to user</text>
 
-          <!-- Coming soon branch -->
-          <line x1="290" y1="318" x2="290" y2="338" stroke="#26313c" stroke-width="1.5" stroke-dasharray="4 2"/>
-          <line x1="290" y1="338" x2="110" y2="338" stroke="#26313c" stroke-width="1.5" stroke-dasharray="4 2"/>
-          <line x1="290" y1="338" x2="470" y2="338" stroke="#26313c" stroke-width="1.5" stroke-dasharray="4 2"/>
-          <line x1="110" y1="338" x2="110" y2="370" stroke="#26313c" stroke-width="1.5" stroke-dasharray="4 2" marker-end="url(#arr)"/>
-          <line x1="470" y1="338" x2="470" y2="370" stroke="#26313c" stroke-width="1.5" stroke-dasharray="4 2" marker-end="url(#arr)"/>
+          <!-- Lead branch -->
+          <line x1="290" y1="318" x2="290" y2="338" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="290" y1="338" x2="110" y2="338" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="290" y1="338" x2="470" y2="338" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="110" y1="338" x2="110" y2="370" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+          <line x1="470" y1="338" x2="470" y2="370" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
 
-          <!-- Coming soon outputs -->
-          <rect x="20" y="372" width="180" height="44" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1.5" stroke-dasharray="4 2"/>
-          <text x="110" y="390" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">COMING SOON</text>
-          <text x="110" y="406" text-anchor="middle" fill="#7d8b99" font-size="11">Google Sheets — Log lead</text>
+          <!-- Live outputs -->
+          <rect x="20" y="372" width="180" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="110" y="390" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">LEAD LOGGING</text>
+          <text x="110" y="406" text-anchor="middle" fill="#dde3ea" font-size="11">Google Sheets — Log lead</text>
 
-          <rect x="380" y="372" width="180" height="44" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1.5" stroke-dasharray="4 2"/>
-          <text x="470" y="390" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">COMING SOON</text>
-          <text x="470" y="406" text-anchor="middle" fill="#7d8b99" font-size="11">Gmail — Follow-up email</text>
+          <rect x="380" y="372" width="180" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="470" y="390" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">NOTIFICATION</text>
+          <text x="470" y="406" text-anchor="middle" fill="#dde3ea" font-size="11">Gmail — Follow-up email</text>
 
           <!-- Legend -->
-          <rect x="20" y="460" width="250" height="80" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1"/>
+          <rect x="20" y="460" width="250" height="60" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1"/>
           <text x="35" y="480" fill="#7d8b99" font-size="9" letter-spacing="1">LEGEND</text>
           <rect x="35" y="490" width="14" height="10" rx="2" fill="none" stroke="#5eead4" stroke-width="1.5"/>
           <text x="55" y="500" fill="#dde3ea" font-size="10">Live and working</text>
-          <rect x="35" y="510" width="14" height="10" rx="2" fill="none" stroke="#26313c" stroke-width="1.5" stroke-dasharray="4 2"/>
-          <text x="55" y="520" fill="#7d8b99" font-size="10">Planned — coming soon</text>
         </svg>
       </div>
     </div>
@@ -364,11 +365,11 @@
           <tr><td class="step-num">1</td><td>User sends a message to the Automate with Bon Facebook Page</td><td class="step-tool">Facebook Messenger</td><td class="step-status-ok">✓ Live</td></tr>
           <tr><td class="step-num">2</td><td>Meta Messenger API fires a webhook event to Make.com</td><td class="step-tool">Meta Messenger API</td><td class="step-status-ok">✓ Live</td></tr>
           <tr><td class="step-num">3</td><td>Make.com Watch Messages module receives the message and sender ID</td><td class="step-tool">Make.com</td><td class="step-status-ok">✓ Live</td></tr>
-          <tr><td class="step-num">4</td><td>HTTP module sends message to Groq AI with full Bon profile as system prompt</td><td class="step-tool">Groq AI (llama-3.3-70b)</td><td class="step-status-ok">✓ Live</td></tr>
+          <tr><td class="step-num">4</td><td>HTTP module sends message to Groq AI with full Bon profile as system prompt and conversation history</td><td class="step-tool">Groq AI (llama-3.3-70b)</td><td class="step-status-ok">✓ Live</td></tr>
           <tr><td class="step-num">5</td><td>Make.com Send Message module replies to the user on Messenger automatically</td><td class="step-tool">Make.com + Meta API</td><td class="step-status-ok">✓ Live</td></tr>
-          <tr><td class="step-num">6</td><td>Lead detection — if hiring interest is shown, collect name and email</td><td class="step-tool">Groq AI + System Prompt</td><td class="step-status-pending">⚠ Coming Soon</td></tr>
-          <tr><td class="step-num">7</td><td>Log lead details to Google Sheets with timestamp</td><td class="step-tool">Make.com + Google Sheets</td><td class="step-status-pending">⚠ Coming Soon</td></tr>
-          <tr><td class="step-num">8</td><td>Send automated follow-up email to the lead</td><td class="step-tool">Make.com + Gmail</td><td class="step-status-pending">⚠ Coming Soon</td></tr>
+          <tr><td class="step-num">6</td><td>Lead detection — when hiring interest is shown, AI collects name, project, and email naturally one at a time</td><td class="step-tool">Groq AI + System Prompt</td><td class="step-status-ok">✓ Live</td></tr>
+          <tr><td class="step-num">7</td><td>Lead details parsed and logged to Google Sheets with timestamp, name, email, project, and source page</td><td class="step-tool">Make.com + Google Sheets</td><td class="step-status-ok">✓ Live</td></tr>
+          <tr><td class="step-num">8</td><td>Automated follow-up email notification sent via Gmail when a new lead is captured</td><td class="step-tool">Make.com + Gmail</td><td class="step-status-ok">✓ Live</td></tr>
         </tbody>
       </table>
     </div>
@@ -385,19 +386,20 @@
             <li>Knows Bon's full background</li>
             <li>Handles any question naturally</li>
             <li>Instant automated replies</li>
+            <li>Conversation memory per user</li>
             <li>Zero manual work</li>
-            <li>Now live and public</li>
           </ul>
         </div>
         <div class="info-card working">
-          <h3>✓ Meta App Approved</h3>
+          <h3>✓ Full Pipeline Live</h3>
           <ul>
-            <li>App review completed</li>
+            <li>Meta App Review approved</li>
             <li>Publicly accessible to all users</li>
-            <li>No tester restrictions</li>
-            <li>Anyone can message the page</li>
-            <li>Lead logging — coming soon</li>
-            <li>Follow-up email — coming soon</li>
+            <li>Lead qualification — live</li>
+            <li>Google Sheets logging — live</li>
+            <li>Gmail notifications — live</li>
+            <li>Text parser extracts lead data</li>
+            <li>End-to-end automated</li>
           </ul>
         </div>
       </div>
@@ -412,8 +414,10 @@
           <li>Trained on Bon's real background — Coast Guard, projects, certifications</li>
           <li>Speaks in first person as Bon — warm, genuine, and natural</li>
           <li>Knows his exact services, availability, and personality</li>
-          <li>Built on free tools — Make.com free tier + Groq AI free tier</li>
-          <li>Meets people where they already are — on Messenger, not a portfolio</li>
+          <li>Remembers conversation history per user via Data Store</li>
+          <li>Qualifies leads naturally — no forms, no friction</li>
+          <li>Full pipeline: chat → qualify → log → notify, all automated</li>
+          <li>Built on free tools — Make.com + Groq AI free tier</li>
           <li>Same architecture can be deployed for any business page</li>
         </ul>
       </div>
@@ -428,7 +432,7 @@
           Message the <strong>Automate with Bon</strong> Facebook Page directly and the AI will respond automatically.
           Ask about services, background, availability, or anything else. No signup. No waiting. Just message.
         </p>
-        <p class="hint">// tip: try asking "what services do you offer?" or "tell me about yourself"</p>
+        <p class="hint">// tip: try asking "what services do you offer?" or "I want to hire you"</p>
         <a href="https://www.facebook.com/profile.php?id=61577060529095" target="_blank" class="demo-link">→ Message Automate with Bon on Facebook</a>
       </div>
     </div>
@@ -441,8 +445,10 @@
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Groq AI (llama-3.3-70b-versatile)</span>
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Meta Messenger API</span>
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Meta for Developers</span>
-        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Sheets (planned)</span>
-        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Gmail (planned)</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Sheets</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Gmail</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Make.com Data Store</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Text Parser (Regex)</span>
       </div>
     </div>
 

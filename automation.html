@@ -30,7 +30,7 @@
   <header>
     <div class="hero-text">
       <p class="welcome">Projects · Section 01</p>
-      <div class="status-line"><span class="pulse"></span> Automation · AI · Zapier Workflows</div>
+      <div class="status-line"><span class="pulse"></span> Automation · AI · Zapier · Make.com Workflows</div>
       <h1>Automation Builds</h1>
       <p class="lede">
         Working systems — a trigger, automated steps, decision logic, and a reliable
@@ -83,22 +83,22 @@
       <p>
         A fully deployed <strong>conversational AI agent</strong> running on the
         Automate with Bon Facebook Page — answering Messenger messages 24/7,
-        responding naturally as Bon, and handling inquiries automatically without
-        any manual work.
+        responding naturally as Bon, qualifying leads automatically, and triggering
+        a complete pipeline without any manual work.
       </p>
       <p>
-        Trained on Bon's full background — his 7 years in the Philippine Coast Guard,
-        his transition into VA and automation work, his projects, and his personality.
         When someone messages the page, the agent responds instantly as Bon —
-        answering questions about services, background, and availability.
-        Built on a <strong>free stack</strong>: Make.com, Groq AI, and the Meta
-        Messenger API. Meta App Review currently in progress for public access.
+        answering questions about services, background, and availability. When hiring
+        interest is detected, it collects <strong>name, project, and email</strong>
+        naturally through conversation, logs the lead to <strong>Google Sheets</strong>,
+        and sends an automated <strong>Gmail notification</strong>. Built on a free
+        stack: Make.com, Groq AI, and the Meta Messenger API. <strong>Live and publicly accessible.</strong>
       </p>
       <div class="stack">
-        <span>Make.com</span><span>Groq AI</span><span>Meta Messenger API</span><span>Google Sheets</span><span>Gmail</span>
+        <span>Make.com</span><span>Groq AI</span><span>Meta Messenger API</span><span>Google Sheets</span><span>Gmail</span><span>Data Store</span>
       </div>
       <div class="project-links">
-        <a href="messenger-agent.html">→ details</a>
+        <a href="messenger-ai-agent.html">→ details</a>
       </div>
     </div>
 
@@ -213,20 +213,9 @@
 
   <script>
     const toggle = document.getElementById('theme-toggle');
-
-    function isDark() {
-      return document.body.classList.contains('dark-mode');
-    }
-
-    function setLabel() {
-      toggle.textContent = isDark() ? 'Switch to Light' : 'Switch to Dark';
-    }
-
-    toggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      setLabel();
-    });
-
+    function isDark() { return document.body.classList.contains('dark-mode'); }
+    function setLabel() { toggle.textContent = isDark() ? 'Switch to Light' : 'Switch to Dark'; }
+    toggle.addEventListener('click', () => { document.body.classList.toggle('dark-mode'); setLabel(); });
     setLabel();
   </script>
   <link rel="stylesheet" href="chatbot.css">

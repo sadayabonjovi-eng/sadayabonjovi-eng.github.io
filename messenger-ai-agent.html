@@ -260,6 +260,13 @@
     color: var(--signal);
   }
   .notice-box strong { color: var(--signal); }
+
+  .scenario-caption {
+    font-family: var(--mono);
+    font-size: .75rem;
+    color: var(--muted);
+    margin-top: .5rem;
+  }
 </style>
 </head>
 <body>
@@ -298,7 +305,7 @@
     <div class="meta-row">
       <span>Type: AI Agent + Lead Qualification + Messenger Automation</span>
       <span>Tools: Make.com · Groq AI · Meta Messenger API · Google Sheets · Gmail</span>
-      <span>Steps: 8</span>
+      <span>Steps: 11</span>
       <span>Platform: Facebook Messenger</span>
       <span>Status: Live · Fully Deployed</span>
     </div>
@@ -381,6 +388,22 @@
       </div>
     </div>
 
+    <!-- Proof of work -->
+    <div class="section-block">
+      <h2>// proof of work — live scenario</h2>
+      <p>This is the actual Make.com scenario running live. Every module visible here is active and deployed.</p>
+      <div class="diagram-wrap" style="padding:1rem;">
+        <img
+          src="files/messenger-scenario.png"
+          alt="Live Make.com scenario — Messenger AI Agent full pipeline"
+          style="width:100%; border-radius:6px; display:block;"
+        >
+      </div>
+      <p class="scenario-caption">
+        // live scenario — webhook → data store → set variable → HTTP (Groq AI) → router → text parser → Google Sheets → Gmail · error handlers on all critical paths
+      </p>
+    </div>
+
     <!-- Step breakdown -->
     <div class="section-block">
       <h2>// step breakdown</h2>
@@ -394,14 +417,78 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td class="step-num">1</td><td>User sends a message to the Automate with Bon Facebook Page</td><td class="step-tool">Facebook Messenger</td><td class="step-status-ok">✓ Live</td></tr>
-          <tr><td class="step-num">2</td><td>Meta Messenger API fires a webhook event to Make.com</td><td class="step-tool">Meta Messenger API</td><td class="step-status-ok">✓ Live</td></tr>
-          <tr><td class="step-num">3</td><td>Make.com Watch Messages module receives the message and sender ID</td><td class="step-tool">Make.com</td><td class="step-status-ok">✓ Live</td></tr>
-          <tr><td class="step-num">4</td><td>HTTP module sends message to Groq AI with full Bon profile as system prompt and conversation history</td><td class="step-tool">Groq AI (llama-3.3-70b)</td><td class="step-status-ok">✓ Live</td></tr>
-          <tr><td class="step-num">5</td><td>Make.com Send Message module replies to the user on Messenger automatically</td><td class="step-tool">Make.com + Meta API</td><td class="step-status-ok">✓ Live</td></tr>
-          <tr><td class="step-num">6</td><td>Lead detection — when hiring interest is shown, AI collects name, project, and email naturally one at a time</td><td class="step-tool">Groq AI + System Prompt</td><td class="step-status-ok">✓ Live</td></tr>
-          <tr><td class="step-num">7</td><td>Lead details parsed and logged to Google Sheets with timestamp, name, email, project, and source page</td><td class="step-tool">Make.com + Google Sheets</td><td class="step-status-ok">✓ Live</td></tr>
-          <tr><td class="step-num">8</td><td>Automated follow-up email notification sent via Gmail when a new lead is captured</td><td class="step-tool">Make.com + Gmail</td><td class="step-status-ok">✓ Live</td></tr>
+          <tr>
+            <td class="step-num">1</td>
+            <td>User sends a message to the Automate with Bon Facebook Page</td>
+            <td class="step-tool">Facebook Messenger</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">2</td>
+            <td>Meta Messenger API fires a webhook event to Make.com</td>
+            <td class="step-tool">Meta Messenger API</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">3</td>
+            <td>Make.com Watch Messages module receives the message and sender ID</td>
+            <td class="step-tool">Make.com</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">3.5</td>
+            <td>Conversation history retrieved from Data Store per user — injected into prompt for full context across messages</td>
+            <td class="step-tool">Make.com Data Store</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">4</td>
+            <td>Input sanitization — user message and history normalized into clean variables before touching the AI prompt. Prevents JSON breaks from special characters, quotes, and unexpected formatting</td>
+            <td class="step-tool">Make.com Tools — Set Variable</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">5</td>
+            <td>HTTP module sends sanitized message to Groq AI with full Bon profile as system prompt and clean conversation history</td>
+            <td class="step-tool">Groq AI (llama-3.3-70b)</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">6</td>
+            <td>Make.com Send Message module replies to the user on Messenger automatically. Data Store updated with new exchange</td>
+            <td class="step-tool">Make.com + Meta API</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">7</td>
+            <td>Router splits path — normal conversation continues, lead detection triggers separate pipeline</td>
+            <td class="step-tool">Make.com Router</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">8</td>
+            <td>Lead detection — when hiring interest is shown, AI collects name, project, and email naturally one at a time. Each lead logged exactly once regardless of messages that follow</td>
+            <td class="step-tool">Groq AI + System Prompt</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">9</td>
+            <td>Text parser extracts lead data via regex — name, email, project parsed from AI output and structured for logging</td>
+            <td class="step-tool">Make.com Text Parser</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">10</td>
+            <td>Lead logged to Google Sheets with timestamp, name, email, project, and source. Duplicate logging prevented by router logic</td>
+            <td class="step-tool">Make.com + Google Sheets</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">11</td>
+            <td>Automated Gmail notification sent to owner. Follow-up email sent to lead. Error handlers on all critical paths — scenario never breaks silently</td>
+            <td class="step-tool">Make.com + Gmail</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -419,6 +506,8 @@
             <li>Handles any question naturally</li>
             <li>Instant automated replies</li>
             <li>Conversation memory per user</li>
+            <li>Input sanitization before every AI call</li>
+            <li>Error handlers on all critical paths</li>
             <li>Zero manual work</li>
           </ul>
         </div>
@@ -431,6 +520,7 @@
             <li>Google Sheets logging — live</li>
             <li>Gmail notifications — live</li>
             <li>Text parser extracts lead data</li>
+            <li>Duplicate logging prevented</li>
             <li>End-to-end automated</li>
           </ul>
         </div>
@@ -472,7 +562,7 @@
         <div class="build-event pivot">
           <div class="build-event-label">Scope expanded</div>
           <h4>Memory became a full AI agent</h4>
-          <p>Once the memory layer worked, the next logical step was clear: if the bot remembers users, it can qualify them. Lead detection was added via system prompt tagging, then a router to catch qualified leads, then Google Sheets logging, then Gmail alerts. What started as one feature became an 8-step automated pipeline.</p>
+          <p>Once the memory layer worked, the next logical step was clear: if the bot remembers users, it can qualify them. Lead detection was added via system prompt tagging, then a router to catch qualified leads, then Google Sheets logging, then Gmail alerts. What started as one feature became an 11-step automated pipeline.</p>
         </div>
         <div class="build-event pivot">
           <div class="build-event-label">Hit a wall</div>

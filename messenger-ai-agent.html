@@ -267,6 +267,14 @@
     color: var(--muted);
     margin-top: .5rem;
   }
+
+  .qa-table code {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: .1rem .35rem;
+    font-size: .78rem;
+  }
 </style>
 </head>
 <body>
@@ -579,6 +587,77 @@
           <h4>Fully live — rebuilt, debugged, deployed</h4>
           <p>The agent passed Meta App Review and went fully public. It now runs 24/7 on the Automate with Bon Facebook Page — responding as Bon, qualifying leads, logging to Sheets, and sending Gmail alerts. Built twice, debugged live, shipped clean.</p>
         </div>
+      </div>
+    </div>
+
+    <!-- QA case study -->
+    <div class="section-block">
+      <h2>// qa case study — the json escaping bug</h2>
+      <p style="margin-bottom:1.8rem;">
+        Shipping the pipeline wasn't the end of the story. A structured QA pass after launch
+        surfaced a bug that only showed up after several conversational turns — the kind of
+        issue that's invisible in a quick demo but breaks things in real usage.
+      </p>
+
+      <div class="two-col" style="grid-template-columns: 1fr; gap: 1.4rem;">
+        <div class="info-card warning">
+          <h3>⚠ The Bug</h3>
+          <ul>
+            <li>Conversation history began producing malformed JSON after a few exchanges</li>
+            <li>New incoming messages were sanitized correctly before hitting the AI</li>
+            <li>Stored conversation history was NOT sanitized before being re-injected into the prompt</li>
+            <li>Unescaped characters from earlier turns silently accumulated in storage</li>
+            <li>Payload eventually broke — but only after a few turns, not on message one</li>
+          </ul>
+        </div>
+
+        <div class="info-card highlight">
+          <h3>→ Root Cause</h3>
+          <ul>
+            <li>The escaping fix was applied to the new message only</li>
+            <li>It was never applied to history pulled from Data Store on each turn</li>
+            <li>Bug was timing-dependent — required accumulated unescaped content to surface</li>
+          </ul>
+        </div>
+
+        <div class="info-card working">
+          <h3>✓ The Fix</h3>
+          <ul>
+            <li>Used Make.com's built-in <code>escapeJSON()</code> function</li>
+            <li>Added a dedicated Set Variable step — <code>clean_history</code></li>
+            <li>Applies escapeJSON() to stored history before reassembly into the prompt</li>
+            <li>Matches the sanitization already applied to new messages</li>
+            <li>Fixed at the source, not patched downstream</li>
+          </ul>
+        </div>
+      </div>
+
+      <p style="margin-top: 1.5rem;"><strong>Verification — structured test pass against the live agent:</strong></p>
+      <table class="step-table qa-table">
+        <thead>
+          <tr><th>#</th><th>Test Case</th><th>Result</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="step-num">1</td><td>Special characters and symbols (<code>!@#$%^&amp;*()_+=;:"'&gt;&lt;?/.,</code>)</td><td class="step-status-ok">✓ Pass</td></tr>
+          <tr><td class="step-num">2</td><td>Emoji input</td><td class="step-status-ok">✓ Pass</td></tr>
+          <tr><td class="step-num">3</td><td>Unicode and multi-language text (中文, é, etc.)</td><td class="step-status-ok">✓ Pass</td></tr>
+          <tr><td class="step-num">4</td><td>File paths and backslashes (<code>C:\Users\test\file.txt</code>)</td><td class="step-status-ok">✓ Pass</td></tr>
+          <tr><td class="step-num">5</td><td>Raw JSON-formatted text (checking it isn't misread as structural data)</td><td class="step-status-ok">✓ Pass</td></tr>
+          <tr><td class="step-num">6</td><td>Mixed and nested quotation marks</td><td class="step-status-ok">✓ Pass</td></tr>
+          <tr><td class="step-num">7</td><td>Multi-line messages with literal line breaks</td><td class="step-status-ok">✓ Pass</td></tr>
+          <tr><td class="step-num">8</td><td>Markdown-style formatting characters</td><td class="step-status-ok">✓ Pass</td></tr>
+          <tr><td class="step-num">9</td><td>Long-form messages (500+ characters)</td><td class="step-status-ok">✓ Pass</td></tr>
+          <tr><td class="step-num">10</td><td>Reserved internal keyword (trigger behavior check)</td><td class="step-status-ok">✓ Pass</td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-card highlight" style="max-width:820px; margin-top: 1rem;">
+        <h3>→ Why It Matters</h3>
+        <ul>
+          <li>The bug was invisible in a quick demo — it only surfaced after multiple turns</li>
+          <li>Root-caused instead of suppressed — the fix targets where bad data entered, not where it broke</li>
+          <li>Distinguishes a system that "looks like it works" from one that's production-reliable</li>
+        </ul>
       </div>
     </div>
 

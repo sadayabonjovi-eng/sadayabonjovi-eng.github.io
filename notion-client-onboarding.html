@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notion Client & Project Onboarding System — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border: 1px solid var(--signal);
+    color: var(--signal);
+    border-radius: 3px;
+    padding: .25rem .7rem;
+    margin-bottom: 1.5rem;
+  }
+  .status-badge .dot-signal {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--signal);
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    font-size: .78rem;
+    color: var(--muted);
+  }
+  .meta-row span {
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: .2rem .6rem;
+    background: var(--bg-2);
+  }
+
+  .section-block {
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  .section-block h2 {
+    font-family: var(--mono);
+    font-size: .78rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 .6rem;
+  }
+  .section-block p {
+    color: var(--ink);
+    margin: 0 0 1rem;
+    max-width: 680px;
+  }
+  .section-block p strong { color: var(--signal); font-weight: 600; }
+
+  .diagram-wrap {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 2rem 1.5rem;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+  }
+  .folder-tree {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--ink);
+    line-height: 1.9;
+    white-space: pre;
+  }
+  .folder-tree .root   { color: var(--signal); font-weight: 700; }
+  .folder-tree .utility { color: #f0b86e; }
+  .folder-tree .folder  { color: #dde3ea; }
+  .folder-tree .file    { color: var(--muted); }
+  .folder-tree .label   { color: var(--signal); font-size: .72rem; letter-spacing: .1em; }
+
+  .step-table {
+    width: 100%;
+    max-width: 820px;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: .80rem;
+    margin-bottom: 3rem;
+  }
+  .step-table th {
+    text-align: left;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-size: .70rem;
+    border-bottom: 1px solid var(--line);
+    padding: .5rem .8rem;
+  }
+  .step-table td {
+    padding: .65rem .8rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    vertical-align: top;
+  }
+  .step-table tr:last-child td { border-bottom: none; }
+  .step-table .step-num  { color: var(--muted); width: 2.5rem; }
+  .step-table .step-tool { color: var(--signal); white-space: nowrap; }
+  .step-table .step-ok   { color: #5eead4; }
+
+  .three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.2rem;
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  @media (max-width: 700px) { .three-col { grid-template-columns: 1fr; } }
+  @media (max-width: 900px) and (min-width: 701px) { .three-col { grid-template-columns: 1fr 1fr; } }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  @media (max-width: 580px) { .two-col { grid-template-columns: 1fr; } }
+
+  .info-card {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--bg-2);
+    padding: 1.1rem 1.2rem;
+  }
+  .info-card h3 {
+    font-family: var(--mono);
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin: 0 0 .8rem;
+    color: var(--signal);
+  }
+  .info-card ul {
+    list-style: none;
+    margin: 0; padding: 0;
+    font-family: var(--mono);
+    font-size: .80rem;
+    color: var(--ink);
+  }
+  .info-card ul li {
+    padding: .3rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .info-card ul li:last-child { border-bottom: none; }
+  .info-card ul li::before { content: "✓"; margin-right: .5rem; color: var(--signal); }
+
+  .rule-card {
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--signal);
+    border-radius: 0 6px 6px 0;
+    background: var(--bg-2);
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+    max-width: 680px;
+  }
+  .rule-card .rule-label {
+    font-family: var(--mono);
+    font-size: .70rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: .4rem;
+  }
+  .rule-card p {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .back-link {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1px;
+    transition: color .2s, border-color .2s;
+    display: inline-block;
+    margin-bottom: 2.5rem;
+  }
+  .back-link:hover { color: var(--signal); border-color: var(--signal); }
+
+  .perm-table {
+    width: 100%;
+    max-width: 680px;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: .78rem;
+    margin-bottom: 2rem;
+  }
+  .perm-table th {
+    text-align: left;
+    color: var(--muted);
+    font-size: .70rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+    padding: .5rem .8rem;
+  }
+  .perm-table td {
+    padding: .55rem .8rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+  }
+  .perm-table tr:last-child td { border-bottom: none; }
+  .perm-table .yes { color: #5eead4; }
+  .perm-table .no  { color: #f0b86e; }
+  .perm-table .role { color: var(--signal); }
+
+  .screenshot-caption {
+    font-family: var(--mono);
+    font-size: .78rem;
+    color: var(--muted);
+    margin-bottom: .5rem;
+  }
+  .screenshot-img {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+</style>
+</head>
+<body>
+
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode">Switch to Light</button>
+  </div>
+
+  <header style="grid-template-columns:1fr;">
+    <div class="hero-text">
+      <p class="welcome">Project</p>
+      <div class="status-line"><span class="pulse"></span> Automation Skill · notion-ops · operational</div>
+      <h1>Notion Client & Project Onboarding System</h1>
+      <p class="lede">
+        A relational operations dashboard built in Notion to run a freelance/agency client
+        pipeline end to end — covering <strong>client lifecycle tracking</strong>,
+        <strong>project & task management</strong>, <strong>invoice status</strong>,
+        and a <strong>live business overview</strong> that surfaces what needs attention
+        today without digging through four separate databases.
+      </p>
+    </div>
+  </header>
+
+  <nav>
+    <a href="index.html">/home</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
+  </nav>
+
+  <div class="container">
+    <a href="projects.html" class="back-link">← back to projects</a>
+
+    <div class="status-badge"><span class="dot-signal"></span> Fully Operational</div>
+
+    <div class="meta-row">
+      <span>Type: Automation Skill — Client & Project Ops</span>
+      <span>Tools: Notion Databases · Relations · Filtered Views</span>
+      <span>Use case: Freelance/Agency client pipeline</span>
+      <span>Databases: 4 relational</span>
+      <span>Status: Live</span>
+    </div>
+
+    <!-- Overview -->
+    <div class="section-block">
+      <h2>// overview</h2>
+      <p>
+        This project is the operations backbone for managing freelance/VA clients from
+        first contact to paid invoice — built as a single Notion workspace with
+        <strong>four relational databases</strong> (Clients, Projects, Tasks, Invoices)
+        feeding one central Dash Board. Instead of checking each database separately,
+        the dashboard surfaces exactly what matters each day: what's overdue, what's due
+        today, which projects are active, and which invoices are still unpaid.
+      </p>
+      <p>
+        The dataset models a realistic client pipeline — clients at every stage
+        (<strong>Lead → Active → Past</strong>), projects at every status
+        (Not Started, In Progress, Done), and tasks spanning overdue, due-today, and
+        upcoming — so every filtered view on the dashboard has real content to prove
+        the logic actually works, not just an empty template.
+      </p>
+    </div>
+
+    <!-- Live Screenshot 1 -->
+    <div class="section-block">
+      <h2>// live screenshot — dashboard overview</h2>
+      <p>
+        The Dash Board home view — Today's Focus, Overdue Tasks, and the Business
+        Overview metrics table pulling real counts across all four databases.
+      </p>
+      <p class="screenshot-caption">// Dash Board — Business Overview · Active Clients 3 · Active Projects 3 · Pending Invoices 2 · Tasks Due Today 4</p>
+      <img
+        src="files/notion-client-dashboard-hero.png"
+        alt="Notion dashboard home view showing Today's Focus and Business Overview metrics"
+        class="screenshot-img"
+      />
+    </div>
+
+    <!-- Architecture -->
+    <div class="section-block">
+      <h2>// database architecture</h2>
+      <p>
+        Four databases, connected by relation properties, so every task rolls up to a
+        project, every project rolls up to a client, and every invoice ties directly
+        back to the client being billed. One source of truth per entity — no duplicate
+        data entry across databases.
+      </p>
+      <div class="diagram-wrap">
+        <div class="folder-tree">
+<span class="root">🗂 Client Ops Workspace/</span>
+├── <span class="utility">👤 Clients</span>              <span class="label">← Name · Company · Email · Status (Lead/Active/Past)</span>
+│   └── relation → <span class="folder">Projects</span>
+│
+├── <span class="folder">📁 Projects</span>              <span class="label">← Name · Client · Status · Type</span>
+│   ├── relation → <span class="folder">Clients</span>
+│   └── relation → <span class="folder">Tasks</span>
+│
+├── <span class="folder">📋 Tasks</span>                 <span class="label">← Name · Project · Status · Priority · Due Date</span>
+│   └── relation → <span class="folder">Projects</span>
+│
+├── <span class="folder">💰 Invoices</span>              <span class="label">← Name · Client · Amount · Status · Date Issued · Date Paid</span>
+│   └── relation → <span class="folder">Clients</span>
+│
+└── <span class="utility">📊 Dash Board</span>            <span class="label">← filtered linked views + static Business Overview</span>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-label">// design principle</div>
+        <p>Every project relates to exactly one client. Every task relates to exactly one project. Every invoice relates to exactly one client. No entity duplicates data another database already owns — relations do the linking.</p>
+      </div>
+    </div>
+
+    <!-- Live Screenshot 2 -->
+    <div class="section-block">
+      <h2>// live screenshot — relational view</h2>
+      <p>
+        Active Projects, filtered by status, with the Client relation populated —
+        showing the link between the Projects and Clients databases actually resolving.
+      </p>
+      <p class="screenshot-caption">// Projects database — filtered to Not Started / In Progress · Client column pulled via relation</p>
+      <img
+        src="files/notion-client-database-relations.png"
+        alt="Notion Projects database showing linked Client relation column"
+        class="screenshot-img"
+      />
+    </div>
+
+    <!-- Exercises -->
+    <div class="section-block">
+      <h2>// build steps completed</h2>
+      <table class="step-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Step</th>
+            <th>Skill</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="step-num">1</td>
+            <td>Designed relational schema across Clients, Projects, Tasks, and Invoices</td>
+            <td class="step-tool">Notion Relations</td>
+            <td class="step-ok">✓ Passed</td>
+          </tr>
+          <tr>
+            <td class="step-num">2</td>
+            <td>Populated a realistic dataset spanning the full client lifecycle (Lead → Active → Past)</td>
+            <td class="step-tool">Data Modeling</td>
+            <td class="step-ok">✓ Passed</td>
+          </tr>
+          <tr>
+            <td class="step-num">3</td>
+            <td>Built filtered linked views — Overdue Tasks, Today's Tasks, Active Projects, Active Clients, Pending Invoices</td>
+            <td class="step-tool">Filtered Views</td>
+            <td class="step-ok">✓ Passed</td>
+          </tr>
+          <tr>
+            <td class="step-num">4</td>
+            <td>Built a Business Overview summary reflecting live counts across all four databases</td>
+            <td class="step-tool">Dashboard Design</td>
+            <td class="step-ok">✓ Passed</td>
+          </tr>
+          <tr>
+            <td class="step-num">5</td>
+            <td>QA pass caught a data entry mismatch on an invoice amount before publishing — corrected against source records</td>
+            <td class="step-tool">QA / Review</td>
+            <td class="step-ok">✓ Passed</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Relation Map -->
+    <div class="section-block">
+      <h2>// relation map</h2>
+      <p>
+        How the four databases connect, and what each relation is responsible for
+        surfacing on the dashboard.
+      </p>
+      <table class="perm-table">
+        <thead>
+          <tr>
+            <th>Database</th>
+            <th>Relation Field</th>
+            <th>Links To</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="role">Projects</td>
+            <td>Client</td>
+            <td>Clients</td>
+            <td>Ties each project to its owning client</td>
+          </tr>
+          <tr>
+            <td class="role">Tasks</td>
+            <td>Project</td>
+            <td>Projects</td>
+            <td>Ties each task to its parent project</td>
+          </tr>
+          <tr>
+            <td class="role">Invoices</td>
+            <td>Client</td>
+            <td>Clients</td>
+            <td>Ties billing directly to the client record</td>
+          </tr>
+          <tr>
+            <td class="role">Dash Board</td>
+            <td>Filtered Views</td>
+            <td>All 4 databases</td>
+            <td>Surfaces overdue, today's, active, and pending items in one place</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Skills demonstrated -->
+    <div class="section-block">
+      <h2>// skills demonstrated</h2>
+      <div class="three-col">
+        <div class="info-card">
+          <h3>Database Design</h3>
+          <ul>
+            <li>Relational schema across 4 DBs</li>
+            <li>Status property design</li>
+            <li>Consistent select/status options</li>
+            <li>Priority & due-date fields</li>
+            <li>One source of truth per entity</li>
+            <li>Scalable, reusable structure</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h3>Dashboard & Views</h3>
+          <ul>
+            <li>Filtered views per use case</li>
+            <li>Due-date filtering logic</li>
+            <li>Status-based filtering</li>
+            <li>Linked view embedding</li>
+            <li>Business overview metrics</li>
+            <li>Clean sidebar navigation</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h3>Client Operations</h3>
+          <ul>
+            <li>Full lifecycle tracking</li>
+            <li>Task prioritization</li>
+            <li>Invoice status tracking</li>
+            <li>Onboarding-ready structure</li>
+            <li>Cross-database navigation</li>
+            <li>Realistic pipeline data</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key strategies -->
+    <div class="section-block">
+      <h2>// key strategies</h2>
+      <div class="two-col">
+        <div class="info-card">
+          <h3>Database Design Rules</h3>
+          <ul>
+            <li>Every project relates to one client</li>
+            <li>Every task relates to one project</li>
+            <li>Every invoice relates to one client</li>
+            <li>Status options stay consistent across DBs</li>
+            <li>Relations before rollups</li>
+            <li>No entity duplicates another's data</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h3>Dashboard Habits</h3>
+          <ul>
+            <li>Filter "Past Day" for Overdue Tasks</li>
+            <li>Filter "This Day" for Today's Focus</li>
+            <li>Static counts for a clean, screenshot-ready view</li>
+            <li>Verify numbers against source before publishing</li>
+            <li>Color-coded status tags for scannability</li>
+            <li>Minimal sidebar — 4 databases only</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Impact -->
+    <div class="section-block">
+      <h2>// impact</h2>
+      <p>
+        Most solo VAs and small agencies run their client pipeline across scattered
+        spreadsheets, sticky notes, or memory — no single view of what's overdue,
+        who's paid, or which projects are stalled. That gap is exactly where clients
+        get dropped and invoices get missed.
+      </p>
+      <p>
+        This system gives a one-person operation the same visibility a small team's
+        project manager would have: every overdue task flagged automatically, every
+        client's stage tracked from first contact to final invoice, and one dashboard
+        that answers "what needs my attention today" without opening four separate
+        databases.
+      </p>
+      <p>
+        The pattern — <strong>clients → projects → tasks → invoices, all relation-linked
+        into one dashboard</strong> — isn't specific to any one niche. It's the same
+        backbone that scales from a solo VA's first three clients to a small agency's
+        full roster.
+      </p>
+    </div>
+
+    <!-- Tools used -->
+    <div class="section-block">
+      <h2>// tools used</h2>
+      <div class="stack" style="font-family:var(--mono); font-size:.78rem; color:var(--muted);">
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Notion Databases</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Notion Relations</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Filtered Linked Views</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Dashboard Design</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Data Modeling</span>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Dark' : 'Switch to Light';
+    };
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      setLabel();
+    });
+    setLabel();
+  </script>
+</body>
+</html>

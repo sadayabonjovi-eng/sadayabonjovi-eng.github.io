@@ -129,6 +129,7 @@
   .info-card.working h3 { color: var(--signal); }
   .info-card.highlight h3 { color: #a78bfa; }
   .info-card.warning h3 { color: var(--warn); }
+  .info-card.planned h3 { color: #60a5fa; }
   .info-card ul {
     list-style: none;
     margin: 0; padding: 0;
@@ -145,6 +146,7 @@
   .info-card.working ul li::before { content: "✓"; color: var(--signal); }
   .info-card.highlight ul li::before { content: "→"; color: #a78bfa; }
   .info-card.warning ul li::before { content: "⚠"; color: var(--warn); }
+  .info-card.planned ul li::before { content: "○"; color: #60a5fa; }
 
   /* Build story timeline */
   .build-timeline {
@@ -517,6 +519,25 @@
             <li>End-to-end tested on live data</li>
           </ul>
         </div>
+      </div>
+    </div>
+
+    <!-- Roadmap -->
+    <div class="section-block">
+      <h2>// next iterations</h2>
+      <p>
+        The pipeline works end-to-end, but "working" and "finished" aren't the same thing.
+        These are the next real improvements planned — fine-tuning an already-live system, not
+        fixing something broken.
+      </p>
+      <div class="info-card planned" style="max-width:820px;">
+        <h3>○ Planned Improvements</h3>
+        <ul>
+          <li>Expand beyond 3 sources — add more job boards with free, public APIs to widen daily coverage</li>
+          <li>Smarter matching — move past exact keyword strings toward broader/fuzzy matching so near-fit roles aren't silently skipped</li>
+          <li>ATS-friendly resume formatting — constrain the generated .docx to a clean single page, parser-safe layout (no tables/columns that break ATS parsing)</li>
+          <li>Configurable keyword profiles — swap search terms per role type without editing code</li>
+        </ul>
       </div>
     </div>
 

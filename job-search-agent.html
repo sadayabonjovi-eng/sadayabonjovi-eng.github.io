@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job-Search Agent — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border: 1px solid var(--signal);
+    color: var(--signal);
+    border-radius: 3px;
+    padding: .25rem .7rem;
+    margin-bottom: 1.5rem;
+  }
+  .status-badge .dot-ok {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--signal);
+    animation: blink 1.4s infinite;
+  }
+  .status-badge.pending {
+    border-color: var(--warn);
+    color: var(--warn);
+  }
+  .status-badge.pending .dot-ok {
+    background: var(--warn);
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    font-size: .78rem;
+    color: var(--muted);
+  }
+  .meta-row span { border: 1px solid var(--line); border-radius: 3px; padding: .2rem .6rem; background: var(--bg-2); }
+
+  .section-block {
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  .section-block h2 {
+    font-family: var(--mono);
+    font-size: .78rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 .6rem;
+  }
+  .section-block p {
+    color: var(--ink);
+    margin: 0 0 1rem;
+    max-width: 680px;
+  }
+  .section-block p strong { color: var(--signal); font-weight: 600; }
+
+  .diagram-wrap {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 2rem 1.5rem;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+  }
+  .diagram-wrap svg { display: block; margin: 0 auto; }
+
+  .step-table {
+    width: 100%;
+    max-width: 820px;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: .80rem;
+    margin-bottom: 3rem;
+  }
+  .step-table th {
+    text-align: left;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-size: .70rem;
+    border-bottom: 1px solid var(--line);
+    padding: .5rem .8rem;
+  }
+  .step-table td {
+    padding: .65rem .8rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    vertical-align: top;
+  }
+  .step-table tr:last-child td { border-bottom: none; }
+  .step-table .step-num { color: var(--muted); width: 2.5rem; }
+  .step-table .step-tool { color: var(--signal); white-space: nowrap; }
+  .step-table .step-status-ok { color: #5eead4; }
+  .step-table .step-status-pending { color: var(--warn); }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  @media (max-width: 580px) { .two-col { grid-template-columns: 1fr; } }
+
+  .info-card {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--bg-2);
+    padding: 1.1rem 1.2rem;
+  }
+  .info-card h3 {
+    font-family: var(--mono);
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin: 0 0 .8rem;
+  }
+  .info-card.working h3 { color: var(--signal); }
+  .info-card.highlight h3 { color: #a78bfa; }
+  .info-card.warning h3 { color: var(--warn); }
+  .info-card ul {
+    list-style: none;
+    margin: 0; padding: 0;
+    font-family: var(--mono);
+    font-size: .80rem;
+    color: var(--ink);
+  }
+  .info-card ul li {
+    padding: .3rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .info-card ul li:last-child { border-bottom: none; }
+  .info-card ul li::before { margin-right: .5rem; }
+  .info-card.working ul li::before { content: "✓"; color: var(--signal); }
+  .info-card.highlight ul li::before { content: "→"; color: #a78bfa; }
+  .info-card.warning ul li::before { content: "⚠"; color: var(--warn); }
+
+  /* Build story timeline */
+  .build-timeline {
+    max-width: 820px;
+    margin-bottom: 3rem;
+    position: relative;
+    padding-left: 2rem;
+  }
+  .build-timeline::before {
+    content: "";
+    position: absolute;
+    left: 7px; top: 8px; bottom: 8px;
+    width: 1px;
+    background: var(--line);
+  }
+  .build-event {
+    position: relative;
+    padding: 0 0 1.8rem 1.2rem;
+  }
+  .build-event::before {
+    content: "";
+    position: absolute;
+    left: -2rem;
+    top: 6px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--signal);
+  }
+  .build-event.pivot::before { border-color: var(--warn); }
+  .build-event.shipped::before { background: var(--signal); border-color: var(--signal); }
+  .build-event-label {
+    font-family: var(--mono);
+    font-size: .68rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .3rem;
+  }
+  .build-event.pivot .build-event-label { color: var(--warn); }
+  .build-event.shipped .build-event-label { color: var(--signal); }
+  .build-event h4 {
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 .4rem;
+  }
+  .build-event p {
+    font-size: .9rem;
+    color: var(--muted);
+    margin: 0;
+    max-width: 600px;
+  }
+
+  .demo-box {
+    border: 1px solid var(--signal);
+    border-radius: 8px;
+    background: var(--bg-2);
+    padding: 1.5rem;
+    max-width: 820px;
+    margin-bottom: 3rem;
+    font-family: var(--mono);
+    font-size: .82rem;
+  }
+  .demo-box h3 {
+    color: var(--signal);
+    font-size: .75rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    margin: 0 0 .8rem;
+  }
+  .demo-box p { color: var(--ink); margin: 0 0 1rem; font-family: var(--mono); font-size: .82rem; }
+  .demo-box .hint { color: var(--muted); font-size: .75rem; margin-top: .5rem; }
+
+  .demo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--bg);
+    background: var(--signal);
+    padding: .7rem 1.4rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: transform .15s ease, opacity .2s ease;
+    margin-top: .5rem;
+  }
+  .demo-link:hover { transform: translateY(-2px); opacity: .9; }
+
+  .back-link {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1px;
+    transition: color .2s, border-color .2s;
+    display: inline-block;
+    margin-bottom: 2.5rem;
+  }
+  .back-link:hover { color: var(--signal); border-color: var(--signal); }
+
+  .notice-box {
+    border: 1px solid var(--signal);
+    border-radius: 8px;
+    background: var(--bg-2);
+    padding: 1.2rem 1.5rem;
+    max-width: 820px;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    font-size: .80rem;
+    color: var(--signal);
+  }
+  .notice-box strong { color: var(--signal); }
+
+  .scenario-caption {
+    font-family: var(--mono);
+    font-size: .75rem;
+    color: var(--muted);
+    margin-top: .5rem;
+  }
+
+  .qa-table code {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: .1rem .35rem;
+    font-size: .78rem;
+  }
+
+  .log-box {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1.2rem 1.4rem;
+    font-family: var(--mono);
+    font-size: .78rem;
+    color: var(--ink);
+    line-height: 1.7;
+    overflow-x: auto;
+    margin-bottom: .8rem;
+  }
+  .log-box .log-comment { color: var(--muted); }
+  .log-box .log-ok { color: #5eead4; }
+</style>
+</head>
+<body>
+
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode"></button>
+  </div>
+
+  <header style="grid-template-columns:1fr;">
+    <div class="hero-text">
+      <p class="welcome">Project</p>
+      <div class="status-line"><span class="pulse"></span> Agent · job search · scheduled daily</div>
+      <h1>Job-Search Agent</h1>
+      <p class="lede">
+        A <strong>fully automated job-search pipeline</strong> that scans remote job boards daily,
+        filters matches against target keywords, and generates a <strong>tailored resume and cover
+        letter</strong> for each one — delivered by email every morning, with zero manual work and
+        zero recurring cost. Built with <strong>Python, Groq AI, GitHub Actions, and Gmail</strong>.
+      </p>
+    </div>
+  </header>
+
+  <nav>
+    <a href="index.html">/home</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
+    <a href="privacy-policy.html">/privacy</a>
+  </nav>
+
+  <div class="container">
+    <a href="projects.html" class="back-link">← back to projects</a>
+
+    <div class="status-badge"><span class="dot-ok"></span> Live — Scheduled Daily · GitHub Actions (private repo)</div>
+
+    <div class="meta-row">
+      <span>Type: Job Search Automation + Resume/Cover Letter Tailoring</span>
+      <span>Tools: Python · Groq AI · GitHub Actions · Gmail SMTP</span>
+      <span>Steps: 6</span>
+      <span>Platform: GitHub Actions (cron)</span>
+      <span>Status: Live · Running Daily</span>
+    </div>
+
+    <!-- Notice -->
+    <div class="notice-box">
+      ✓ <strong>Fully deployed end-to-end.</strong> Runs automatically every day via GitHub Actions.
+      Sources jobs only from platforms that offer free, scrape-free APIs — no automation runs against
+      sites that prohibit bots. Every application still passes through manual review before it's sent.
+    </div>
+
+    <!-- Overview -->
+    <div class="section-block">
+      <h2>// overview</h2>
+      <p>
+        Job hunting is repetitive by nature — the same information gets re-typed and re-tailored,
+        posting after posting. Most "auto-apply" tools solve this by scraping platforms like LinkedIn
+        or Indeed and submitting applications with no human involved. That approach is fast, but built
+        on a foundation that doesn't hold — those platforms explicitly prohibit bots and actively ban
+        accounts caught running them.
+      </p>
+      <p>
+        This agent takes a different path. It sources only from job boards with <strong>free, public
+        APIs meant to be queried programmatically</strong>, filters listings against a keyword list,
+        and for every genuine new match, uses an LLM to tailor a professional summary and reorder
+        skills to fit that specific posting — <strong>never inventing new experience</strong>, only
+        reframing what's already true. The tailored resume and cover letter are generated as real
+        <code>.docx</code> files and emailed directly, attached and ready to send.
+      </p>
+      <p>
+        Runs entirely on free-tier infrastructure — no server to maintain, no recurring cost, and
+        nothing running against a platform's Terms of Service.
+      </p>
+    </div>
+
+    <!-- Diagram -->
+    <div class="section-block">
+      <h2>// system diagram</h2>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 580 600" width="560" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', 'Fira Code', monospace">
+          <defs>
+            <marker id="arr-signal" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M1,1 L7,4 L1,7 Z" fill="#5eead4"/>
+            </marker>
+          </defs>
+          <rect x="165" y="10" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="290" y="28" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">TRIGGER</text>
+          <text x="290" y="44" text-anchor="middle" fill="#dde3ea" font-size="11">1. GitHub Actions — daily cron</text>
+          <line x1="290" y1="54" x2="290" y2="74" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="165" y="76" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="290" y="94" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">SOURCING</text>
+          <text x="290" y="110" text-anchor="middle" fill="#dde3ea" font-size="11">2. Fetch: Remotive, Arbeitnow, RemoteOK</text>
+          <line x1="290" y1="120" x2="290" y2="140" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="165" y="142" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="290" y="160" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">FILTER</text>
+          <text x="290" y="176" text-anchor="middle" fill="#dde3ea" font-size="11">3. Match keywords + dedupe vs. history</text>
+          <line x1="290" y1="186" x2="290" y2="206" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="165" y="208" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="290" y="226" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">AI PROCESSING</text>
+          <text x="290" y="242" text-anchor="middle" fill="#dde3ea" font-size="11">4. Groq AI — tailor summary + skills</text>
+          <line x1="290" y1="252" x2="290" y2="272" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="165" y="274" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="290" y="292" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">GENERATION</text>
+          <text x="290" y="308" text-anchor="middle" fill="#dde3ea" font-size="11">5. Build tailored .docx resume + letter</text>
+          <line x1="290" y1="318" x2="290" y2="338" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="290" y1="338" x2="110" y2="338" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="290" y1="338" x2="470" y2="338" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="110" y1="338" x2="110" y2="370" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+          <line x1="470" y1="338" x2="470" y2="370" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="20" y="372" width="180" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="110" y="390" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">DELIVERY</text>
+          <text x="110" y="406" text-anchor="middle" fill="#dde3ea" font-size="11">Gmail — digest + attachments</text>
+
+          <rect x="380" y="372" width="180" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="470" y="390" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">ARCHIVE</text>
+          <text x="470" y="406" text-anchor="middle" fill="#dde3ea" font-size="11">GitHub repo — commit results</text>
+
+          <rect x="20" y="460" width="250" height="60" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1"/>
+          <text x="35" y="480" fill="#7d8b99" font-size="9" letter-spacing="1">LEGEND</text>
+          <rect x="35" y="490" width="14" height="10" rx="2" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="55" y="500" fill="#dde3ea" font-size="10">Live and working</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Proof of work -->
+    <div class="section-block">
+      <h2>// proof of work — live run log</h2>
+      <p>Actual console output from a production run, triggered manually to verify the pipeline end-to-end before enabling the daily schedule.</p>
+      <div class="log-box">
+        <span class="log-comment">[main] Searching for keywords: ['Automation Specialist', 'Workflow Automation', 'Virtual Assistant', 'Administrative Support', 'Operations Support', 'AI Agent Developer', 'No-code Automation']</span><br>
+        <span class="log-ok">[main] Found 1 total matching jobs across sources.</span><br>
+        <span class="log-ok">[main] 1 new job(s) to process this run.</span><br>
+        [main] Tailoring documents for: Entry Level Scheduling &amp; Coordinating Reservations Online @ Destination Careers<br>
+        <span class="log-ok">[send_email] Sent digest email with 1 job(s) to sadayabonjovi@gmail.com.</span><br>
+        <span class="log-ok">[main] Done.</span>
+      </div>
+      <p class="scenario-caption">
+        // GitHub Actions run #1 — succeeded in 21s · install deps → run agent → commit + push results
+      </p>
+    </div>
+
+    <!-- Step breakdown -->
+    <div class="section-block">
+      <h2>// step breakdown</h2>
+      <table class="step-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Step</th>
+            <th>Tool</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="step-num">1</td>
+            <td>GitHub Actions wakes on a daily cron schedule (or manual trigger) and checks out the repo</td>
+            <td class="step-tool">GitHub Actions</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">2</td>
+            <td>Script queries three free job-board APIs and filters listings against the keyword list</td>
+            <td class="step-tool">Remotive · Arbeitnow · RemoteOK</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">3</td>
+            <td>Matches are checked against a processed-jobs log so nothing gets sent twice</td>
+            <td class="step-tool">Python — JSON log</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">4</td>
+            <td>Each new match is sent to the LLM with the base resume — returns a tailored summary, reordered skills, and a full cover letter, grounded only in real experience</td>
+            <td class="step-tool">Groq AI (llama-3.3-70b)</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">5</td>
+            <td>Tailored content is rendered into a formatted resume and cover letter as real, downloadable Word documents</td>
+            <td class="step-tool">python-docx</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">6</td>
+            <td>One digest email is sent — job title, company, summary, posting link, resume + cover letter attached. Results also committed to the repo as a permanent archive</td>
+            <td class="step-tool">Gmail SMTP + Git</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Status cards -->
+    <div class="section-block">
+      <h2>// current status</h2>
+      <div class="two-col">
+        <div class="info-card working">
+          <h3>✓ Fully Working</h3>
+          <ul>
+            <li>Queries 3 job boards daily</li>
+            <li>Keyword filtering + dedupe</li>
+            <li>AI-tailored summary + skills</li>
+            <li>Never fabricates experience</li>
+            <li>Generates real .docx files</li>
+            <li>Digest email with attachments</li>
+            <li>Archives every result to GitHub</li>
+            <li>Zero manual work</li>
+          </ul>
+        </div>
+        <div class="info-card working">
+          <h3>✓ Full Pipeline Live</h3>
+          <ul>
+            <li>Scheduled via GitHub Actions cron</li>
+            <li>Secrets encrypted at rest</li>
+            <li>Runs on $0/month infrastructure</li>
+            <li>No scraping, no ToS violations</li>
+            <li>Manual trigger available anytime</li>
+            <li>End-to-end tested on live data</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- What makes it different -->
+    <div class="section-block">
+      <h2>// what makes it different</h2>
+      <div class="info-card highlight" style="max-width:820px;">
+        <h3>→ Not a scraper, not an auto-submitter</h3>
+        <ul>
+          <li>Sources only from platforms with free, public, scrape-free APIs</li>
+          <li>Deliberately excludes LinkedIn and OnlineJobs.ph — no free API, so no scraping workaround was built</li>
+          <li>Never submits an application automatically — always prepares, never sends</li>
+          <li>Tailoring only rewrites summary and skill emphasis, never invents new experience</li>
+          <li>Runs entirely on free tiers — Groq AI, GitHub Actions, Gmail SMTP</li>
+          <li>Every result archived, so nothing is ever silently lost or repeated</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Build story -->
+    <div class="section-block">
+      <h2>// build story</h2>
+      <p style="margin-bottom:1.8rem;">
+        This project didn't start with a fixed architecture. It went through a few real pivots as
+        constraints — cost, platform rules, tool limits — came into focus.
+      </p>
+      <div class="build-timeline">
+        <div class="build-event">
+          <div class="build-event-label">The original plan</div>
+          <h4>Full auto-apply across every platform</h4>
+          <p>The first idea was the obvious one — an agent that finds jobs and submits applications everywhere automatically, LinkedIn and Indeed included. That plan didn't survive first contact with those platforms' Terms of Service, which explicitly prohibit bots and actively ban accounts caught running them.</p>
+        </div>
+        <div class="build-event pivot">
+          <div class="build-event-label">Scope corrected</div>
+          <h4>Prepare-and-review, not auto-submit</h4>
+          <p>The design shifted to sourcing only from platforms with free, public APIs meant for programmatic use, and stopping short of submission entirely — the agent hands over a link, a tailored resume, and a cover letter, and a human still sends it.</p>
+        </div>
+        <div class="build-event pivot">
+          <div class="build-event-label">Scheduler decision</div>
+          <h4>Make.com vs. GitHub Actions</h4>
+          <p>Make.com's free tier offered a faster visual build, but its 1,000-operations-per-month ceiling would have been exhausted almost immediately by daily runs. GitHub Actions has no such ceiling and already hosted the code, so it became the scheduler.</p>
+        </div>
+        <div class="build-event pivot">
+          <div class="build-event-label">LLM decision</div>
+          <h4>Claude API vs. Groq</h4>
+          <p>Claude's writing quality is stronger, but its free allowance is a one-time trial credit, not an ongoing tier. Groq offers a genuinely free, ongoing allowance — the better fit for a tool meant to run indefinitely during an active job search.</p>
+        </div>
+        <div class="build-event shipped">
+          <div class="build-event-label">Shipped</div>
+          <h4>Live, tested against real listings, running daily</h4>
+          <p>The first production run found a genuine remote administrative-support match, generated a tailored resume and cover letter, and delivered both by email — end to end, unattended, for free.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- QA case study -->
+    <div class="section-block">
+      <h2>// qa case study — the html entity bug</h2>
+      <p style="margin-bottom:1.8rem;">
+        Shipping the pipeline wasn't the end of the story. The first real run surfaced a small but
+        visible formatting bug — the kind that's easy to miss in testing but immediately obvious
+        once real data flows through.
+      </p>
+
+      <div class="two-col" style="grid-template-columns: 1fr; gap: 1.4rem;">
+        <div class="info-card warning">
+          <h3>⚠ The Bug</h3>
+          <ul>
+            <li>Job titles pulled from RemoteOK's API displayed with raw HTML entities</li>
+            <li>"Scheduling &amp; Coordinating" rendered as "Scheduling &amp;amp; Coordinating" in the email</li>
+            <li>Only surfaced once a real live listing containing an ampersand was matched</li>
+          </ul>
+        </div>
+
+        <div class="info-card highlight">
+          <h3>→ Root Cause</h3>
+          <ul>
+            <li>The job board's API returns titles and descriptions HTML-encoded</li>
+            <li>The fetch layer stripped HTML tags but never decoded HTML entities</li>
+            <li>Encoded text passed untouched through filtering, tailoring, and into the final documents</li>
+          </ul>
+        </div>
+
+        <div class="info-card working">
+          <h3>✓ The Fix</h3>
+          <ul>
+            <li>Added a shared <code>_clean()</code> helper using Python's built-in <code>html.unescape()</code></li>
+            <li>Applied to title, company, and description across all three job sources</li>
+            <li>Fixed once at the source, so every downstream step — filtering, tailoring, documents, email — inherits clean text</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="info-card highlight" style="max-width:820px; margin-top: 1rem;">
+        <h3>→ Why It Matters</h3>
+        <ul>
+          <li>Invisible in code review — only showed up once real API data flowed through the pipeline</li>
+          <li>Root-caused at the point text enters the system, not patched at the point it's displayed</li>
+          <li>The kind of small detail that separates a script that "mostly works" from one that ships clean output every time</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- How it runs -->
+    <div class="section-block">
+      <h2>// how it runs</h2>
+      <div class="demo-box">
+        <h3>⚡ Fully automated — private personal tool</h3>
+        <p>
+          This agent runs on a private GitHub repository, scheduled daily via GitHub Actions.
+          It's not a public demo — it's a working piece of personal infrastructure, actively
+          finding and preparing job matches every morning without any manual input.
+        </p>
+        <p class="hint">// stack: Python · Groq AI · GitHub Actions · python-docx · Gmail SMTP — $0/month</p>
+      </div>
+    </div>
+
+    <!-- Tools used -->
+    <div class="section-block">
+      <h2>// tools used</h2>
+      <div class="stack" style="font-family:var(--mono); font-size:.78rem; color:var(--muted);">
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Python 3.12</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Groq AI (llama-3.3-70b-versatile)</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">GitHub Actions</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">python-docx</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Remotive API</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Arbeitnow API</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">RemoteOK API</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Gmail SMTP</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">GitHub Secrets (encrypted)</span>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Light' : 'Switch to Dark';
+    };
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      setLabel();
+    });
+    setLabel();
+  </script>
+  <link rel="stylesheet" href="chatbot.css">
+  <script src="chatbot.js"></script>
+</body>
+</html>

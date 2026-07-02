@@ -371,26 +371,22 @@
           <line x1="470" y1="332" x2="470" y2="352" stroke="#f0b429" stroke-width="1.5" marker-end="url(#arr-signal)"/>
 
           <rect x="350" y="354" width="240" height="40" rx="6" fill="#131a22" stroke="#f0b429" stroke-width="1.5"/>
-          <text x="470" y="378" text-anchor="middle" fill="#dde3ea" font-size="10">6b. Tools — Text Aggregator</text>
+          <text x="470" y="378" text-anchor="middle" fill="#dde3ea" font-size="10">6b. Google Gemini AI — Generate Reply</text>
           <line x1="470" y1="394" x2="470" y2="414" stroke="#f0b429" stroke-width="1.5" marker-end="url(#arr-signal)"/>
 
           <rect x="350" y="416" width="240" height="40" rx="6" fill="#131a22" stroke="#f0b429" stroke-width="1.5"/>
-          <text x="470" y="440" text-anchor="middle" fill="#dde3ea" font-size="10">7b. Google Gemini AI — Generate Reply</text>
+          <text x="470" y="440" text-anchor="middle" fill="#dde3ea" font-size="10">7b. Google Sheets — Log (Conflict)</text>
           <line x1="470" y1="456" x2="470" y2="476" stroke="#f0b429" stroke-width="1.5" marker-end="url(#arr-signal)"/>
 
           <rect x="350" y="478" width="240" height="40" rx="6" fill="#131a22" stroke="#f0b429" stroke-width="1.5"/>
-          <text x="470" y="502" text-anchor="middle" fill="#dde3ea" font-size="10">8b. Google Sheets — Log (Conflict)</text>
-          <line x1="470" y1="518" x2="470" y2="538" stroke="#f0b429" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+          <text x="470" y="502" text-anchor="middle" fill="#dde3ea" font-size="10">8b. Gmail — Send AI Response</text>
 
-          <rect x="350" y="540" width="240" height="40" rx="6" fill="#131a22" stroke="#f0b429" stroke-width="1.5"/>
-          <text x="470" y="564" text-anchor="middle" fill="#dde3ea" font-size="10">9b. Gmail — Send AI Response</text>
-
-          <rect x="30" y="620" width="250" height="60" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1"/>
-          <text x="45" y="640" fill="#7d8b99" font-size="9" letter-spacing="1">LEGEND</text>
-          <rect x="45" y="650" width="14" height="10" rx="2" fill="none" stroke="#5eead4" stroke-width="1.5"/>
-          <text x="65" y="659" fill="#dde3ea" font-size="10">Slot free — auto-book path</text>
-          <rect x="45" y="666" width="14" height="10" rx="2" fill="none" stroke="#f0b429" stroke-width="1.5"/>
-          <text x="65" y="675" fill="#dde3ea" font-size="10">Slot taken — AI reply path</text>
+          <rect x="30" y="600" width="250" height="60" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1"/>
+          <text x="45" y="620" fill="#7d8b99" font-size="9" letter-spacing="1">LEGEND</text>
+          <rect x="45" y="630" width="14" height="10" rx="2" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="65" y="639" fill="#dde3ea" font-size="10">Slot free — auto-book path</text>
+          <rect x="45" y="646" width="14" height="10" rx="2" fill="none" stroke="#f0b429" stroke-width="1.5"/>
+          <text x="65" y="655" fill="#dde3ea" font-size="10">Slot taken — AI reply path</text>
         </svg>
       </div>
     </div>
@@ -422,10 +418,6 @@
         <figure>
           <img src="files/booking-sheet-clean.png" alt="Google Sheets log showing clean plain-text date and Confirmed status">
           <figcaption>// Google Sheets log — plain-text date, Confirmed status, written by the pipeline</figcaption>
-        </figure>
-        <figure>
-          <img src="files/booking-aggregator-output.png" alt="Text Aggregator output combining conflicting calendar events for the AI prompt">
-          <figcaption>// Text Aggregator — conflicting events combined into raw context for Gemini</figcaption>
         </figure>
       </div>
     </div>
@@ -488,24 +480,18 @@
           </tr>
           <tr>
             <td class="step-num">6b</td>
-            <td>All conflicting events are combined into a single text block used as AI context</td>
-            <td class="step-tool">Make.com — Text Aggregator</td>
-            <td class="step-status-ok">✓ Live</td>
-          </tr>
-          <tr>
-            <td class="step-num">7b</td>
-            <td>Gemini reads the conflict context and generates a natural reply, e.g. proposing alternative times</td>
+            <td>Gemini reads the conflicting events directly and generates a natural reply, e.g. proposing alternative times</td>
             <td class="step-tool">Google Gemini AI</td>
             <td class="step-status-ok">✓ Live</td>
           </tr>
           <tr>
-            <td class="step-num">8b</td>
+            <td class="step-num">7b</td>
             <td>Attempt logged separately to Google Sheets with a distinct status</td>
             <td class="step-tool">Google Sheets — Add a Row</td>
             <td class="step-status-ok">✓ Live</td>
           </tr>
           <tr>
-            <td class="step-num">9b</td>
+            <td class="step-num">8b</td>
             <td>Gemini's generated response is emailed back to the user</td>
             <td class="step-tool">Gmail — Send an Email</td>
             <td class="step-status-ok">✓ Live</td>
@@ -606,7 +592,6 @@
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Sheets</span>
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Gemini AI</span>
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Gmail</span>
-        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Make.com Text Aggregator</span>
       </div>
     </div>
 

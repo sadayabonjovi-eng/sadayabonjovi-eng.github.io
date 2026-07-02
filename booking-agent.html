@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking AI Agent — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border: 1px solid var(--signal);
+    color: var(--signal);
+    border-radius: 3px;
+    padding: .25rem .7rem;
+    margin-bottom: 1.5rem;
+  }
+  .status-badge .dot-ok {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--signal);
+    animation: blink 1.4s infinite;
+  }
+  .status-badge.pending { border-color: var(--warn); color: var(--warn); }
+  .status-badge.pending .dot-ok { background: var(--warn); }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    font-size: .78rem;
+    color: var(--muted);
+  }
+  .meta-row span { border: 1px solid var(--line); border-radius: 3px; padding: .2rem .6rem; background: var(--bg-2); }
+
+  .section-block { max-width: 820px; margin-bottom: 3rem; }
+  .section-block h2 {
+    font-family: var(--mono);
+    font-size: .78rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 .6rem;
+  }
+  .section-block p { color: var(--ink); margin: 0 0 1rem; max-width: 680px; }
+  .section-block p strong { color: var(--signal); font-weight: 600; }
+
+  .diagram-wrap {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 2rem 1.5rem;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+  }
+  .diagram-wrap svg { display: block; margin: 0 auto; }
+
+  .step-table {
+    width: 100%;
+    max-width: 820px;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: .80rem;
+    margin-bottom: 3rem;
+  }
+  .step-table th {
+    text-align: left;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-size: .70rem;
+    border-bottom: 1px solid var(--line);
+    padding: .5rem .8rem;
+  }
+  .step-table td {
+    padding: .65rem .8rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    vertical-align: top;
+  }
+  .step-table tr:last-child td { border-bottom: none; }
+  .step-table .step-num { color: var(--muted); width: 2.5rem; }
+  .step-table .step-tool { color: var(--signal); white-space: nowrap; }
+  .step-table .step-status-ok { color: #5eead4; }
+  .step-table .step-status-pending { color: var(--warn); }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  @media (max-width: 580px) { .two-col { grid-template-columns: 1fr; } }
+
+  .info-card {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--bg-2);
+    padding: 1.1rem 1.2rem;
+  }
+  .info-card h3 {
+    font-family: var(--mono);
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin: 0 0 .8rem;
+  }
+  .info-card.working h3 { color: var(--signal); }
+  .info-card.highlight h3 { color: #a78bfa; }
+  .info-card.warning h3 { color: var(--warn); }
+  .info-card ul { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: .80rem; color: var(--ink); }
+  .info-card ul li { padding: .3rem 0; border-bottom: 1px solid var(--line); }
+  .info-card ul li:last-child { border-bottom: none; }
+  .info-card ul li::before { margin-right: .5rem; }
+  .info-card.working ul li::before { content: "✓"; color: var(--signal); }
+  .info-card.highlight ul li::before { content: "→"; color: #a78bfa; }
+  .info-card.warning ul li::before { content: "⚠"; color: var(--warn); }
+
+  .build-timeline { max-width: 820px; margin-bottom: 3rem; position: relative; padding-left: 2rem; }
+  .build-timeline::before {
+    content: "";
+    position: absolute;
+    left: 7px; top: 8px; bottom: 8px;
+    width: 1px;
+    background: var(--line);
+  }
+  .build-event { position: relative; padding: 0 0 1.8rem 1.2rem; }
+  .build-event::before {
+    content: "";
+    position: absolute;
+    left: -2rem;
+    top: 6px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--signal);
+  }
+  .build-event.pivot::before { border-color: var(--warn); }
+  .build-event.shipped::before { background: var(--signal); border-color: var(--signal); }
+  .build-event-label {
+    font-family: var(--mono);
+    font-size: .68rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .3rem;
+  }
+  .build-event.pivot .build-event-label { color: var(--warn); }
+  .build-event.shipped .build-event-label { color: var(--signal); }
+  .build-event h4 { font-family: var(--sans); font-size: 1rem; font-weight: 700; margin: 0 0 .4rem; }
+  .build-event p { font-size: .9rem; color: var(--muted); margin: 0; max-width: 600px; }
+
+  .demo-box {
+    border: 1px solid var(--signal);
+    border-radius: 8px;
+    background: var(--bg-2);
+    padding: 1.5rem;
+    max-width: 820px;
+    margin-bottom: 3rem;
+    font-family: var(--mono);
+    font-size: .82rem;
+  }
+  .demo-box h3 { color: var(--signal); font-size: .75rem; letter-spacing: .2em; text-transform: uppercase; margin: 0 0 .8rem; }
+  .demo-box p { color: var(--ink); margin: 0 0 1rem; font-family: var(--mono); font-size: .82rem; }
+  .demo-box .hint { color: var(--muted); font-size: .75rem; margin-top: .5rem; }
+
+  .demo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--bg);
+    background: var(--signal);
+    padding: .7rem 1.4rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: transform .15s ease, opacity .2s ease;
+    margin-top: .5rem;
+  }
+  .demo-link:hover { transform: translateY(-2px); opacity: .9; }
+
+  .back-link {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1px;
+    transition: color .2s, border-color .2s;
+    display: inline-block;
+    margin-bottom: 2.5rem;
+  }
+  .back-link:hover { color: var(--signal); border-color: var(--signal); }
+
+  .notice-box {
+    border: 1px solid var(--signal);
+    border-radius: 8px;
+    background: var(--bg-2);
+    padding: 1.2rem 1.5rem;
+    max-width: 820px;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    font-size: .80rem;
+    color: var(--signal);
+  }
+  .notice-box strong { color: var(--signal); }
+
+  .scenario-caption { font-family: var(--mono); font-size: .75rem; color: var(--muted); margin-top: .5rem; }
+
+  .shot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    max-width: 820px;
+    margin-bottom: .5rem;
+  }
+  @media (max-width: 580px) { .shot-grid { grid-template-columns: 1fr; } }
+  .shot-grid figure { margin: 0; }
+  .shot-grid img {
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    display: block;
+  }
+  .shot-grid figcaption {
+    font-family: var(--mono);
+    font-size: .72rem;
+    color: var(--muted);
+    margin-top: .5rem;
+  }
+
+  .qa-table code {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: .1rem .35rem;
+    font-size: .78rem;
+  }
+</style>
+</head>
+<body>
+
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode"></button>
+  </div>
+
+  <header style="grid-template-columns:1fr;">
+    <div class="hero-text">
+      <p class="welcome">Project</p>
+      <div class="status-line"><span class="pulse"></span> Agent · booking · live</div>
+      <h1>Booking AI Agent</h1>
+      <p class="lede">
+        A fully deployed <strong>appointment booking agent</strong> that takes a Tally form submission,
+        checks real availability on Google Calendar, books the slot or asks <strong>AI</strong> to propose
+        alternatives when it's taken, logs every attempt to Google Sheets, and sends a confirmation
+        email — all without any manual work. Built with <strong>Make.com, Tally, Google Calendar,
+        Google Sheets, Google Gemini AI, and Gmail</strong>.
+      </p>
+    </div>
+  </header>
+
+  <nav>
+    <a href="index.html">/home</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
+    <a href="privacy-policy.html">/privacy</a>
+  </nav>
+
+  <div class="container">
+    <a href="projects.html" class="back-link">← back to projects</a>
+
+    <div class="status-badge"><span class="dot-ok"></span> Live — Automated Appointment Booking Pipeline</div>
+
+    <div class="meta-row">
+      <span>Type: AI Agent + Calendar Booking + Conflict Resolution</span>
+      <span>Tools: Make.com · Tally · Google Calendar · Google Sheets · Google Gemini AI · Gmail</span>
+      <span>Steps: 11</span>
+      <span>Platform: Tally Form → Make.com</span>
+      <span>Status: Live · Fully Deployed</span>
+    </div>
+
+    <!-- Notice -->
+    <div class="notice-box">
+      ✓ <strong>Fully deployed end-to-end.</strong> Every booking request submitted through the Tally
+      form is checked against real calendar availability, automatically confirmed or handled with an
+      AI-generated response, logged to Google Sheets, and followed up by email — 24/7, zero manual work.
+    </div>
+
+    <!-- Overview -->
+    <div class="section-block">
+      <h2>// overview</h2>
+      <p>
+        A complete appointment booking agent built on Make.com. Instead of manually checking a calendar
+        and replying to every booking request by hand, this agent handles the entire flow the moment
+        someone submits the Tally form.
+      </p>
+      <p>
+        The agent checks the requested date and time against existing Google Calendar events. If the
+        slot is free, it books the event, logs the confirmed appointment to Google Sheets, and sends a
+        confirmation email automatically. If the slot is already taken, it pulls the conflicting events,
+        hands that context to <strong>Google Gemini AI</strong>, and lets the AI write a natural response —
+        logging that attempt separately and emailing the user back.
+      </p>
+      <p>
+        <strong>Zero manual scheduling. Zero double-bookings. 24/7.</strong>
+      </p>
+    </div>
+
+    <!-- Diagram -->
+    <div class="section-block">
+      <h2>// system diagram</h2>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 620 760" width="600" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', 'Fira Code', monospace">
+          <defs>
+            <marker id="arr-signal" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M1,1 L7,4 L1,7 Z" fill="#5eead4"/>
+            </marker>
+          </defs>
+
+          <rect x="185" y="10" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="28" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">TRIGGER</text>
+          <text x="310" y="44" text-anchor="middle" fill="#dde3ea" font-size="11">1. Tally — Watch New Responses</text>
+          <line x1="310" y1="54" x2="310" y2="74" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="185" y="76" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="94" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">NORMALIZE</text>
+          <text x="310" y="110" text-anchor="middle" fill="#dde3ea" font-size="11">2. Set Variable — clean date+time</text>
+          <line x1="310" y1="120" x2="310" y2="140" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="185" y="142" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="160" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">AVAILABILITY</text>
+          <text x="310" y="176" text-anchor="middle" fill="#dde3ea" font-size="11">3. Google Calendar — Search Events</text>
+          <line x1="310" y1="186" x2="310" y2="206" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="185" y="208" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="226" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">DECISION</text>
+          <text x="310" y="242" text-anchor="middle" fill="#dde3ea" font-size="11">4. Router — Slot Free / Slot Taken</text>
+
+          <line x1="310" y1="252" x2="150" y2="280" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="310" y1="252" x2="470" y2="280" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="150" y1="280" x2="150" y2="290" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+          <line x1="470" y1="280" x2="470" y2="290" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <text x="150" y="278" text-anchor="middle" fill="#5eead4" font-size="9">SLOT FREE</text>
+          <text x="470" y="278" text-anchor="middle" fill="#f0b429" font-size="9">SLOT TAKEN</text>
+
+          <rect x="30" y="292" width="240" height="40" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="150" y="316" text-anchor="middle" fill="#dde3ea" font-size="10">5a. Google Calendar — Create Event</text>
+          <line x1="150" y1="332" x2="150" y2="352" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="30" y="354" width="240" height="40" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="150" y="378" text-anchor="middle" fill="#dde3ea" font-size="10">6a. Google Sheets — Log (Confirmed)</text>
+          <line x1="150" y1="394" x2="150" y2="414" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="30" y="416" width="240" height="40" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="150" y="440" text-anchor="middle" fill="#dde3ea" font-size="10">7a. Gmail — Send Confirmation</text>
+
+          <rect x="350" y="292" width="240" height="40" rx="6" fill="#131a22" stroke="#f0b429" stroke-width="1.5"/>
+          <text x="470" y="316" text-anchor="middle" fill="#dde3ea" font-size="10">5b. Google Calendar — Search Conflicts</text>
+          <line x1="470" y1="332" x2="470" y2="352" stroke="#f0b429" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="350" y="354" width="240" height="40" rx="6" fill="#131a22" stroke="#f0b429" stroke-width="1.5"/>
+          <text x="470" y="378" text-anchor="middle" fill="#dde3ea" font-size="10">6b. Tools — Text Aggregator</text>
+          <line x1="470" y1="394" x2="470" y2="414" stroke="#f0b429" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="350" y="416" width="240" height="40" rx="6" fill="#131a22" stroke="#f0b429" stroke-width="1.5"/>
+          <text x="470" y="440" text-anchor="middle" fill="#dde3ea" font-size="10">7b. Google Gemini AI — Generate Reply</text>
+          <line x1="470" y1="456" x2="470" y2="476" stroke="#f0b429" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="350" y="478" width="240" height="40" rx="6" fill="#131a22" stroke="#f0b429" stroke-width="1.5"/>
+          <text x="470" y="502" text-anchor="middle" fill="#dde3ea" font-size="10">8b. Google Sheets — Log (Conflict)</text>
+          <line x1="470" y1="518" x2="470" y2="538" stroke="#f0b429" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="350" y="540" width="240" height="40" rx="6" fill="#131a22" stroke="#f0b429" stroke-width="1.5"/>
+          <text x="470" y="564" text-anchor="middle" fill="#dde3ea" font-size="10">9b. Gmail — Send AI Response</text>
+
+          <rect x="30" y="620" width="250" height="60" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1"/>
+          <text x="45" y="640" fill="#7d8b99" font-size="9" letter-spacing="1">LEGEND</text>
+          <rect x="45" y="650" width="14" height="10" rx="2" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="65" y="659" fill="#dde3ea" font-size="10">Slot free — auto-book path</text>
+          <rect x="45" y="666" width="14" height="10" rx="2" fill="none" stroke="#f0b429" stroke-width="1.5"/>
+          <text x="65" y="675" fill="#dde3ea" font-size="10">Slot taken — AI reply path</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Proof of work -->
+    <div class="section-block">
+      <h2>// proof of work — live scenario</h2>
+      <p>This is the actual Make.com scenario running live. Every module visible here is active and deployed.</p>
+      <div class="diagram-wrap" style="padding:1rem;">
+        <img
+          src="files/booking-scenario-overview.png"
+          alt="Live Make.com scenario — Booking AI Agent full pipeline"
+          style="width:100%; border-radius:6px; display:block;"
+        >
+      </div>
+      <p class="scenario-caption">
+        // live scenario — Tally trigger → set variable → Google Calendar search → router → create event / AI conflict path → Google Sheets → Gmail
+      </p>
+    </div>
+
+    <!-- Screenshots -->
+    <div class="section-block">
+      <h2>// screenshots</h2>
+      <div class="shot-grid">
+        <figure>
+          <img src="files/booking-confirmation-email.png" alt="Confirmation email sent to the user with clean formatted date">
+          <figcaption>// automated confirmation email — clean, human-readable date after the formatting fix</figcaption>
+        </figure>
+        <figure>
+          <img src="files/booking-sheet-clean.png" alt="Google Sheets log showing clean plain-text date and Confirmed status">
+          <figcaption>// Google Sheets log — plain-text date, Confirmed status, written by the pipeline</figcaption>
+        </figure>
+        <figure>
+          <img src="files/booking-aggregator-output.png" alt="Text Aggregator output combining conflicting calendar events for the AI prompt">
+          <figcaption>// Text Aggregator — conflicting events combined into raw context for Gemini</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- Step breakdown -->
+    <div class="section-block">
+      <h2>// step breakdown</h2>
+      <table class="step-table">
+        <thead>
+          <tr><th>#</th><th>Step</th><th>Tool</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="step-num">1</td>
+            <td>User submits a booking request through the Tally form — name, email, requested date/time</td>
+            <td class="step-tool">Tally</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">2</td>
+            <td>Set Variable normalizes the submitted date/time into a single clean <code>date+time</code> value used by every downstream step</td>
+            <td class="step-tool">Make.com — Set Variable</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">3</td>
+            <td>Google Calendar is queried to check whether the requested slot is already booked</td>
+            <td class="step-tool">Google Calendar — Search Events</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">4</td>
+            <td>Router splits the flow based on availability — Slot Free or Slot Taken</td>
+            <td class="step-tool">Make.com Router</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">5a</td>
+            <td><strong>Slot free:</strong> event is created directly on the calendar</td>
+            <td class="step-tool">Google Calendar — Create Event</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">6a</td>
+            <td>Confirmed booking logged to Google Sheets — name, email, formatted date, Status = Confirmed</td>
+            <td class="step-tool">Google Sheets — Add a Row</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">7a</td>
+            <td>Confirmation email sent automatically with a human-readable date</td>
+            <td class="step-tool">Gmail — Send an Email</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">5b</td>
+            <td><strong>Slot taken:</strong> conflicting calendar events for that window are pulled</td>
+            <td class="step-tool">Google Calendar — Search Events</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">6b</td>
+            <td>All conflicting events are combined into a single text block used as AI context</td>
+            <td class="step-tool">Make.com — Text Aggregator</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">7b</td>
+            <td>Gemini reads the conflict context and generates a natural reply, e.g. proposing alternative times</td>
+            <td class="step-tool">Google Gemini AI</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">8b</td>
+            <td>Attempt logged separately to Google Sheets with a distinct status</td>
+            <td class="step-tool">Google Sheets — Add a Row</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">9b</td>
+            <td>Gemini's generated response is emailed back to the user</td>
+            <td class="step-tool">Gmail — Send an Email</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Status cards -->
+    <div class="section-block">
+      <h2>// current status</h2>
+      <div class="two-col">
+        <div class="info-card working">
+          <h3>✓ Fully Working</h3>
+          <ul>
+            <li>Real-time availability check against Google Calendar</li>
+            <li>Auto-books confirmed slots — no double-bookings</li>
+            <li>AI-generated replies when a slot is taken</li>
+            <li>Every attempt logged to Google Sheets</li>
+            <li>Confirmation and follow-up emails sent automatically</li>
+            <li>Zero manual scheduling</li>
+          </ul>
+        </div>
+        <div class="info-card working">
+          <h3>✓ Full Pipeline Live</h3>
+          <ul>
+            <li>Tally form trigger — live</li>
+            <li>Date/time normalization — live</li>
+            <li>Conflict detection and AI reply path — live</li>
+            <li>Google Sheets logging on both paths — live</li>
+            <li>Gmail notifications on both paths — live</li>
+            <li>End-to-end automated</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Build story -->
+    <div class="section-block">
+      <h2>// build story — the date formatting bug</h2>
+      <p style="margin-bottom:1.8rem;">
+        The workflow logic worked on the first pass. What didn't work — for a while — was something
+        much smaller and much more annoying: getting a date to display the same clean way in every
+        place it showed up.
+      </p>
+      <div class="build-timeline">
+        <div class="build-event">
+          <div class="build-event-label">First symptom</div>
+          <h4>Clean date in Make, raw ISO in Google Sheets</h4>
+          <p>The Set Variable step showed a perfectly readable date — "July 24, 2026 1:00 PM" — in Make's own execution log. But the Google Sheets row it fed into showed a raw ISO timestamp like <code>2026-07-12T02:00:00.000Z</code> instead.</p>
+        </div>
+        <div class="build-event pivot">
+          <div class="build-event-label">First wrong turn</div>
+          <h4>Column formatting and value input option</h4>
+          <p>The first suspects were Google Sheets column formatting and Make's "value input option" (RAW vs USER_ENTERED). Both were checked and corrected — column set to plain text, input option set to RAW — but the ISO string kept showing up.</p>
+        </div>
+        <div class="build-event pivot">
+          <div class="build-event-label">Root cause found</div>
+          <h4>The date was never text to begin with</h4>
+          <p>The readable date in Make's log was only a display convenience. Internally, <code>date+time</code> stayed a Date object until something explicitly converted it. Any field it landed in without an explicit format call serialized it back to ISO 8601 — regardless of Sheets settings.</p>
+        </div>
+        <div class="build-event pivot">
+          <div class="build-event-label">Second bug, same root cause</div>
+          <h4>Broken concatenation in the Gmail body</h4>
+          <p>The confirmation email had a second, unrelated-looking symptom — a garbled string like <code>"AM0iam/7amni7/31/2026am"</code> tacked onto the end of an otherwise correct sentence. Tracing it back showed a leftover broken date expression concatenated alongside a working one, left over from earlier edits.</p>
+        </div>
+        <div class="build-event shipped">
+          <div class="build-event-label">Fixed</div>
+          <h4>formatDate() applied at every output point</h4>
+          <p>The fix was the same in both places: wrap <code>date+time</code> in Make's <code>formatDate()</code> function wherever it left the pipeline as plain text — once in the Google Sheets mapping, once in the Gmail body — and delete the stray leftover expression. Both the sheet log and the confirmation email now show a clean, consistent date.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- What makes it different -->
+    <div class="section-block">
+      <h2>// what makes it different</h2>
+      <div class="info-card highlight" style="max-width:820px;">
+        <h3>→ Not just a form-to-calendar sync</h3>
+        <ul>
+          <li>Actually checks real calendar availability before booking anything</li>
+          <li>Two distinct outcomes, not one — auto-confirm or AI-handled conflict</li>
+          <li>Gemini reasons over the actual conflicting events, not a canned message</li>
+          <li>Every request is logged, whether it succeeded or hit a conflict</li>
+          <li>Confirmation and conflict-reply emails both fully automated</li>
+          <li>Built entirely on Make.com's native Google Calendar/Sheets/Gmail modules</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Tools used -->
+    <div class="section-block">
+      <h2>// tools used</h2>
+      <div class="stack" style="font-family:var(--mono); font-size:.78rem; color:var(--muted);">
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Make.com</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Tally</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Calendar</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Sheets</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Gemini AI</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Gmail</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Make.com Text Aggregator</span>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Light' : 'Switch to Dark';
+    };
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      setLabel();
+    });
+    setLabel();
+  </script>
+  <link rel="stylesheet" href="chatbot.css">
+  <script src="chatbot.js"></script>
+</body>
+</html>

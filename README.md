@@ -72,6 +72,7 @@ A professional Google Sheets financial tracker for small business owners and fre
 `Zapier` `Google Sheets` `Google Workspace` `Tally` `Email Management`
 `AI Prompt Workflows` `Data Entry` `Calendar Management` `Documentation`
 `Customer Support` `Automation Systems` `SUMIFS / Spreadsheet Formulas`
+`Make.com` `Notion`
 
 ---
 

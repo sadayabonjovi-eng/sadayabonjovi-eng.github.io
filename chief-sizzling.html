@@ -4,132 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chief Sizzling Grill — Reservation Automation Case Study — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
 <style>
-  :root {
-    --bg: #0b0f14;
-    --bg-2: #131a22;
-    --ink: #dde3ea;
-    --muted: #7d8b99;
-    --line: #26313c;
-    --signal: #5eead4;
-    --warn: #f5a623;
-    --purple: #a78bfa;
-    --mono: 'JetBrains Mono', 'Fira Code', 'SFMono-Regular', monospace;
-    --sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
-  }
-  body.dark-mode {
-    --bg: #f4f1ea;
-    --bg-2: #ffffff;
-    --ink: #1c2127;
-    --muted: #6b7580;
-    --line: #d9d3c6;
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--sans);
-    line-height: 1.55;
-    transition: background .25s ease, color .25s ease;
-  }
-  a { color: var(--signal); }
-
-  .topstrip {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: .6rem 2rem;
-    font-family: var(--mono);
-    font-size: .72rem;
-    color: var(--muted);
-    border-bottom: 1px solid var(--line);
-  }
-  .topstrip .dot { color: var(--signal); margin-right: .4rem; }
-  #theme-toggle {
-    background: none;
-    border: 1px solid var(--line);
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: .68rem;
-    letter-spacing: .05em;
-    text-transform: uppercase;
-    padding: .3rem .7rem;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  #theme-toggle:hover { color: var(--signal); border-color: var(--signal); }
-
-  header {
-    padding: 3.5rem 2rem 2.5rem;
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  .welcome {
-    font-family: var(--mono);
-    font-size: .72rem;
-    letter-spacing: .25em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin: 0 0 .8rem;
-  }
-  .status-line {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    font-family: var(--mono);
-    font-size: .78rem;
-    color: var(--warn);
-    margin-bottom: 1rem;
-  }
-  .pulse {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--warn);
-    animation: blink 1.4s infinite;
-  }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-  h1 {
-    font-family: var(--sans);
-    font-size: clamp(2rem, 5vw, 2.9rem);
-    font-weight: 800;
-    letter-spacing: -.02em;
-    margin: 0 0 1rem;
-  }
-  .lede {
-    font-size: 1.05rem;
-    color: var(--muted);
-    max-width: 680px;
-    margin: 0;
-  }
-  .lede strong { color: var(--ink); font-weight: 600; }
-
-  nav {
-    display: flex;
-    gap: 1.5rem;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 2rem 1.5rem;
-    font-family: var(--mono);
-    font-size: .78rem;
-  }
-  nav a { color: var(--muted); text-decoration: none; }
-  nav a:hover { color: var(--signal); }
-
-  .container { max-width: 900px; margin: 0 auto; padding: 0 2rem 4rem; }
-
-  .back-link {
-    font-family: var(--mono);
-    font-size: .82rem;
-    color: var(--muted);
-    text-decoration: none;
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 1px;
-    display: inline-block;
-    margin-bottom: 2.5rem;
-  }
-  .back-link:hover { color: var(--signal); border-color: var(--signal); }
-
   .status-badge {
     display: inline-flex;
     align-items: center;
@@ -138,17 +14,25 @@
     font-size: .72rem;
     letter-spacing: .12em;
     text-transform: uppercase;
-    border: 1px solid var(--warn);
-    color: var(--warn);
+    border: 1px solid var(--signal);
+    color: var(--signal);
     border-radius: 3px;
     padding: .25rem .7rem;
     margin-bottom: 1.5rem;
   }
-  .status-badge .dot-warn {
+  .status-badge .dot-ok {
     width: 7px; height: 7px; border-radius: 50%;
-    background: var(--warn);
+    background: var(--signal);
     animation: blink 1.4s infinite;
   }
+  .status-badge.pending {
+    border-color: var(--warn);
+    color: var(--warn);
+  }
+  .status-badge.pending .dot-ok {
+    background: var(--warn);
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
 
   .meta-row {
     display: flex;
@@ -161,21 +45,10 @@
   }
   .meta-row span { border: 1px solid var(--line); border-radius: 3px; padding: .2rem .6rem; background: var(--bg-2); }
 
-  .notice-box {
-    border: 1px solid var(--warn);
-    border-radius: 8px;
-    background: var(--bg-2);
-    padding: 1.2rem 1.5rem;
+  .section-block {
     max-width: 820px;
-    margin-bottom: 2.5rem;
-    font-family: var(--mono);
-    font-size: .80rem;
-    color: var(--warn);
-    line-height: 1.6;
+    margin-bottom: 3rem;
   }
-  .notice-box strong { color: var(--warn); }
-
-  .section-block { max-width: 820px; margin-bottom: 3rem; }
   .section-block h2 {
     font-family: var(--mono);
     font-size: .78rem;
@@ -184,9 +57,12 @@
     color: var(--muted);
     margin: 0 0 .6rem;
   }
-  .section-block p { color: var(--ink); margin: 0 0 1rem; max-width: 680px; }
+  .section-block p {
+    color: var(--ink);
+    margin: 0 0 1rem;
+    max-width: 680px;
+  }
   .section-block p strong { color: var(--signal); font-weight: 600; }
-  .section-block p em { color: var(--purple); font-style: normal; }
 
   .diagram-wrap {
     background: var(--bg-2);
@@ -194,10 +70,15 @@
     border-radius: 8px;
     padding: 2rem 1.5rem;
     overflow-x: auto;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
   .diagram-wrap svg { display: block; margin: 0 auto; }
-  .scenario-caption { font-family: var(--mono); font-size: .75rem; color: var(--muted); margin: .5rem 0 2rem; }
+  .scenario-caption {
+    font-family: var(--mono);
+    font-size: .75rem;
+    color: var(--muted);
+    margin-top: .5rem;
+  }
 
   .step-table {
     width: 100%;
@@ -229,8 +110,14 @@
     font-size: .78rem;
   }
 
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; max-width: 820px; margin-bottom: 1.5rem; }
-  @media (max-width: 620px) { .two-col { grid-template-columns: 1fr; } }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    max-width: 820px;
+    margin-bottom: 1.4rem;
+  }
+  @media (max-width: 580px) { .two-col { grid-template-columns: 1fr; } }
 
   .info-card { border: 1px solid var(--line); border-radius: 6px; background: var(--bg-2); padding: 1.1rem 1.2rem; }
   .info-card h3 {
@@ -241,49 +128,68 @@
     margin: 0 0 .8rem;
   }
   .info-card.working h3 { color: var(--signal); }
-  .info-card.highlight h3 { color: var(--purple); }
+  .info-card.highlight h3 { color: #a78bfa; }
   .info-card.warning h3 { color: var(--warn); }
   .info-card ul { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: .80rem; color: var(--ink); }
   .info-card ul li { padding: .3rem 0; border-bottom: 1px solid var(--line); }
   .info-card ul li:last-child { border-bottom: none; }
   .info-card ul li::before { margin-right: .5rem; }
   .info-card.working ul li::before { content: "✓"; color: var(--signal); }
-  .info-card.highlight ul li::before { content: "→"; color: var(--purple); }
+  .info-card.highlight ul li::before { content: "→"; color: #a78bfa; }
   .info-card.warning ul li::before { content: "⚠"; color: var(--warn); }
 
-  .bug-block { margin-bottom: 2.4rem; }
-  .bug-block .bug-label {
+  /* Bug write-ups */
+  .bug-label {
     font-family: var(--mono);
-    font-size: .70rem;
-    letter-spacing: .12em;
+    font-size: .68rem;
+    letter-spacing: .15em;
     text-transform: uppercase;
     color: var(--warn);
     margin-bottom: .4rem;
   }
-  .bug-block h4 { font-family: var(--sans); font-size: 1.05rem; font-weight: 700; margin: 0 0 .6rem; }
+  .bug-block { margin-bottom: 2.2rem; }
+  .bug-block h4 { font-family: var(--sans); font-weight: 700; font-size: 1.05rem; margin: 0 0 .8rem; }
 
-  .quote-box {
-    border-left: 2px solid var(--purple);
-    padding: .6rem 1rem;
-    margin: 1rem 0;
+  /* Rule / quote block (matches the rule-block convention used elsewhere on the site) */
+  .rule-block {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    margin-bottom: .8rem;
+    font-family: var(--mono);
+    font-size: .80rem;
+    color: var(--muted);
+    max-width: 820px;
+    font-style: italic;
+  }
+
+  .notice-box {
+    border: 1px solid var(--warn);
+    border-radius: 8px;
+    background: var(--bg-2);
+    padding: 1.2rem 1.5rem;
+    max-width: 820px;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    font-size: .80rem;
+    color: var(--warn);
+    line-height: 1.6;
+  }
+  .notice-box strong { color: var(--warn); }
+
+  .back-link {
     font-family: var(--mono);
     font-size: .82rem;
     color: var(--muted);
-    background: var(--bg-2);
-    border-radius: 0 6px 6px 0;
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1px;
+    transition: color .2s, border-color .2s;
+    display: inline-block;
+    margin-bottom: 2.5rem;
   }
-
-  footer {
-    display: flex;
-    justify-content: space-between;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 2rem 2rem 3rem;
-    font-family: var(--mono);
-    font-size: .72rem;
-    color: var(--muted);
-    border-top: 1px solid var(--line);
-  }
+  .back-link:hover { color: var(--signal); border-color: var(--signal); }
 </style>
 </head>
 <body>
@@ -293,16 +199,16 @@
     <button id="theme-toggle" aria-label="Toggle dark and light mode"></button>
   </div>
 
-  <header>
+  <header style="grid-template-columns:1fr;">
     <div class="hero-text">
       <p class="welcome">Project</p>
-      <div class="status-line"><span class="pulse"></span> Practice build · GoHighLevel · simulated business</div>
+      <div class="status-line"><span class="pulse"></span> Automation · GoHighLevel · practice build</div>
       <h1>Chief Sizzling Grill</h1>
       <p class="lede">
-        A reservation landing page and no-code CRM automation built from scratch, on the
-        first day using GoHighLevel — for a <strong>fictional BBQ restaurant</strong> created
-        purely as a self-directed learning exercise. The interesting part wasn't the page.
-        It was deliberately trying to break the automation and fixing what broke.
+        A reservation landing page and no-code CRM automation built for a
+        <strong>fictional BBQ restaurant</strong> — a self-directed learning exercise on
+        GoHighLevel's first day of use. The page was the easy part. The real work was
+        deliberately breaking the automation, then fixing what broke.
       </p>
     </div>
   </header>
@@ -317,12 +223,12 @@
   <div class="container">
     <a href="projects.html" class="back-link">← back to projects</a>
 
-    <div class="status-badge"><span class="dot-warn"></span> Practice Build — Simulated Business, Not a Real Client</div>
+    <div class="status-badge pending"><span class="dot-ok"></span> Practice Build — Simulated Business, Not a Real Client</div>
 
     <div class="meta-row">
       <span>Type: Landing Page + No-Code CRM Automation</span>
       <span>Platform: GoHighLevel (GHL)</span>
-      <span>Tools: Tally Forms · Workflow Builder · Google Calendar · Sheets · Gmail</span>
+      <span>Tools: Tally Forms · Workflow Builder · Sheets · Gmail</span>
       <span>Role: Solo builder</span>
       <span>Timeframe: Single session · Day 1 on GHL</span>
     </div>
@@ -360,7 +266,7 @@
         attention paid to visual cohesion rather than stitching together disconnected template
         sections.
       </p>
-      <div class="two-col" style="grid-template-columns: 1fr;">
+      <div class="two-col" style="grid-template-columns: 1fr; margin-bottom: 1.5rem;">
         <div class="info-card highlight">
           <h3>→ Page structure</h3>
           <ul>
@@ -409,8 +315,8 @@
           <line x1="310" y1="214" x2="480" y2="214" stroke="#5eead4" stroke-width="1.5"/>
           <line x1="140" y1="214" x2="140" y2="246" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2)"/>
           <line x1="480" y1="214" x2="480" y2="246" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr2)"/>
-          <text x="140" y="234" text-anchor="middle" fill="#f5a623" font-size="10">FOUND</text>
-          <text x="480" y="234" text-anchor="middle" fill="#f5a623" font-size="10">NOT FOUND</text>
+          <text x="140" y="234" text-anchor="middle" fill="#f0b86e" font-size="10">FOUND</text>
+          <text x="480" y="234" text-anchor="middle" fill="#f0b86e" font-size="10">NOT FOUND</text>
           <rect x="20" y="248" width="240" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
           <text x="140" y="266" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">BRANCH A</text>
           <text x="140" y="282" text-anchor="middle" fill="#dde3ea" font-size="11">Notify staff + customer</text>
@@ -437,12 +343,12 @@
       <div class="bug-block">
         <div class="bug-label">Bug 01</div>
         <h4>A misleading action label</h4>
-        <div class="two-col" style="grid-template-columns: 1fr 1fr;">
+        <div class="two-col">
           <div class="info-card warning">
             <h3>⚠ What happened</h3>
             <ul>
               <li>GHL's "Find opportunity" action can behave two completely different ways depending on config</li>
-              <li>Its on-screen description changes to match — sometimes reading as a create action, sometimes as a pure search</li>
+              <li>Its on-screen description changes to match — sometimes reads as a create action, sometimes as a pure search</li>
               <li>Trusted the first description and recommended removing the separate Create step — had to walk that back</li>
             </ul>
           </div>
@@ -459,7 +365,7 @@
       <div class="bug-block">
         <div class="bug-label">Bug 02</div>
         <h4>"Found" meant "ever had a reservation," not "has an open one"</h4>
-        <div class="two-col" style="grid-template-columns: 1fr 1fr;">
+        <div class="two-col">
           <div class="info-card warning">
             <h3>⚠ What happened</h3>
             <ul>
@@ -470,7 +376,7 @@
           <div class="info-card working">
             <h3>✓ The fix</h3>
             <ul>
-              <li>Added match conditions: <code>Pipeline Is Reservations</code></li>
+              <li>Added match condition: <code>Pipeline Is Reservations</code></li>
               <li>Added match condition: <code>Status Is Open</code></li>
               <li>Narrowed "Found" to mean specifically an open, active reservation — fixed same-day duplicates and repeat customers in one change</li>
             </ul>
@@ -481,7 +387,7 @@
       <div class="bug-block">
         <div class="bug-label">Bug 03</div>
         <h4>Contact matching doesn't catch typos</h4>
-        <div class="two-col" style="grid-template-columns: 1fr 1fr;">
+        <div class="two-col">
           <div class="info-card warning">
             <h3>⚠ What happened</h3>
             <ul>
@@ -494,8 +400,7 @@
             <h3>✓ The fix</h3>
             <ul>
               <li>Settings → Business Profile → Contact Deduplication Preferences</li>
-              <li>Primary match field: Email</li>
-              <li>Secondary match field: Phone</li>
+              <li>Primary match field: Email · Secondary match field: Phone</li>
               <li>A typo'd email on a repeat visit now still gets caught by phone match</li>
             </ul>
           </div>
@@ -527,7 +432,7 @@
         form got no response at all, which could look like a silent failure from their side.
         A second notification was added so the customer isn't left to self-diagnose:
       </p>
-      <div class="quote-box">
+      <div class="rule-block">
         "Hi [Name], thanks for reaching out! It looks like you may already have an open
         reservation with us. Don't worry — one of our staff will personally check this and
         make sure everything's in order..."
@@ -585,15 +490,12 @@
 
   <script>
     const toggle = document.getElementById('theme-toggle');
-    const setLabel = () => {
-      toggle.textContent = document.body.classList.contains('dark-mode')
-        ? 'Switch to Dark' : 'Switch to Light';
-    };
-    toggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      setLabel();
-    });
+    function isDark() { return document.body.classList.contains('dark-mode'); }
+    function setLabel() { toggle.textContent = isDark() ? 'Switch to Light' : 'Switch to Dark'; }
+    toggle.addEventListener('click', () => { document.body.classList.toggle('dark-mode'); setLabel(); });
     setLabel();
   </script>
+  <link rel="stylesheet" href="chatbot.css">
+  <script src="chatbot.js"></script>
 </body>
 </html>

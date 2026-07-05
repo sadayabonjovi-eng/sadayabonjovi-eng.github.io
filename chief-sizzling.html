@@ -252,9 +252,10 @@
         or silent failures.
       </p>
       <p>
-        Three non-obvious bugs surfaced during deliberate <strong>"destroy testing"</strong> —
-        each one the kind that looks fine in a quick demo and quietly breaks in production.
-        All three were root-caused and fixed before this was called done.
+        Six non-obvious bugs surfaced across two build sessions — the first pass on the core
+        Found/Not Found logic, the second on ownership and follow-up accountability — each one
+        the kind that looks fine in a quick demo and quietly breaks in production. All six were
+        root-caused and fixed before this was called done.
       </p>
     </div>
 
@@ -439,6 +440,152 @@
       </div>
     </div>
 
+    <!-- PART 3: Round-robin assignment + escalation ladder -->
+    <div class="section-block">
+      <h2>// part 3 — round-robin assignment &amp; escalation ladder</h2>
+      <p>
+        Once the Found/Not Found logic was solid, the automation was extended past "notify
+        staff" into an actual <strong>ownership and accountability system</strong> — every new
+        reservation lead gets assigned to a person, that person gets reminded, and if nothing
+        happens within 48 hours, it escalates to the business owner directly.
+      </p>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 620 460" width="580" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono','Fira Code',monospace">
+          <defs>
+            <marker id="arr3" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M1,1 L7,4 L1,7 Z" fill="#5eead4"/>
+            </marker>
+          </defs>
+
+          <rect x="185" y="10" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="28" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">CONDITION</text>
+          <text x="310" y="44" text-anchor="middle" fill="#dde3ea" font-size="11">Opportunity Owner Is Not Empty?</text>
+
+          <line x1="310" y1="54" x2="140" y2="80" stroke="#5eead4" stroke-width="1.5"/>
+          <line x1="310" y1="54" x2="480" y2="80" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="140" y="76" text-anchor="middle" fill="#f0b86e" font-size="10">YES</text>
+          <text x="480" y="76" text-anchor="middle" fill="#f0b86e" font-size="10">NO</text>
+
+          <rect x="20" y="82" width="240" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="140" y="100" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">OWNER ALREADY SET</text>
+          <text x="140" y="116" text-anchor="middle" fill="#dde3ea" font-size="10">proceed directly</text>
+
+          <rect x="360" y="82" width="240" height="44" rx="6" fill="#131a22" stroke="#a78bfa" stroke-width="1.5"/>
+          <text x="480" y="100" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">OWNER EMPTY</text>
+          <text x="480" y="116" text-anchor="middle" fill="#dde3ea" font-size="10">Assign to User (round-robin)</text>
+
+          <line x1="140" y1="126" x2="140" y2="180" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr3)"/>
+          <path d="M480,126 C480,170 260,170 260,192" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr3)"/>
+          <text x="400" y="165" text-anchor="middle" fill="#a78bfa" font-size="9" letter-spacing="1">GO TO (merge)</text>
+
+          <rect x="20" y="182" width="240" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="140" y="200" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">SHARED STEP</text>
+          <text x="140" y="216" text-anchor="middle" fill="#dde3ea" font-size="11">Add Task</text>
+
+          <line x1="140" y1="226" x2="140" y2="246" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr3)"/>
+          <rect x="20" y="248" width="240" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="140" y="266" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">CUSTOMER</text>
+          <text x="140" y="282" text-anchor="middle" fill="#dde3ea" font-size="11">Email → Wait 1 Day</text>
+
+          <line x1="140" y1="292" x2="140" y2="312" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr3)"/>
+          <rect x="20" y="314" width="240" height="52" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="140" y="332" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">CHECK</text>
+          <text x="140" y="348" text-anchor="middle" fill="#dde3ea" font-size="10">Stage still "New Reservation"?</text>
+          <text x="140" y="362" text-anchor="middle" fill="#7d8b99" font-size="9">No → END · Yes → escalate</text>
+
+          <line x1="260" y1="340" x2="360" y2="340" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr3)"/>
+          <rect x="362" y="314" width="238" height="52" rx="6" fill="#131a22" stroke="#f0b86e" stroke-width="1.5"/>
+          <text x="481" y="332" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">ESCALATION LADDER</text>
+          <text x="481" y="348" text-anchor="middle" fill="#dde3ea" font-size="10">Round 1 (24h) → Round 2 (48h)</text>
+          <text x="481" y="362" text-anchor="middle" fill="#dde3ea" font-size="10">see table below</text>
+
+          <rect x="20" y="382" width="580" height="66" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1"/>
+          <text x="35" y="400" fill="#7d8b99" font-size="9" letter-spacing="1">LEGEND</text>
+          <text x="35" y="418" fill="#dde3ea" font-size="9">The dashed line is the "Go To" action — Advanced Builder's fix</text>
+          <text x="35" y="432" fill="#dde3ea" font-size="9">for merging two branches into one shared downstream chain,</text>
+          <text x="35" y="446" fill="#dde3ea" font-size="9">instead of duplicating Add Task / Email / Wait / Escalation twice.</text>
+        </svg>
+      </div>
+      <p class="scenario-caption">// Both the "Found" (owner-check) and "Not Found" (always assigns) paths converge into this same shared chain</p>
+
+      <div class="bug-block">
+        <div class="bug-label">Bug 04</div>
+        <h4>Building the whole workflow twice</h4>
+        <div class="two-col">
+          <div class="info-card warning">
+            <h3>⚠ What happened</h3>
+            <ul>
+              <li>Found and Not Found branches were each built out independently — Task, Email, Wait, Check, Escalation, repeated in full down both sides</li>
+              <li>Any change to timing or the escalation ladder had to be made twice, with no guarantee the copies stayed in sync</li>
+            </ul>
+          </div>
+          <div class="info-card highlight">
+            <h3>→ The distinction</h3>
+            <ul>
+              <li><strong>Legitimate duplication:</strong> messaging genuinely differs (double-booking tone vs. new-lead welcome tone) — this should stay separate</li>
+              <li><strong>Accidental duplication:</strong> the escalation ladder mechanics are identical in both branches — this shouldn't be copy-pasted</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="bug-block">
+        <div class="bug-label">Bug 05</div>
+        <h4>Ownerless leads with no path to assignment</h4>
+        <div class="two-col">
+          <div class="info-card warning">
+            <h3>⚠ What happened</h3>
+            <ul>
+              <li>The Found branch assumed every existing opportunity already had an owner and skipped straight to notifying "the owner"</li>
+              <li>In practice the pipeline had a mix — manually created, imported, or workflow-created opportunities with no owner at all</li>
+              <li>Round-robin assignment only ran on Not Found — any ownerless "Found" opportunity fell through the crack permanently</li>
+            </ul>
+          </div>
+          <div class="info-card working">
+            <h3>✓ The fix</h3>
+            <ul>
+              <li>Added condition: <code>Opportunity Owner Is Not Empty</code> right after the Found branch</li>
+              <li>Owner set → proceed straight to the shared Task step</li>
+              <li>Owner empty → round-robin Assign to User first, then continue into the same shared step</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="bug-block">
+        <div class="bug-label">Bug 06</div>
+        <h4>Standard Builder can't merge branches back together</h4>
+        <div class="two-col">
+          <div class="info-card warning">
+            <h3>⚠ What happened</h3>
+            <ul>
+              <li>Fixing Bug 05 required both ownership paths to converge into the same downstream Task node</li>
+              <li>GHL's Standard Builder doesn't support dragging a connection from one branch into an existing node elsewhere on the canvas</li>
+              <li>Attempting it just detached the connection with no valid target</li>
+            </ul>
+          </div>
+          <div class="info-card working">
+            <h3>✓ The fix</h3>
+            <ul>
+              <li>Switched the workflow to <strong>Advanced Builder</strong></li>
+              <li>Used the dedicated <code>Go To</code> action, built exactly for routing a branch to an existing step elsewhere on the canvas</li>
+              <li>Merged both ownership paths into one shared chain, eliminating a third copy of the logic before it was ever built</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <p>Both branches converge into the same two-round escalation pattern:</p>
+      <table class="step-table">
+        <thead><tr><th>Round</th><th>Trigger</th><th>Action if unresolved</th></tr></thead>
+        <tbody>
+          <tr><td class="step-num">1</td><td>24 hours, no stage change</td><td>Internal Notification to assigned owner</td></tr>
+          <tr><td class="step-num">2</td><td>48 hours total, still no stage change</td><td>Escalation to business owner directly</td></tr>
+        </tbody>
+      </table>
+      <p class="scenario-caption">// the "stage changed" branch on each check is intentionally left with no further action — a stage change means a human already resolved the lead manually, so the ladder simply stops there</p>
+    </div>
+
     <!-- Known limitations -->
     <div class="section-block">
       <h2>// known limitations — documented honestly</h2>
@@ -449,6 +596,7 @@
           <li>Status field integrity is an assumption, not a guarantee — the Found/Not Found logic depends on staff actually moving completed reservations out of "Open." Skip that consistently, and every past customer eventually reads as a false "Found"</li>
           <li>Gemini AI, Sheets, and Gmail integrations on the broader scenario are still in progress</li>
           <li>Rapid-fire, millisecond-level duplicate submissions were deprioritized as low-probability, since the form resets and requires full re-entry after each submission</li>
+          <li>The escalation ladder is structurally verified but not yet execution-tested — the builder sub-account can't send live email, so the merge and branching logic were confirmed by tracing the canvas rather than a live test run. Next step: Execution Logs or a temporary tag-based marker to confirm the routed path at runtime</li>
         </ul>
       </div>
     </div>
@@ -462,6 +610,8 @@
           <li>Proactively stress-testing for edge cases — typos, repeat customers, duplicate submissions — not just the happy path</li>
           <li>Fixing a problem in the right layer of the system — a workflow symptom traced back to a contact-matching setting</li>
           <li>Balancing automated logic with human-facing communication, so no one is left confused by silent system behavior</li>
+          <li>Distinguishing legitimate duplication (different messaging for different scenarios) from accidental duplication (identical logic copy-pasted for no reason) — and only merging the latter</li>
+          <li>Recognizing when a tool's Standard mode has hit a real structural limit, and deliberately switching modes rather than working around it with more duplication</li>
           <li>Honest scoping of what's done, what's deferred, and why</li>
         </ul>
       </div>

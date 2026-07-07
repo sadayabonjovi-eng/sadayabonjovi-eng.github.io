@@ -760,6 +760,63 @@
     </div>
 
     <div class="section-block">
+      <h2>// part 5 — calendar type mismatch, and closing the loop on failed bookings</h2>
+      <p>
+        With appointment creation working for the happy path, two more gaps surfaced: what
+        happens when GHL rejects the calendar type itself, and what happens when a real slot
+        conflict occurs — no available time, not just a formatting error.
+      </p>
+
+      <div class="bug-block">
+        <div class="bug-label">Bug 08</div>
+        <h4>Class Booking calendars silently rejected valid appointments</h4>
+        <div class="two-col">
+          <div class="info-card warning">
+            <h3>⚠ What happened</h3>
+            <ul>
+              <li>Chief Sizzling Grill — Reservations was originally configured as a <strong>Class Booking</strong> calendar type</li>
+              <li>Book Appointment calls against it failed consistently, while a separate <strong>Personal</strong> calendar on the same sub-account booked correctly using the same workflow logic</li>
+              <li>Same trigger, same Format Date step, same Book Appointment action — the only variable was calendar type, which pointed the fault away from the workflow and onto the calendar's own configuration</li>
+            </ul>
+          </div>
+          <div class="info-card working">
+            <h3>✓ The fix</h3>
+            <ul>
+              <li>Switched Chief Sizzling Grill — Reservations from Class Booking to <strong>Personal</strong> calendar type</li>
+              <li>Reservation bookings began succeeding immediately, with no other change to the workflow</li>
+              <li>Slot capacity was reconfigured directly on the calendar to <strong>10 bookings per slot</strong> — an intentional setting, not a leftover default, matching a restaurant reservation's real capacity (a time slot serving multiple parties, not one booking per moment)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="bug-block">
+        <div class="bug-label">Built &amp; Tested</div>
+        <h4>Closing the loop when no slot is available</h4>
+        <div class="two-col">
+          <div class="info-card highlight">
+            <h3>→ The reasoning</h3>
+            <ul>
+              <li>Book Appointment can fail for a reason that isn't a bug at all — the requested date/time is genuinely full (all 10 slots taken)</li>
+              <li>A Wait step after Book Appointment allows the action time to resolve before the workflow checks whether it actually succeeded</li>
+              <li>Calendar Event ID is used as the single source of truth for success — if the appointment was created, GHL returns an ID; if not, that field stays empty</li>
+            </ul>
+          </div>
+          <div class="info-card working">
+            <h3>✓ What was actually built</h3>
+            <ul>
+              <li>Condition after Wait: <code>Calendar Event ID is empty?</code></li>
+              <li><strong>Empty (failed — no available slot):</strong> Email sent to the customer explaining the requested time is unavailable, with a direct link to the booking widget so they can pick an open slot themselves — then Update Opportunity to <strong>Lost</strong>, removing it from the active pipeline</li>
+              <li><strong>Not empty (success):</strong> confirmation Email sent, opportunity remains active in the pipeline</li>
+              <li>This keeps the failure case from going silent — the customer always gets an answer and a next step, and the pipeline never carries a phantom "still open" opportunity for a booking that never actually happened</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <p class="scenario-caption">// this replaces an earlier assumption — that any Book Appointment failure meant a formatting bug (Bug 07) — with a proper distinction between "the workflow is broken" and "the workflow is working correctly and the slot is genuinely full"</p>
+    </div>
+
+    <div class="section-block">
       <h2>// why reservations aren't auto-closed</h2>
       <p>
         Once the Calendar step was designed, an obvious next question came up: could the system
@@ -793,7 +850,7 @@
       <p>Named on purpose, not glossed over, as part of the learning process.</p>
       <div class="info-card warning" style="max-width:820px;">
         <ul>
-          <li>No capacity limits yet — every valid submission creates a card, with no max-bookings-per-slot check. Planned on GHL's Calendar tool rather than a custom counter, since a naive counter is vulnerable to phantom slots from skipped or duplicate runs</li>
+          <li>Capacity is enforced directly on the calendar (10 bookings per slot on the Personal-type calendar, see Bug 08), rather than a custom counter built in the workflow — a naive counter would be vulnerable to phantom slots from skipped or duplicate runs, so letting GHL's own calendar engine own capacity was the more reliable choice</li>
           <li>Status field integrity is an assumption, not a guarantee — the Found/Not Found logic depends on staff actually moving completed reservations out of "Open." Skip that consistently, and every past customer eventually reads as a false "Found." If this happens, the stale Calendar Event ID left on that Opportunity can also cause a genuinely new reservation to silently skip calendar creation — the same safety-net notification below is the catch for this case too</li>
           <li>Cancellation still resolves to the contact's most recent appointment when it updates status — GHL's native Update Appointment Status action doesn't accept a specific appointment ID as input, only "the appointment that triggered this workflow" or "most recent for this contact." This is a real platform ceiling, not a workaround-able config choice. In practice it's a narrower risk than it sounds: Bug 02's Pipeline/Status filters plus Bug 03's phone-fallback contact matching mean a contact can only ever have one open reservation Opportunity at a time, so the automated booking path never creates a second candidate appointment for "most recent" to choose between — there's nothing to disambiguate. The one way this could still resolve to the wrong appointment is a staff member manually creating an unrelated appointment for that same contact outside the reservation flow — a training/process gap, not something workflow logic can close. The Calendar Event ID capture built in Part 4 doesn't mechanically enable precise ID-targeting, but it gives the record a verifiable, auditable link between Opportunity and appointment, and puts the ID in place for a future API-based upgrade, where GHL's API (unlike the visual builder) does support targeting a specific appointment ID directly</li>
           <li>Gemini AI, Sheets, and Gmail integrations on the broader scenario are still in progress</li>

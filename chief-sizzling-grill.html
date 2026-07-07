@@ -223,12 +223,12 @@
   <div class="container">
     <a href="projects.html" class="back-link">← back to projects</a>
 
-    <div class="status-badge"><span class="dot-ok"></span> Stage 1 Complete · Stages 2–3 Planned</div>
+    <div class="status-badge"><span class="dot-ok"></span> Stage 1 Complete · Review Response Routing Complete · Post-Visit Review Request &amp; Retention Planned</div>
 
     <div class="meta-row">
       <span>Type: Landing Page + No-Code CRM Automation</span>
       <span>Platform: GoHighLevel (GHL)</span>
-      <span>Tools: Tally Forms · Workflow Builder · Sheets · Gmail</span>
+      <span>Tools: Tally Forms · Workflow Builder · Reputation Management · Sheets · Gmail</span>
       <span>Role: Solo builder</span>
       <span>Timeframe: Two build days · Day 1–2 on GHL</span>
     </div>
@@ -254,7 +254,8 @@
         Found/Not Found logic, Day 2 on upgrading that logic further, then on ownership and
         follow-up accountability, then on the appointment-scheduling layer itself — each one the
         kind that looks fine in a quick demo and quietly breaks in production. All of them were
-        root-caused and fixed before this was called done.
+        root-caused and fixed before this was called done. A later session added a review
+        response routing layer on top of the booking system, covered in Part 6.
       </p>
       <div class="rule-block" style="font-style: normal;">
         <strong style="color: var(--signal);">Short on time?</strong> The most instructive bug is
@@ -269,8 +270,11 @@
       <h2>// the full pipeline: booking → review → retention</h2>
       <p>
         The booking automation below is one stage of a larger customer-lifecycle system.
-        The full pipeline is scoped as three connected stages — only the first is fully
-        built and tested so far, with the other two designed and planned as the next phase.
+        The full pipeline is scoped as three connected stages. Stage 1 (booking) is fully
+        built and tested. A fourth, adjacent piece — review response routing, covering what
+        happens once a review actually comes in rather than requesting one — has also been
+        built and is documented in Part 6. Stages 2 (outbound review request) and 3
+        (retention) remain designed and planned as the next phase.
       </p>
       <div class="diagram-wrap">
         <svg viewBox="0 0 620 300" width="580" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono','Fira Code',monospace">
@@ -322,7 +326,7 @@
           <text x="36" y="268" fill="#dde3ea" font-size="10">All stages share the same contact record — no separate signup required.</text>
         </svg>
       </div>
-      <p class="scenario-caption">// this case study documents Stage 1 in full, including the Calendar trust-boundary step — originally scoped as a Google Calendar all-day event, later rebuilt as a native GHL Appointment with its own ID-capture workflow (see Part 4 below). Stages 2–3 are scoped above and remain planned.</p>
+      <p class="scenario-caption">// this case study documents Stage 1 in full, including the Calendar trust-boundary step — originally scoped as a Google Calendar all-day event, later rebuilt as a native GHL Appointment with its own ID-capture workflow (see Part 4 below). Part 6 documents a separate, already-built review response routing layer that reacts to inbound reviews rather than requesting them — distinct from the still-planned Stage 2. Stage 3 remains planned.</p>
     </div>
 
     <div class="section-block">
@@ -869,6 +873,169 @@
     </div>
 
     <div class="section-block">
+      <h2>// part 6 — review response routing &amp; the Reviews AI safeguard</h2>
+      <p>
+        A separate piece, built after the booking system was stable: what happens once a real
+        review actually comes in. Rather than requesting reviews (that's the still-planned
+        Stage 2 above), this system reacts to <strong>inbound</strong> reviews — surfacing the
+        ones that need urgent attention, while letting GHL's native Reviews AI handle the
+        drafting work.
+      </p>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 620 220" width="580" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono','Fira Code',monospace">
+          <defs>
+            <marker id="arr5" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M1,1 L7,4 L1,7 Z" fill="#5eead4"/>
+            </marker>
+          </defs>
+          <rect x="20" y="20" width="190" height="52" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="115" y="38" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">TRIGGER</text>
+          <text x="115" y="54" text-anchor="middle" fill="#dde3ea" font-size="11">New Review Received</text>
+          <text x="115" y="66" text-anchor="middle" fill="#7d8b99" font-size="8">Source: Google · Spam: No</text>
+
+          <line x1="210" y1="46" x2="235" y2="46" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr5)"/>
+
+          <rect x="238" y="20" width="190" height="52" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="333" y="38" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">CONDITION</text>
+          <text x="333" y="54" text-anchor="middle" fill="#dde3ea" font-size="11">Review Rating &#8804; 2 ?</text>
+          <text x="333" y="66" text-anchor="middle" fill="#7d8b99" font-size="8">only branch that does anything</text>
+
+          <line x1="333" y1="72" x2="333" y2="100" stroke="#f0b86e" stroke-width="1.5"/>
+          <line x1="333" y1="100" x2="140" y2="100" stroke="#f0b86e" stroke-width="1.5"/>
+          <line x1="333" y1="100" x2="480" y2="100" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="140" y="94" text-anchor="middle" fill="#f0b86e" font-size="9">YES (1–2★)</text>
+          <text x="480" y="94" text-anchor="middle" fill="#7d8b99" font-size="9">NO (3–5★)</text>
+
+          <line x1="140" y1="100" x2="140" y2="122" stroke="#f0b86e" stroke-width="1.5" marker-end="url(#arr5)"/>
+          <rect x="30" y="124" width="220" height="52" rx="6" fill="#131a22" stroke="#f0b86e" stroke-width="1.5"/>
+          <text x="140" y="142" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">ACTION</text>
+          <text x="140" y="158" text-anchor="middle" fill="#dde3ea" font-size="11">Internal Notification</text>
+          <text x="140" y="170" text-anchor="middle" fill="#7d8b99" font-size="8">"Urgent: check Reputation tab"</text>
+
+          <rect x="400" y="124" width="180" height="52" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="490" y="142" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">NO ACTION</text>
+          <text x="490" y="158" text-anchor="middle" fill="#7d8b99" font-size="9">workflow ends quietly</text>
+          <text x="490" y="170" text-anchor="middle" fill="#7d8b99" font-size="8">AI still drafts, unprompted</text>
+
+          <rect x="20" y="188" width="580" height="24" rx="4" fill="#131a22" stroke="#26313c" stroke-width="1"/>
+          <text x="35" y="204" fill="#7d8b99" font-size="9">Contactless trigger — review isn't tied to a contact, so no direct customer-facing message is possible here</text>
+        </svg>
+      </div>
+      <p class="scenario-caption">// the workflow only surfaces urgency for negative reviews on purpose — see reasoning below</p>
+
+      <div class="bug-block">
+        <div class="bug-label">Limitation</div>
+        <h4>"Review Received" is contactless — no direct message to the reviewer is possible</h4>
+        <div class="two-col">
+          <div class="info-card warning">
+            <h3>⚠ What this means</h3>
+            <ul>
+              <li>GHL states this explicitly in the trigger description: reviews aren't linked to a specific contact record</li>
+              <li>Standard customer-facing actions (Send Email, Send SMS to a contact) don't apply here — there's no contact for them to resolve against</li>
+            </ul>
+          </div>
+          <div class="info-card working">
+            <h3>✓ The design response</h3>
+            <ul>
+              <li>Used <strong>Internal Notification</strong> instead — a native action built specifically for alerting staff/owner, with no contact dependency</li>
+              <li>The workflow's job was reframed correctly: not "reply to the reviewer" (that's a separate, manual step — see below), but "tell a human a reply needs attention"</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="bug-block">
+        <div class="bug-label">Design decision</div>
+        <h4>One branch, not three — narrowing "notify" down to what's actually urgent</h4>
+        <div class="two-col">
+          <div class="info-card highlight">
+            <h3>→ The reasoning</h3>
+            <ul>
+              <li>An earlier draft of this workflow branched into three paths — Positive (4-5★), Neutral (3★), Negative (1-2★) — each with its own notification</li>
+              <li>All three notifications would fire on every single review, regardless of how much attention each one actually warranted — a 5-star review doesn't need the same urgency as a 1-star one</li>
+              <li>Collapsed to a single condition: <code>Rating ≤ 2</code>. Everything else ends the workflow with no action</li>
+            </ul>
+          </div>
+          <div class="info-card working">
+            <h3>✓ Why this is the stronger design</h3>
+            <ul>
+              <li>Reviews AI drafts a reply automatically for <strong>every</strong> review regardless of rating — the branching was never gating whether a draft exists, only whether the owner needs to be interrupted about it</li>
+              <li>Positive/neutral reviews can be checked at the owner's own pace inside Reputation → Reviews; negative ones get pushed to them immediately</li>
+              <li>Not every event needs an automated alert — deciding what's worth interrupting a business owner for is itself part of the design, not a shortcut</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="bug-block">
+        <div class="bug-label">Reviews AI configuration</div>
+        <h4>Suggestive mode — AI drafts automatically, a human sends manually</h4>
+        <div class="two-col">
+          <div class="info-card highlight">
+            <h3>→ The three modes available</h3>
+            <ul>
+              <li><strong>Auto Responses:</strong> AI generates and posts a reply with zero human involvement</li>
+              <li><strong>Suggestive:</strong> AI generates a draft the moment a review comes in — a human must click to review, edit, and send it before anything goes public</li>
+              <li><strong>Off:</strong> no AI assistance, fully manual</li>
+            </ul>
+          </div>
+          <div class="info-card working">
+            <h3>✓ The choice, and why</h3>
+            <ul>
+              <li>Set to <strong>Suggestive</strong> under Reputation → Settings → Reviews AI, at <code>Settings → Reputation</code> in the sub-account</li>
+              <li>Auto-replying to negative reviews unsupervised is a real reputational risk — an angry customer getting an AI-generated reply with no human review is worse than a slightly delayed, considered response</li>
+              <li>Precise split: <strong>reply generation is automatic, reply sending is manual</strong> — the speed benefit of not writing from scratch, without losing control over what's published under the business's name</li>
+              <li>Pricing: $0.01 per AI-generated response (first 3 free), enabled at the agency level first, then toggled per sub-account</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="bug-block">
+        <div class="bug-label">Limitation</div>
+        <h4>Reviews AI isn't a workflow action — it only lives in the Reputation tab</h4>
+        <div class="two-col">
+          <div class="info-card warning">
+            <h3>⚠ The platform ceiling</h3>
+            <ul>
+              <li>There's no native workflow action to "generate an AI reply" or "auto-post an AI reply" that can be dropped into the automation canvas</li>
+              <li>Reviews AI operates independently, surfaced only inside <strong>Reputation → Reviews</strong>, disconnected from anything built in the Workflow Builder</li>
+            </ul>
+          </div>
+          <div class="info-card highlight">
+            <h3>→ What this means in practice</h3>
+            <ul>
+              <li>The workflow and Reviews AI are two separate systems that meet at one point: the internal notification tells a human to go check the Reputation tab, where the AI draft is already waiting</li>
+              <li>Not a single continuous automated pipeline — routing and alerting is automated, drafting is automated, but the connection between them currently requires a manual step</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="bug-block">
+        <div class="bug-label">Safety check</div>
+        <h4>Confirmed sandbox isolation before enabling anything</h4>
+        <div class="two-col">
+          <div class="info-card warning">
+            <h3>⚠ Why this mattered</h3>
+            <ul>
+              <li>Chief Sizzling Grill is a real, physical small eatery — not purely fictional — which raised a real question: could this sandbox build accidentally touch its actual public presence?</li>
+              <li>The eatery does appear as an unclaimed pin on Google Maps, but has no verified Google Business Profile, no owner account, and no connection to the Google account used for this GHL build</li>
+            </ul>
+          </div>
+          <div class="info-card working">
+            <h3>✓ Verified before proceeding</h3>
+            <ul>
+              <li>Checked business.google.com directly under the build's Google account — no existing listing, confirming GHL's "connected" status referred only to the linked Google account, not a live business profile</li>
+              <li>Confirmed the real eatery's Google presence (if any) sits under a separate, unrelated Google account — no shared access, no possibility of this sandbox workflow touching real public reviews</li>
+              <li>Workflow left in <strong>Draft</strong>, never published — combined with the isolation above, nothing here can fire against real customers or incur real cost</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
       <h2>// known limitations — documented honestly</h2>
       <p>Named on purpose, not glossed over, as part of the learning process.</p>
       <div class="info-card warning" style="max-width:820px;">
@@ -876,6 +1043,8 @@
           <li>Capacity is enforced directly on the calendar (10 bookings per slot on the Personal-type calendar, see Bug 08), rather than a custom counter built in the workflow — a naive counter would be vulnerable to phantom slots from skipped or duplicate runs, so letting GHL's own calendar engine own capacity was the more reliable choice</li>
           <li>Status field integrity is an assumption, not a guarantee — the Found/Not Found logic depends on staff actually moving completed reservations out of "Open." Skip that consistently, and every past customer eventually reads as a false "Found." If this happens, the stale Calendar Event ID left on that Opportunity can also cause a genuinely new reservation to silently skip calendar creation — the same safety-net notification below is the catch for this case too</li>
           <li>Cancellation still resolves to the contact's most recent appointment when it updates status — GHL's native Update Appointment Status action doesn't accept a specific appointment ID as input, only "the appointment that triggered this workflow" or "most recent for this contact." This is a real platform ceiling, not a workaround-able config choice. In practice it's a narrower risk than it sounds: Bug 02's Pipeline/Status filters plus Bug 03's phone-fallback contact matching mean a contact can only ever have one open reservation Opportunity at a time, so the automated booking path never creates a second candidate appointment for "most recent" to choose between — there's nothing to disambiguate. The one way this could still resolve to the wrong appointment is a staff member manually creating an unrelated appointment for that same contact outside the reservation flow — a training/process gap, not something workflow logic can close. The Calendar Event ID capture built in Part 4 doesn't mechanically enable precise ID-targeting, but it gives the record a verifiable, auditable link between Opportunity and appointment, and puts the ID in place for a future API-based upgrade, where GHL's API (unlike the visual builder) does support targeting a specific appointment ID directly</li>
+          <li>The "Review Received" trigger is contactless by design — no reservation-linked review data, and no way to message a reviewer directly through this workflow. Internal Notification was the correct native substitute, not a workaround</li>
+          <li>Reviews AI's automatic drafting happens the moment a review is received, regardless of rating — the workflow's branching controls notification urgency only, not whether a draft gets created. Positive/neutral review drafts still require a manual check-in at the owner's own pace, since no alert fires for them</li>
           <li>Gemini AI, Sheets, and Gmail integrations on the broader scenario are still in progress</li>
           <li>Rapid-fire, millisecond-level duplicate submissions were deprioritized as low-probability, since the form resets and requires full re-entry after each submission</li>
           <li>The escalation ladder has since been execution-tested directly — canvas tracing was confirmed against a live run showing the correct branch entered and exited. Actual email delivery still can't be verified end-to-end, since the builder sub-account has live email sending blocked for sandbox agencies; branching and merge logic are confirmed, delivery is not</li>
@@ -891,7 +1060,10 @@
         actual configured behavior, stress-testing edge cases instead of just the happy path, and
         treating a "successful" execution as suspect, not just a failed one — Bug 07's wrong-date
         bookings never threw an error, so verifying output against input mattered as much as
-        watching for failures.
+        watching for failures. Part 6 adds a second, related thread: knowing where to draw the
+        line between automation and human judgment isn't a limitation to route around — the
+        decision to keep AI reply-sending manual, and to only interrupt the owner for genuinely
+        urgent cases, is itself a deliberate design choice, not a shortfall.
       </p>
     </div>
 
@@ -901,6 +1073,7 @@
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">GoHighLevel</span>
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Tally Forms</span>
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">GHL Workflow Builder</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">GHL Reputation Management / Reviews AI</span>
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Calendar <em style="color:var(--muted); font-style:italic;">(linked for staff-facing sync — bookings created via GHL's native Appointment system automatically appear here; not part of the workflow logic itself)</em></span>
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Sheets</span>
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Gmail</span>

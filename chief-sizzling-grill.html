@@ -223,7 +223,7 @@
   <div class="container">
     <a href="projects.html" class="back-link">← back to projects</a>
 
-    <div class="status-badge pending"><span class="dot-ok"></span> Practice Build</div>
+    <div class="status-badge"><span class="dot-ok"></span> Stage 1 Complete · Stages 2–3 Planned</div>
 
     <div class="meta-row">
       <span>Type: Landing Page + No-Code CRM Automation</span>
@@ -259,7 +259,7 @@
       <div class="rule-block" style="font-style: normal;">
         <strong style="color: var(--signal);">Short on time?</strong> The most instructive bug is
         <a href="#bug07" style="color: var(--signal);">Bug 07</a> — a date field that silently
-        booked real appointments 2–3 months off from what the customer submitted, with zero error
+        booked real appointments months off from what the customer submitted, with zero error
         thrown. It's the clearest example of the theme running through this whole build:
         a "successful" run isn't proof of a correct one.
       </div>
@@ -695,7 +695,7 @@
             <h3>⚠ The two failure modes</h3>
             <ul>
               <li><strong>Loud failure:</strong> action skipped outright with "Invalid date format" — annoying, but safe, since no appointment was created</li>
-              <li><strong>Silent failure:</strong> several test bookings "succeeded" with no error at all — but day and month had been swapped in transit, booking real appointments 2–3 months away from the date the customer actually submitted</li>
+              <li><strong>Silent failure:</strong> several test bookings "succeeded" with no error at all — but the resulting date was wrong in a consistent, non-random way (see table and pattern below)</li>
             </ul>
           </div>
         </div>
@@ -711,6 +711,29 @@
         </tbody>
       </table>
       <p class="scenario-caption">// the silent failures were strictly worse than the loud ones — a skipped booking is annoying but visible; a booking on the wrong month reads as a completely normal, confirmed reservation until a customer shows up on the wrong day</p>
+
+      <div class="bug-block">
+        <div class="bug-label">Bug 07 — cont'd</div>
+        <h4>The real failure pattern, once cross-checked</h4>
+        <div class="two-col">
+          <div class="info-card warning">
+            <h3>⚠ Not a simple swap</h3>
+            <ul>
+              <li>First assumption was a day/month swap — but the numbers don't support that: <code>07-11-2026</code> booked to Nov <strong>20</strong>, not Nov 7 as a true swap would produce</li>
+              <li>The actual pattern: the resulting <strong>month</strong> consistently matched the <strong>day</strong> originally submitted (11 → Nov, 09 → Sep, 10 → Oct), and the resulting <strong>day</strong> was consistently <strong>20</strong> in every case</li>
+              <li>That "20" lines up with the leading digits of the year (<code>2026</code>) — pointing to a positional misread of the raw <code>YYYY-MM-DD</code> string rather than a clean field swap</li>
+            </ul>
+          </div>
+          <div class="info-card highlight">
+            <h3>→ Best-available explanation</h3>
+            <ul>
+              <li>Most likely cause: the raw <code>YYYY-MM-DD</code> value was being parsed against a shorter expected format before the formatter step was correctly wired in, causing fixed character positions to be read against the wrong parts of the string</li>
+              <li>The exact byte-level mechanism inside GHL's parser wasn't fully diagnosable from the tools available (see dead ends below) — but the pattern was consistent and reproducible across multiple tests, which is stronger evidence than a one-off anomaly would be</li>
+              <li>The fix (explicit Date/time formatter, correctly wired) eliminated the failure regardless of the precise internal cause</li>
+            </ul>
+          </div>
+        </div>
+      </div>
 
       <div class="bug-block">
         <div class="bug-label">Bug 07 — cont'd</div>
@@ -878,7 +901,7 @@
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">GoHighLevel</span>
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Tally Forms</span>
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">GHL Workflow Builder</span>
-        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Calendar</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Calendar <em style="color:var(--muted); font-style:italic;">(linked for staff-facing sync — bookings created via GHL's native Appointment system automatically appear here; not part of the workflow logic itself)</em></span>
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Sheets</span>
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Gmail</span>
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Gemini AI</span>

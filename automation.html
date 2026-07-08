@@ -49,78 +49,31 @@
   <div class="container">
     <a href="projects.html" class="back-link">← back to all projects</a>
 
-    <!-- Project: Booking AI Agent -->
+    <!-- Project: Chief Sizzling Grill — GHL Reservation Automation -->
     <div class="project-card">
-      <div class="project-tag">Agent · booking · live</div>
-      <h3>Booking AI Agent</h3>
+      <div class="project-tag">No-Code · GoHighLevel · featured build</div>
+      <h3>Chief Sizzling Grill — Reservation Automation</h3>
       <p>
-        A fully deployed <strong>appointment booking agent</strong> that takes a Tally
-        form submission, checks real availability on Google Calendar, books the slot
-        or asks <strong>AI</strong> to propose alternatives when it's taken, logs every
-        attempt to Google Sheets, and sends a confirmation email — all without any
-        manual work.
+        A <strong>reservation landing page and CRM automation</strong> built inside
+        <strong>GoHighLevel</strong> — the platform most in-demand right now among
+        agencies and local businesses. A Tally form submission gets checked against
+        existing open reservations, routes into a Found/Not Found branch, and either
+        notifies staff of a possible duplicate or creates a new opportunity and
+        confirms it.
       </p>
       <p>
-        Two distinct outcomes, not one: a free slot books automatically, while a
-        conflict hands the actual overlapping events to <strong>Google Gemini AI</strong>
-        to write a natural reply. Every attempt is logged, whether confirmed or
-        conflicted.
+        The real work was deliberate <strong>destroy-testing</strong> — deliberately
+        trying to break the automation before trusting it with anything real. That
+        surfaced three non-obvious bugs (a misleading action label, a stale-match
+        problem with repeat customers, and a contact-deduplication gap that let
+        typo'd emails slip through), each root-caused and fixed at the layer where
+        it actually lived.
       </p>
       <div class="stack">
-        <span>Make.com</span><span>Tally</span><span>Google Calendar</span><span>Google Sheets</span><span>Google Gemini AI</span><span>Gmail</span>
+        <span>GoHighLevel</span><span>Tally Forms</span><span>Workflow Builder</span><span>Google Calendar</span><span>Google Sheets</span><span>Gmail</span>
       </div>
       <div class="project-links">
-        <a href="booking-agent.html">→ details</a>
-      </div>
-    </div>
-
-    <!-- Project: Review AI Agent -->
-    <div class="project-card">
-      <div class="project-tag">Agent · review response · live</div>
-      <h3>Review AI Agent</h3>
-      <p>
-        A fully deployed <strong>review response agent</strong> that takes a Tally
-        review submission, validates it, and routes it by star rating into three
-        distinct branches — negative, neutral, and positive — each handled with the
-        exact mix of AI and templated logic that rating actually needs.
-      </p>
-      <p>
-        Negative reviews get a <strong>Google Gemini AI</strong>-drafted apology with
-        a discount code, but it's held for owner approval before ever reaching the
-        customer. Neutral reviews get a lighter AI reply sent directly. Positive
-        reviews skip AI entirely — a templated thank-you is all that's needed. Every
-        review is logged to Google Sheets with its sentiment and status.
-      </p>
-      <div class="stack">
-        <span>Make.com</span><span>Tally</span><span>Google Gemini AI</span><span>Google Sheets</span><span>Gmail</span>
-      </div>
-      <div class="project-links">
-        <a href="review-agent.html">→ details</a>
-      </div>
-    </div>
-
-    <!-- Project: Job-Search Agent -->
-    <div class="project-card">
-      <div class="project-tag">Agent · job-search · live</div>
-      <h3>Job-Search Agent</h3>
-      <p>
-        A fully automated <strong>job-search pipeline</strong> that scans remote job
-        boards daily, filters genuine matches against target keywords, and for every
-        new match, generates a <strong>resume and cover letter tailored to that exact
-        posting</strong> — not a generic template, rewritten every time. Delivered
-        straight to email each morning, with the original job link included.
-      </p>
-      <p>
-        Sources only from job boards with <strong>free, public APIs</strong> — no
-        scraping, no auto-submitting. It prepares every application; a human still
-        sends it. Scheduled via <strong>GitHub Actions</strong>, running on
-        <strong>$0/month</strong> infrastructure end to end.
-      </p>
-      <div class="stack">
-        <span>Python</span><span>Groq AI</span><span>GitHub Actions</span><span>python-docx</span><span>Gmail SMTP</span>
-      </div>
-      <div class="project-links">
-        <a href="https://sadayabonjovi-eng.github.io/job-search-agent.html">→ details</a>
+        <a href="chief-sizzling-grill.html">→ details</a>
       </div>
     </div>
 
@@ -177,6 +130,81 @@
       </div>
     </div>
 
+    <!-- Project: Job-Search Agent -->
+    <div class="project-card">
+      <div class="project-tag">Agent · job-search · live</div>
+      <h3>Job-Search Agent</h3>
+      <p>
+        A fully automated <strong>job-search pipeline</strong> that scans remote job
+        boards daily, filters genuine matches against target keywords, and for every
+        new match, generates a <strong>resume and cover letter tailored to that exact
+        posting</strong> — not a generic template, rewritten every time. Delivered
+        straight to email each morning, with the original job link included.
+      </p>
+      <p>
+        Sources only from job boards with <strong>free, public APIs</strong> — no
+        scraping, no auto-submitting. It prepares every application; a human still
+        sends it. Scheduled via <strong>GitHub Actions</strong>, running on
+        <strong>$0/month</strong> infrastructure end to end.
+      </p>
+      <div class="stack">
+        <span>Python</span><span>Groq AI</span><span>GitHub Actions</span><span>python-docx</span><span>Gmail SMTP</span>
+      </div>
+      <div class="project-links">
+        <a href="https://sadayabonjovi-eng.github.io/job-search-agent.html">→ details</a>
+      </div>
+    </div>
+
+    <!-- Project: Booking AI Agent -->
+    <div class="project-card">
+      <div class="project-tag">Agent · booking · live</div>
+      <h3>Booking AI Agent</h3>
+      <p>
+        A fully deployed <strong>appointment booking agent</strong> that takes a Tally
+        form submission, checks real availability on Google Calendar, books the slot
+        or asks <strong>AI</strong> to propose alternatives when it's taken, logs every
+        attempt to Google Sheets, and sends a confirmation email — all without any
+        manual work.
+      </p>
+      <p>
+        Two distinct outcomes, not one: a free slot books automatically, while a
+        conflict hands the actual overlapping events to <strong>Google Gemini AI</strong>
+        to write a natural reply. Every attempt is logged, whether confirmed or
+        conflicted.
+      </p>
+      <div class="stack">
+        <span>Make.com</span><span>Tally</span><span>Google Calendar</span><span>Google Sheets</span><span>Google Gemini AI</span><span>Gmail</span>
+      </div>
+      <div class="project-links">
+        <a href="booking-agent.html">→ details</a>
+      </div>
+    </div>
+
+    <!-- Project: Review AI Agent -->
+    <div class="project-card">
+      <div class="project-tag">Agent · review response · live</div>
+      <h3>Review AI Agent</h3>
+      <p>
+        A fully deployed <strong>review response agent</strong> that takes a Tally
+        review submission, validates it, and routes it by star rating into three
+        distinct branches — negative, neutral, and positive — each handled with the
+        exact mix of AI and templated logic that rating actually needs.
+      </p>
+      <p>
+        Negative reviews get a <strong>Google Gemini AI</strong>-drafted apology with
+        a discount code, but it's held for owner approval before ever reaching the
+        customer. Neutral reviews get a lighter AI reply sent directly. Positive
+        reviews skip AI entirely — a templated thank-you is all that's needed. Every
+        review is logged to Google Sheets with its sentiment and status.
+      </p>
+      <div class="stack">
+        <span>Make.com</span><span>Tally</span><span>Google Gemini AI</span><span>Google Sheets</span><span>Gmail</span>
+      </div>
+      <div class="project-links">
+        <a href="review-agent.html">→ details</a>
+      </div>
+    </div>
+
     <!-- Project: Order Automation -->
     <div class="project-card">
       <div class="project-tag">Agent · order-retention-flow · live</div>
@@ -195,7 +223,6 @@
       </div>
       <div class="project-links">
         <a href="order-automation.html">→ details</a>
-        <a href="https://github.com/sadayabonjovi-eng/order-automation">→ github</a>
       </div>
     </div>
 
@@ -221,24 +248,6 @@
       </div>
       <div class="project-links">
         <a href="content-pipeline.html">→ details</a>
-      </div>
-    </div>
-
-    <!-- Project: Weather Bot -->
-    <div class="project-card">
-      <div class="project-tag">Agent · weather-report-bot · live</div>
-      <h3>Email Weather Bot</h3>
-      <p>
-        Triggers every day at <strong>7 AM</strong>, checks the forecast, uses AI to
-        turn it into a short readable summary, and sends it straight to an inbox —
-        a small example of <strong>recurring reports that run themselves</strong>.
-      </p>
-      <div class="stack">
-        <span>Zapier</span><span>Email</span>
-      </div>
-      <div class="project-links">
-        <a href="weather-bot.html">→ details</a>
-        <a href="https://github.com/sadayabonjovi-eng/weather-bot">→ github</a>
       </div>
     </div>
 
@@ -268,31 +277,20 @@
       </div>
     </div>
 
-    <!-- Project: Chief Sizzling Grill — GHL Reservation Automation -->
+
     <div class="project-card">
-      <div class="project-tag">No-Code · ghl-reservations · practice build</div>
-      <h3>Chief Sizzling Grill — Reservation Automation</h3>
+      <div class="project-tag">Agent · weather-report-bot · live</div>
+      <h3>Email Weather Bot</h3>
       <p>
-        A <strong>reservation landing page and CRM automation</strong> built inside
-        GoHighLevel for a fictional BBQ restaurant — a self-directed learning
-        exercise on GHL's first day of use. A Tally form submission gets checked
-        against existing open reservations, routes into a Found/Not Found branch,
-        and either notifies staff of a possible duplicate or creates a new
-        opportunity and confirms it.
-      </p>
-      <p>
-        The real work was deliberate <strong>destroy-testing</strong> — deliberately
-        trying to break the automation before trusting it with anything real. That
-        surfaced three non-obvious bugs (a misleading action label, a stale-match
-        problem with repeat customers, and a contact-deduplication gap that let
-        typo'd emails slip through), each root-caused and fixed at the layer where
-        it actually lived.
+        Triggers every day at <strong>7 AM</strong>, checks the forecast, uses AI to
+        turn it into a short readable summary, and sends it straight to an inbox —
+        a small example of <strong>recurring reports that run themselves</strong>.
       </p>
       <div class="stack">
-        <span>GoHighLevel</span><span>Tally Forms</span><span>Workflow Builder</span><span>Google Calendar</span><span>Google Sheets</span><span>Gmail</span>
+        <span>Zapier</span><span>Email</span>
       </div>
       <div class="project-links">
-        <a href="chief-sizzling-grill.html">→ details</a>
+        <a href="weather-bot.html">→ details</a>
       </div>
     </div>
 

@@ -230,7 +230,7 @@
       <span>Platform: GoHighLevel (GHL)</span>
       <span>Tools: Tally Forms · Workflow Builder · Reputation Management · Sheets · Gmail</span>
       <span>Role: Solo builder</span>
-      <span>Timeframe: Two build days · Day 1–2 on GHL</span>
+      <span>Timeframe: Four build days · Day 1–4 on GHL</span>
     </div>
 
     <div class="notice-box">
@@ -880,10 +880,19 @@
       <h2>// part 6 — review response routing &amp; the Reviews AI safeguard</h2>
       <p>
         A separate piece, built after the booking system was stable: what happens once a real
-        review actually comes in. Rather than requesting reviews (that's the still-planned
-        Stage 2 above), this system reacts to <strong>inbound</strong> reviews — surfacing the
+        review actually comes in. Rather than requesting reviews (that's Stage 2, designed in
+        Part 7), this system reacts to <strong>inbound</strong> reviews — surfacing the
         ones that need urgent attention, while letting GHL's native Reviews AI handle the
         drafting work.
+      </p>
+      <p>
+        The trigger itself, <strong>New Review Received</strong>, is a native GHL trigger tied
+        to whichever review platforms are connected on the account — in this build, Google
+        (Facebook is also supported natively). It doesn't poll or check anything on a schedule;
+        it fires automatically the moment someone leaves a review directly on the connected
+        Google or Facebook business profile, and GHL pulls that review in as an event. This is
+        a distinct system from the Stage 2 review <em>request</em> in Part 7 — this trigger
+        reacts to a review a customer already posted externally, it doesn't send anything out.
       </p>
       <div class="diagram-wrap">
         <svg viewBox="0 0 620 220" width="580" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono','Fira Code',monospace">
@@ -1149,7 +1158,6 @@
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Calendar <em style="color:var(--muted); font-style:italic;">(linked for staff-facing sync — bookings created via GHL's native Appointment system automatically appear here; not part of the workflow logic itself)</em></span>
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Sheets</span>
         <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Gmail</span>
-        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Google Gemini AI</span>
       </div>
     </div>
 

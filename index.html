@@ -220,9 +220,12 @@
   /* ── Featured builds grid ── */
   .featured-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+    grid-template-columns:repeat(3, 1fr);
     gap:1.5rem;
     margin-bottom:2.5rem;
+  }
+  @media (max-width:820px){
+    .featured-grid{ grid-template-columns:1fr; }
   }
   .feat-card{
     border:1px solid var(--line);
@@ -505,17 +508,17 @@
         <a href="order-automation.html" class="contact-btn">→ view_project</a>
       </article>
 
-      <!-- 3. Trello Client Onboarding -->
+      <!-- 3. GHL Reservation Automation -->
       <article class="feat-card">
-        <span class="feat-tag">Automation · Trello · Live</span>
-        <h3>Trello Client Onboarding Pipeline</h3>
+        <span class="feat-tag">No-Code · GoHighLevel · Featured</span>
+        <h3>Reservation Automation (GoHighLevel)</h3>
         <p>
-          A 7-stage automated client pipeline built entirely in Trello — <strong>checklists swap per stage, due dates reset automatically, urgent cards get flagged</strong>, and every transition is logged with an audit comment. Zero manual input after setup.
+          A reservation landing page and CRM automation built inside <strong>GoHighLevel</strong> — the platform most in-demand right now among agencies and local businesses. Every submission is checked against existing bookings, then routed to confirm or flag it automatically.
         </p>
         <div class="stack">
-          <span>Trello Butler</span><span>Gmail</span><span>No-Code</span>
+          <span>GoHighLevel</span><span>Tally</span><span>Google Calendar</span><span>Gmail</span>
         </div>
-        <a href="trello-onboarding.html" class="contact-btn">→ view_project</a>
+        <a href="chief-sizzling-grill.html" class="contact-btn">→ view_project</a>
       </article>
 
     </div>

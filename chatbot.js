@@ -157,6 +157,47 @@
   }
 
   /* ─────────────────────────────────────────
+     ACHIEVEMENT SYSTEM — "Meet the Crew"
+     Tracks which cats a visitor has actually
+     met (i.e. visited that cat's page), across
+     the whole site, forever (localStorage).
+  ───────────────────────────────────────── */
+  const CATS_MET_KEY = "bon_cats_met";
+  const CREW_CELEBRATED_KEY = "bon_crew_celebrated";
+  const CAT_ORDER = ["salt", "ash", "pepper", "amber"];
+
+  function getCatsMet() {
+    try {
+      const raw = localStorage.getItem(CATS_MET_KEY);
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    } catch { return []; }
+  }
+
+  function markCatMet(catKey) {
+    try {
+      const met = getCatsMet();
+      if (met.indexOf(catKey) === -1) {
+        met.push(catKey);
+        localStorage.setItem(CATS_MET_KEY, JSON.stringify(met));
+      }
+      return met;
+    } catch { return getCatsMet(); }
+  }
+
+  function hasCelebratedCrew() {
+    try {
+      return localStorage.getItem(CREW_CELEBRATED_KEY) === "1";
+    } catch { return true; }
+  }
+
+  function markCrewCelebrated() {
+    try {
+      localStorage.setItem(CREW_CELEBRATED_KEY, "1");
+    } catch (e) {}
+  }
+
+  /* ─────────────────────────────────────────
      SYSTEM PROMPT — who Bon is
   ───────────────────────────────────────── */
   const SYSTEM = `You are Bon — Bon Jovi F. Sadaya — speaking in the first person as a friendly, professional digital version of yourself on your portfolio website. You're a Filipino freelancer based in Cebu, Philippines, transitioning from ~7 years of Philippine Coast Guard service into remote work as a Virtual Assistant.
@@ -242,6 +283,7 @@ LEAD CAPTURE RULES:
   widget.id = "bon-chat-widget";
   widget.innerHTML = `
     <div id="bon-cat-tag" aria-hidden="true"></div>
+    <div id="bon-paw-progress" aria-label="Cats met progress"></div>
     <div id="bon-paw-swipe" aria-hidden="true"></div>
     <div id="bon-chat-window" role="dialog" aria-label="Chat with Bon Sadaya" aria-modal="true">
       <div id="bon-chat-header">
@@ -289,6 +331,7 @@ LEAD CAPTURE RULES:
   const notifDot  = document.getElementById("bon-notif-dot");
   const catTag    = document.getElementById("bon-cat-tag");
   const pawSwipe  = document.getElementById("bon-paw-swipe");
+  const pawProgress = document.getElementById("bon-paw-progress");
 
   /* ─────────────────────────────────────────
      CAT TAG LABEL ("On duty: [Cat Name]")
@@ -639,6 +682,108 @@ LEAD CAPTURE RULES:
   }, 3000);
 
   /* ─────────────────────────────────────────
+     ACHIEVEMENT UI — paw-print progress dots
+     Renders 4 small dots; filled teal for each
+     cat met so far. Lives next to the tag label.
+  ───────────────────────────────────────── */
+  function renderPawProgress() {
+    const met = getCatsMet();
+    pawProgress.innerHTML = CAT_ORDER.map(key => {
+      const filled = met.indexOf(key) !== -1;
+      const c = CATS[key];
+      return `<span class="bon-paw-dot${filled ? " met" : ""}" title="${c.name}">🐾</span>`;
+    }).join("");
+
+    if (met.length > 0) {
+      pawProgress.classList.add("show");
+    }
+  }
+
+  /* ─────────────────────────────────────────
+     CREW CELEBRATION — fires once, ever, the
+     moment a visitor has met all 4 cats.
+  ───────────────────────────────────────── */
+  function celebrateFullCrew() {
+    if (hasCelebratedCrew()) return;
+    markCrewCelebrated();
+
+    const overlay = document.createElement("div");
+    overlay.id = "bon-crew-celebration";
+    overlay.setAttribute("aria-hidden", "true");
+    overlay.innerHTML = `
+      <div class="bon-crew-card">
+        <div class="bon-crew-paws">🐾🐾🐾🐾</div>
+        <strong>You've met the whole crew!</strong>
+        <span>Salt, Ash, Pepper &amp; Amber say hi 🎉</span>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    // small confetti-ish paw burst
+    for (let i = 0; i < 14; i++) {
+      const p = document.createElement("span");
+      p.className = "bon-confetti-paw";
+      p.textContent = "🐾";
+      p.style.left = Math.random() * 100 + "vw";
+      p.style.animationDelay = (Math.random() * 0.4) + "s";
+      p.style.fontSize = (0.8 + Math.random() * 0.9) + "rem";
+      overlay.appendChild(p);
+    }
+
+    window.requestAnimationFrame(() => overlay.classList.add("show"));
+
+    window.setTimeout(() => overlay.classList.add("fade-out"), 3200);
+    window.setTimeout(() => overlay.remove(), 3800);
+  }
+
+  function trackAchievement() {
+    const met = markCatMet(ACTIVE_CAT_KEY);
+    renderPawProgress();
+    if (met.length >= CAT_ORDER.length) {
+      // slight delay so it doesn't collide with the handoff/intro animation
+      window.setTimeout(celebrateFullCrew, 1600);
+    }
+  }
+
+  /* ─────────────────────────────────────────
+     SCROLL REACTION — one-time "peek & wave"
+     when a visitor scrolls deep into any page.
+     Reliable across layouts since it only
+     reacts to overall scroll depth, not to
+     specific page elements.
+  ───────────────────────────────────────── */
+  function initScrollReaction() {
+    let fired = false;
+
+    function checkScroll() {
+      if (fired) return;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight <= 0) return;
+      const pct = scrollTop / docHeight;
+
+      if (pct >= 0.6) {
+        fired = true;
+        toggle.classList.add("bon-peek-wave");
+        window.setTimeout(() => toggle.classList.remove("bon-peek-wave"), 900);
+        window.removeEventListener("scroll", onScroll);
+      }
+    }
+
+    let ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        checkScroll();
+        ticking = false;
+      });
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
+  /* ─────────────────────────────────────────
      RUN MASCOT ANIMATIONS
      Homepage intro takes priority on first-ever
      visit; otherwise run the tag-in handoff.
@@ -651,5 +796,9 @@ LEAD CAPTURE RULES:
   } else {
     runHandoffAnimation();
   }
+
+  renderPawProgress();
+  trackAchievement();
+  initScrollReaction();
 
 })();

@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activepieces Messenger AI Chatbot — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border: 1px solid var(--signal);
+    color: var(--signal);
+    border-radius: 3px;
+    padding: .25rem .7rem;
+    margin-bottom: 1.5rem;
+  }
+  .status-badge .dot-ok {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--signal);
+    animation: blink 1.4s infinite;
+  }
+  .status-badge.pending {
+    border-color: var(--warn);
+    color: var(--warn);
+  }
+  .status-badge.pending .dot-ok {
+    background: var(--warn);
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    font-size: .78rem;
+    color: var(--muted);
+  }
+  .meta-row span { border: 1px solid var(--line); border-radius: 3px; padding: .2rem .6rem; background: var(--bg-2); }
+
+  .section-block {
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  .section-block h2 {
+    font-family: var(--mono);
+    font-size: .78rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 .6rem;
+  }
+  .section-block p {
+    color: var(--ink);
+    margin: 0 0 1rem;
+    max-width: 680px;
+  }
+  .section-block p strong { color: var(--signal); font-weight: 600; }
+
+  .diagram-wrap {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 2rem 1.5rem;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+  }
+  .diagram-wrap svg { display: block; margin: 0 auto; }
+
+  .step-table {
+    width: 100%;
+    max-width: 820px;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: .80rem;
+    margin-bottom: 3rem;
+  }
+  .step-table th {
+    text-align: left;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-size: .70rem;
+    border-bottom: 1px solid var(--line);
+    padding: .5rem .8rem;
+  }
+  .step-table td {
+    padding: .65rem .8rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    vertical-align: top;
+  }
+  .step-table tr:last-child td { border-bottom: none; }
+  .step-table .step-num { color: var(--muted); width: 2.5rem; }
+  .step-table .step-tool { color: var(--signal); white-space: nowrap; }
+  .step-table .step-status-ok { color: #5eead4; }
+  .step-table .step-status-pending { color: var(--warn); }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  @media (max-width: 580px) { .two-col { grid-template-columns: 1fr; } }
+
+  .info-card {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--bg-2);
+    padding: 1.1rem 1.2rem;
+  }
+  .info-card h3 {
+    font-family: var(--mono);
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin: 0 0 .8rem;
+  }
+  .info-card.working h3 { color: var(--signal); }
+  .info-card.highlight h3 { color: #a78bfa; }
+  .info-card.warning h3 { color: var(--warn); }
+  .info-card ul {
+    list-style: none;
+    margin: 0; padding: 0;
+    font-family: var(--mono);
+    font-size: .80rem;
+    color: var(--ink);
+  }
+  .info-card ul li {
+    padding: .3rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .info-card ul li:last-child { border-bottom: none; }
+  .info-card ul li::before { margin-right: .5rem; }
+  .info-card.working ul li::before { content: "✓"; color: var(--signal); }
+  .info-card.highlight ul li::before { content: "→"; color: #a78bfa; }
+  .info-card.warning ul li::before { content: "⚠"; color: var(--warn); }
+
+  /* Build story timeline */
+  .build-timeline {
+    max-width: 820px;
+    margin-bottom: 3rem;
+    position: relative;
+    padding-left: 2rem;
+  }
+  .build-timeline::before {
+    content: "";
+    position: absolute;
+    left: 7px; top: 8px; bottom: 8px;
+    width: 1px;
+    background: var(--line);
+  }
+  .build-event {
+    position: relative;
+    padding: 0 0 1.8rem 1.2rem;
+  }
+  .build-event::before {
+    content: "";
+    position: absolute;
+    left: -2rem;
+    top: 6px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--signal);
+  }
+  .build-event.pivot::before { border-color: var(--warn); }
+  .build-event.shipped::before { background: var(--signal); border-color: var(--signal); }
+  .build-event-label {
+    font-family: var(--mono);
+    font-size: .68rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .3rem;
+  }
+  .build-event.pivot .build-event-label { color: var(--warn); }
+  .build-event.shipped .build-event-label { color: var(--signal); }
+  .build-event h4 {
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 .4rem;
+  }
+  .build-event p {
+    font-size: .9rem;
+    color: var(--muted);
+    margin: 0;
+    max-width: 600px;
+  }
+
+  .demo-box {
+    border: 1px solid var(--warn);
+    border-radius: 8px;
+    background: var(--bg-2);
+    padding: 1.5rem;
+    max-width: 820px;
+    margin-bottom: 3rem;
+    font-family: var(--mono);
+    font-size: .82rem;
+  }
+  .demo-box h3 {
+    color: var(--warn);
+    font-size: .75rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    margin: 0 0 .8rem;
+  }
+  .demo-box p { color: var(--ink); margin: 0 0 1rem; font-family: var(--mono); font-size: .82rem; }
+  .demo-box .hint { color: var(--muted); font-size: .75rem; margin-top: .5rem; }
+
+  .back-link {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1px;
+    transition: color .2s, border-color .2s;
+    display: inline-block;
+    margin-bottom: 2.5rem;
+  }
+  .back-link:hover { color: var(--signal); border-color: var(--signal); }
+
+  .notice-box {
+    border: 1px solid var(--warn);
+    border-radius: 8px;
+    background: var(--bg-2);
+    padding: 1.2rem 1.5rem;
+    max-width: 820px;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    font-size: .80rem;
+    color: var(--warn);
+  }
+  .notice-box strong { color: var(--warn); }
+
+  .scenario-caption {
+    font-family: var(--mono);
+    font-size: .75rem;
+    color: var(--muted);
+    margin-top: .5rem;
+  }
+
+  .qa-table code {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: .1rem .35rem;
+    font-size: .78rem;
+  }
+</style>
+</head>
+<body>
+
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode"></button>
+  </div>
+
+  <header style="grid-template-columns:1fr;">
+    <div class="hero-text">
+      <p class="welcome">Project</p>
+      <div class="status-line"><span class="pulse"></span> Agent · messenger · in development</div>
+      <h1>Messenger AI Chatbot — Activepieces Build</h1>
+      <p class="lede">
+        A second Messenger AI chatbot, rebuilt from scratch on <strong>Activepieces</strong> after
+        shipping the first one on Make.com — same category of tool, different platform, deliberately
+        chosen to build real fluency across builders as part of the progression toward
+        multi-agentic AI systems. Wired for webhook verification, conversation memory, duplicate
+        detection, Groq AI replies, and Messenger Send API delivery.
+      </p>
+    </div>
+  </header>
+
+  <nav>
+    <a href="index.html">/home</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
+    <a href="privacy-policy.html">/privacy</a>
+  </nav>
+
+  <div class="container">
+    <a href="automation.html" class="back-link">← back to projects</a>
+
+    <div class="status-badge pending"><span class="dot-ok"></span> In Development — Meta App Review Pending</div>
+
+    <div class="meta-row">
+      <span>Type: AI Chatbot + Webhook Verification + Conversation Memory</span>
+      <span>Tools: Activepieces · Groq AI · Meta Messenger API · Activepieces Tables</span>
+      <span>Steps: 12</span>
+      <span>Platform: Facebook Messenger</span>
+      <span>Status: Built · Not Yet Public</span>
+    </div>
+
+    <!-- Notice -->
+    <div class="notice-box">
+      ⚠ <strong>Built and functioning, not yet public.</strong> The full pipeline runs end-to-end —
+      webhook verification, message parsing, conversation logging, AI reply generation, and reply
+      delivery are all working — but the Meta app is still in <strong>Development mode</strong>, so
+      the bot is only reachable by admins and testers on the connected Page until Meta App Review
+      is completed.
+    </div>
+
+    <!-- Overview -->
+    <div class="section-block">
+      <h2>// overview</h2>
+      <p>
+        After shipping the first Messenger AI agent on Make.com, this project rebuilds the same
+        category of system — a Facebook Messenger chatbot with memory, AI-generated replies, and
+        automatic logging — on <strong>Activepieces</strong>. The goal wasn't just to duplicate the
+        result, it was to get hands-on with how a different automation platform handles the same
+        problems: expression syntax, trigger sample data, step-level testing, and webhook
+        verification all work differently here than they did in Make.com.
+      </p>
+      <p>
+        The flow catches every incoming Meta webhook event on a single trigger, then routes it
+        two ways: verification handshakes get echoed straight back (required for Meta's initial
+        webhook setup), while real user messages get parsed, checked against existing conversation
+        records to avoid duplicate processing, sent to <strong>Groq AI</strong> for a reply, logged
+        to <strong>Activepieces Tables</strong> with a live timestamp, and sent back to the user via
+        the Messenger Send API.
+      </p>
+    </div>
+
+    <!-- Diagram -->
+    <div class="section-block">
+      <h2>// system diagram</h2>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 620 900" width="580" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', 'Fira Code', monospace">
+          <defs>
+            <marker id="arr-signal" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M1,1 L7,4 L1,7 Z" fill="#5eead4"/>
+            </marker>
+            <marker id="arr-warn" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M1,1 L7,4 L1,7 Z" fill="#facc15"/>
+            </marker>
+          </defs>
+
+          <rect x="185" y="10" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="28" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">TRIGGER</text>
+          <text x="310" y="44" text-anchor="middle" fill="#dde3ea" font-size="11">1. Catch Webhook</text>
+          <line x1="310" y1="54" x2="310" y2="74" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="185" y="76" width="250" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="310" y="94" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">ROUTER</text>
+          <text x="310" y="110" text-anchor="middle" fill="#dde3ea" font-size="11">2. Verification vs. real message</text>
+
+          <line x1="310" y1="120" x2="130" y2="150" stroke="#facc15" stroke-width="1.5" marker-end="url(#arr-warn)"/>
+          <line x1="310" y1="120" x2="480" y2="150" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+          <text x="130" y="140" text-anchor="middle" fill="#facc15" font-size="9">Branch 1</text>
+          <text x="480" y="140" text-anchor="middle" fill="#5eead4" font-size="9">Otherwise</text>
+
+          <rect x="20" y="152" width="220" height="44" rx="6" fill="#131a22" stroke="#facc15" stroke-width="1.5"/>
+          <text x="130" y="170" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">WEBHOOK</text>
+          <text x="130" y="186" text-anchor="middle" fill="#dde3ea" font-size="11">3. Return Response — echo hub.challenge</text>
+
+          <rect x="360" y="152" width="240" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="480" y="170" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">PARSE</text>
+          <text x="480" y="186" text-anchor="middle" fill="#dde3ea" font-size="11">4. Code — extract sender, text, timestamp</text>
+          <line x1="480" y1="196" x2="480" y2="216" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="360" y="218" width="240" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="480" y="236" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">LOOKUP</text>
+          <text x="480" y="252" text-anchor="middle" fill="#dde3ea" font-size="11">5. Find Records — existing conversation?</text>
+          <line x1="480" y1="262" x2="480" y2="282" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="360" y="284" width="240" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="480" y="302" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">ROUTER</text>
+          <text x="480" y="318" text-anchor="middle" fill="#dde3ea" font-size="11">6. Duplicate — Skip vs. Otherwise</text>
+
+          <line x1="480" y1="328" x2="300" y2="358" stroke="#facc15" stroke-width="1.5" marker-end="url(#arr-warn)"/>
+          <line x1="480" y1="328" x2="500" y2="358" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+          <text x="300" y="348" text-anchor="middle" fill="#facc15" font-size="9">Duplicate — Skip</text>
+          <text x="500" y="348" text-anchor="middle" fill="#5eead4" font-size="9">Otherwise</text>
+
+          <rect x="200" y="360" width="200" height="40" rx="6" fill="#131a22" stroke="#facc15" stroke-width="1.5"/>
+          <text x="300" y="384" text-anchor="middle" fill="#dde3ea" font-size="11">End (skip processing)</text>
+
+          <rect x="380" y="360" width="220" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="490" y="378" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">CONTEXT</text>
+          <text x="490" y="394" text-anchor="middle" fill="#dde3ea" font-size="11">7. Find Records — pull history</text>
+          <line x1="490" y1="404" x2="490" y2="424" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="380" y="426" width="220" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="490" y="444" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">AI</text>
+          <text x="490" y="460" text-anchor="middle" fill="#dde3ea" font-size="11">8. Send HTTP Request — Groq AI</text>
+          <line x1="490" y1="470" x2="490" y2="490" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="380" y="492" width="220" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="490" y="510" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">FORMAT</text>
+          <text x="490" y="526" text-anchor="middle" fill="#dde3ea" font-size="11">9. Code — extract reply text</text>
+          <line x1="490" y1="536" x2="490" y2="556" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="380" y="558" width="220" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="490" y="576" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">LOG</text>
+          <text x="490" y="592" text-anchor="middle" fill="#dde3ea" font-size="11">10. Create Record — save conversation</text>
+          <line x1="490" y1="602" x2="490" y2="622" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="380" y="624" width="220" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="490" y="642" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">LOG</text>
+          <text x="490" y="658" text-anchor="middle" fill="#dde3ea" font-size="11">11. Create Record — secondary write</text>
+          <line x1="490" y1="668" x2="490" y2="688" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="380" y="690" width="220" height="44" rx="6" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="490" y="708" text-anchor="middle" fill="#7d8b99" font-size="9" letter-spacing="1">REPLY</text>
+          <text x="490" y="724" text-anchor="middle" fill="#dde3ea" font-size="11">12. Send HTTP Request — Messenger Send API</text>
+          <line x1="490" y1="734" x2="490" y2="754" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr-signal)"/>
+
+          <rect x="420" y="756" width="140" height="40" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1"/>
+          <text x="490" y="780" text-anchor="middle" fill="#dde3ea" font-size="11">End</text>
+
+          <rect x="20" y="800" width="280" height="80" rx="6" fill="#131a22" stroke="#26313c" stroke-width="1"/>
+          <text x="35" y="820" fill="#7d8b99" font-size="9" letter-spacing="1">LEGEND</text>
+          <rect x="35" y="832" width="14" height="10" rx="2" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="55" y="842" fill="#dde3ea" font-size="10">Live and working</text>
+          <rect x="35" y="852" width="14" height="10" rx="2" fill="none" stroke="#facc15" stroke-width="1.5"/>
+          <text x="55" y="862" fill="#dde3ea" font-size="10">Verification / dedup branch</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Step breakdown -->
+    <div class="section-block">
+      <h2>// step breakdown</h2>
+      <table class="step-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Step</th>
+            <th>Tool</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="step-num">1</td>
+            <td>Single trigger catches every incoming Meta webhook event — both the verification handshake and real user messages</td>
+            <td class="step-tool">Activepieces Webhook</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">2</td>
+            <td>Router splits verification requests (GET with hub.mode=subscribe) from real messages (POST with message data)</td>
+            <td class="step-tool">Activepieces Router</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">3</td>
+            <td>Verification branch echoes hub.challenge straight back — completes Meta's webhook setup handshake</td>
+            <td class="step-tool">Activepieces Webhook</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">4</td>
+            <td>Message branch parses the raw payload — extracts senderId and messageText, flags whether the message is valid, and stamps an ISO timestamp</td>
+            <td class="step-tool">Activepieces Code (JS)</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">5</td>
+            <td>Checks Activepieces Tables for an existing conversation record matching this sender, to catch duplicate webhook fires</td>
+            <td class="step-tool">Activepieces Tables</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">6</td>
+            <td>Router splits already-processed duplicates (skipped) from genuinely new messages that continue to the AI reply logic</td>
+            <td class="step-tool">Activepieces Router</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">7</td>
+            <td>Pulls existing conversation history for this sender, giving the AI reply full context rather than treating each message in isolation</td>
+            <td class="step-tool">Activepieces Tables</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">8</td>
+            <td>Sends the message and conversation context to Groq AI to generate the reply</td>
+            <td class="step-tool">HTTP · Groq AI</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">9</td>
+            <td>Extracts and formats the AI's reply text from the raw API response</td>
+            <td class="step-tool">Activepieces Code (JS)</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">10</td>
+            <td>Writes senderId, the updated conversation history, and a live ISO timestamp to the conversations table</td>
+            <td class="step-tool">Activepieces Tables</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+          <tr>
+            <td class="step-num">11</td>
+            <td>Secondary record write — table split still being finalized as the customer-record and conversation-log structures are separated</td>
+            <td class="step-tool">Activepieces Tables</td>
+            <td class="step-status-pending">⚠ In progress</td>
+          </tr>
+          <tr>
+            <td class="step-num">12</td>
+            <td>Posts the AI's reply back to the user via the Meta Messenger Send API, using the Page Access Token generated during app setup</td>
+            <td class="step-tool">HTTP · Meta Messenger API</td>
+            <td class="step-status-ok">✓ Live</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Status cards -->
+    <div class="section-block">
+      <h2>// current status</h2>
+      <div class="two-col">
+        <div class="info-card working">
+          <h3>✓ Working End to End</h3>
+          <ul>
+            <li>Webhook verification handshake resolves correctly</li>
+            <li>Incoming messages parsed cleanly — sender, text, timestamp</li>
+            <li>Duplicate webhook fires detected and skipped</li>
+            <li>Conversation history pulled for context per sender</li>
+            <li>Groq AI generates the reply</li>
+            <li>Reply written back to the user via Messenger Send API</li>
+            <li>Live ISO timestamp on every logged conversation</li>
+          </ul>
+        </div>
+        <div class="info-card warning">
+          <h3>⚠ Not Yet Public</h3>
+          <ul>
+            <li>Meta App Review not yet completed</li>
+            <li>Bot only reachable by admins/testers on the connected Page</li>
+            <li>Update-vs-Create logic for returning customers still pending</li>
+            <li>Two Create Record steps — table structure still being split cleanly</li>
+            <li>No public "message us" link until App Review clears</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- What makes it different -->
+    <div class="section-block">
+      <h2>// why rebuild the same thing on a different platform</h2>
+      <div class="info-card highlight" style="max-width:820px;">
+        <h3>→ Platform fluency, not just a working bot</h3>
+        <ul>
+          <li>Make.com and Activepieces solve the same problem with genuinely different mental models</li>
+          <li>Activepieces expressions are step-ID based, not generic aliases — "trigger" isn't always valid</li>
+          <li>Trigger sample data has to be populated deliberately (via a built-in test-request form) before the picker can generate correct references</li>
+          <li>Step-level "Retest Step" debugging surfaced a stale-cache issue that looked like a code bug but wasn't</li>
+          <li>Same core architecture — webhook, parse, dedup, AI call, log, reply — proven portable across builders</li>
+          <li>Part of the planned progression: Make.com → GoHighLevel → Activepieces/n8n → multi-agentic systems</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Build story -->
+    <div class="section-block">
+      <h2>// build story</h2>
+      <p style="margin-bottom:1.8rem;">
+        This build started with a working reference point already in hand — the Make.com Messenger
+        agent — which made it a useful stress test for how much of that architecture (and how much
+        debugging instinct) actually transfers to a new platform.
+      </p>
+      <div class="build-timeline">
+        <div class="build-event">
+          <div class="build-event-label">The starting point</div>
+          <h4>Rebuild a proven architecture on Activepieces</h4>
+          <p>Instead of designing a new bot from scratch, the same core pipeline from the Make.com build — webhook, memory, AI reply, logging — was rebuilt on Activepieces, on a separate Facebook Page used purely for testing.</p>
+        </div>
+        <div class="build-event pivot">
+          <div class="build-event-label">Hit a wall</div>
+          <h4>The hub.challenge verification wouldn't resolve</h4>
+          <p>The Raw Body field kept returning an empty response even though the trigger data existed. It traced back to how Activepieces stores trigger sample data separately from live test runs — the picker had nothing real to reference until a test request was sent through the builder's own test-data form, not just the live URL.</p>
+        </div>
+        <div class="build-event pivot">
+          <div class="build-event-label">Debugging instinct tested</div>
+          <h4>A "bug" that turned out to be a stale cache</h4>
+          <p>senderId briefly showed up with a stray space. Rather than assume the parsing code was wrong, the Code step was audited line by line, confirmed as a pure passthrough with no string manipulation — and the space was traced to a step panel that simply hadn't been retested since the sample data was cleaned up.</p>
+        </div>
+        <div class="build-event">
+          <div class="build-event-label">Wired properly</div>
+          <h4>Real timestamps, not placeholders</h4>
+          <p>lastUpdated started as a static "now" string. It was replaced with a real new Date().toISOString() generated directly inside the existing parsing step, then mapped into the table write through the picker — confirmed with a live ISO timestamp in the logged record.</p>
+        </div>
+        <div class="build-event shipped">
+          <div class="build-event-label">Where it stands</div>
+          <h4>Fully wired, gated by App Review</h4>
+          <p>The full 12-step pipeline runs cleanly end to end — verification, parsing, dedup, AI reply, logging, and reply delivery. The only thing standing between this and a public bot is Meta App Review, since the connected app is still in Development mode.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status note instead of a live demo link -->
+    <div class="section-block">
+      <h2>// try it</h2>
+      <div class="demo-box">
+        <h3>⚠ Not public yet</h3>
+        <p>
+          This bot is fully built and functioning, but Meta App Review hasn't been completed, so it's
+          currently only reachable by admins and testers on the connected Page. Once App Review clears,
+          this section will be updated with a live link — the same way the Make.com Messenger agent's
+          "try it" section works today.
+        </p>
+        <p class="hint">// in the meantime, the step breakdown and build story above reflect the actual live build</p>
+      </div>
+    </div>
+
+    <!-- Tools used -->
+    <div class="section-block">
+      <h2>// tools used</h2>
+      <div class="stack" style="font-family:var(--mono); font-size:.78rem; color:var(--muted);">
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Activepieces</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Groq AI</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Meta Messenger API</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Meta for Developers</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Activepieces Tables</span>
+        <span style="display:inline-block; border:1px solid var(--line); border-radius:3px; padding:.2rem .6rem; margin:0 .3rem .4rem 0; background:var(--bg-2);">Webhook Verification</span>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Light' : 'Switch to Dark';
+    };
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      setLabel();
+    });
+    setLabel();
+  </script>
+  <link rel="stylesheet" href="chatbot.css">
+  <script src="chatbot.js"></script>
+</body>
+</html>

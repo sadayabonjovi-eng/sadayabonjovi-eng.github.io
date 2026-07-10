@@ -130,6 +130,32 @@
       </div>
     </div>
 
+    <!-- Project: Activepieces Messenger AI Chatbot -->
+    <div class="project-card">
+      <div class="project-tag">Agent · messenger · in development</div>
+      <h3>Messenger AI Chatbot — Activepieces Build</h3>
+      <p>
+        A second Messenger AI chatbot, rebuilt from scratch on <strong>Activepieces</strong>
+        after shipping the first one on Make.com — same core architecture, different
+        platform, built deliberately to get hands-on with how a different automation
+        builder handles webhook verification, expression syntax, and step-level testing.
+      </p>
+      <p>
+        The flow catches every incoming Meta webhook event, routes verification
+        handshakes separately from real messages, checks for duplicate fires, pulls
+        conversation history for context, sends the message to <strong>Groq AI</strong>
+        for a reply, logs the exchange with a live timestamp, and sends the reply back
+        via the Messenger Send API. Fully wired end to end — currently gated by
+        <strong>Meta App Review</strong>, so it's not public yet.
+      </p>
+      <div class="stack">
+        <span>Activepieces</span><span>Groq AI</span><span>Meta Messenger API</span><span>Activepieces Tables</span>
+      </div>
+      <div class="project-links">
+        <a href="activepieces-messenger-chatbot.html">→ details</a>
+      </div>
+    </div>
+
     <!-- Project: Job-Search Agent -->
     <div class="project-card">
       <div class="project-tag">Agent · job-search · live</div>

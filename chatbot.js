@@ -198,6 +198,26 @@
   }
 
   /* ─────────────────────────────────────────
+     ACHIEVEMENT SYSTEM — "Transmission Sent"
+     Signal Trail egg #3: fires once, ever, the
+     first time a visitor successfully sends a
+     message via the Contact page form.
+  ───────────────────────────────────────── */
+  const MESSAGE_SENT_KEY = "bon_message_sent_celebrated";
+
+  function hasCelebratedMessageSent() {
+    try {
+      return localStorage.getItem(MESSAGE_SENT_KEY) === "1";
+    } catch { return true; }
+  }
+
+  function markMessageSentCelebrated() {
+    try {
+      localStorage.setItem(MESSAGE_SENT_KEY, "1");
+    } catch (e) {}
+  }
+
+  /* ─────────────────────────────────────────
      SYSTEM PROMPT — who Bon is
   ───────────────────────────────────────── */
   const SYSTEM = `You are Bon — Bon Jovi F. Sadaya — speaking in the first person as a friendly, professional digital version of yourself on your portfolio website. You're a Filipino freelancer based in Cebu, Philippines, transitioning from ~7 years of Philippine Coast Guard service into remote work as a Virtual Assistant.
@@ -273,6 +293,110 @@ LEAD CAPTURE RULES:
     "Are you available?",
     "How do I contact you?"
   ];
+
+  /* ─────────────────────────────────────────
+     MESSAGE-SENT EGG — injected styles
+     chatbot.css wasn't available to hand-edit,
+     so this scoped block covers just the new
+     envelope→rocket animation + badge card.
+     Uses the same CSS variable tokens as the
+     rest of the site, so it themes correctly.
+     Safe to move into chatbot.css later — if
+     these selectors exist there too, remove
+     this block to avoid duplicate rules.
+  ───────────────────────────────────────── */
+  const messageEggStyles = document.createElement("style");
+  messageEggStyles.textContent = `
+    #bon-message-flyer {
+      position: fixed;
+      z-index: 10000;
+      font-size: 1.4rem;
+      line-height: 1;
+      pointer-events: none;
+      transform: scale(1);
+      transition: transform .18s ease;
+    }
+    #bon-message-flyer.fold {
+      transform: scale(0.6) rotate(-8deg);
+    }
+    #bon-message-flyer.launch {
+      transform: translateY(-160px) scale(1.15) rotate(0deg);
+      transition: transform .78s cubic-bezier(.2,.7,.3,1), opacity .78s ease;
+      opacity: 0;
+    }
+    .bon-message-trail {
+      position: fixed;
+      z-index: 9999;
+      color: var(--signal, #5eead4);
+      font-size: 1.1rem;
+      pointer-events: none;
+      opacity: .9;
+      transform: translateY(0);
+      transition: transform .65s ease, opacity .65s ease;
+    }
+    .bon-message-trail.rise {
+      transform: translateY(-90px);
+      opacity: 0;
+    }
+    #bon-message-celebration {
+      position: fixed;
+      inset: 0;
+      z-index: 10001;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 6rem;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .35s ease;
+    }
+    #bon-message-celebration.show { opacity: 1; }
+    #bon-message-celebration.fade-out { opacity: 0; }
+    .bon-message-card {
+      pointer-events: auto;
+      background: var(--bg-2, #131a22);
+      border: 1px solid var(--signal-dim, #2a5a52);
+      border-radius: 10px;
+      padding: 1.1rem 1.6rem;
+      text-align: center;
+      font-family: var(--mono, monospace);
+      box-shadow: 0 8px 30px rgba(0,0,0,.35);
+      transform: translateY(10px);
+      transition: transform .35s ease;
+    }
+    #bon-message-celebration.show .bon-message-card {
+      transform: translateY(0);
+    }
+    .bon-message-icon {
+      font-size: 1.6rem;
+      margin-bottom: .4rem;
+    }
+    .bon-message-card strong {
+      display: block;
+      color: var(--signal, #5eead4);
+      font-size: .95rem;
+      margin-bottom: .3rem;
+    }
+    .bon-message-card span {
+      display: block;
+      color: var(--muted, #7d8b99);
+      font-size: .78rem;
+    }
+    .bon-confetti-paw--message {
+      position: fixed;
+      top: -2rem;
+      z-index: 10000;
+      pointer-events: none;
+      opacity: 0;
+      animation: bon-message-confetti-fall 2.6s ease-in forwards;
+    }
+    @keyframes bon-message-confetti-fall {
+      0% { opacity: 0; transform: translateY(0) rotate(0deg); }
+      10% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(70vh) rotate(180deg); }
+    }
+  `;
+  document.head.appendChild(messageEggStyles);
 
   /* ─────────────────────────────────────────
      BUILD THE WIDGET HTML
@@ -782,6 +906,103 @@ LEAD CAPTURE RULES:
     window.setTimeout(() => overlay.remove(), 3800);
   }
 
+  /* ─────────────────────────────────────────
+     MESSAGE-SENT CELEBRATION — "Transmission
+     Sent" (Signal Trail egg #3). Plays an
+     envelope-fold → rocket-launch sequence at
+     the chat toggle, then the badge card.
+     Fires once, ever, on the first successful
+     Contact-form submission.
+  ───────────────────────────────────────── */
+  function celebrateMessageSent() {
+    if (hasCelebratedMessageSent()) return;
+    markMessageSentCelebrated();
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function showBadge() {
+      const overlay = document.createElement("div");
+      overlay.id = "bon-message-celebration";
+      overlay.setAttribute("aria-hidden", "true");
+      overlay.innerHTML = `
+        <div class="bon-message-card">
+          <div class="bon-message-icon">🚀</div>
+          <strong>Transmission Sent</strong>
+          <span>Your message is on its way — Amber's got it 🎉</span>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+
+      for (let i = 0; i < 14; i++) {
+        const p = document.createElement("span");
+        p.className = "bon-confetti-paw bon-confetti-paw--message";
+        p.textContent = "✨";
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.animationDelay = (Math.random() * 0.4) + "s";
+        p.style.fontSize = (0.8 + Math.random() * 0.9) + "rem";
+        overlay.appendChild(p);
+      }
+
+      window.requestAnimationFrame(() => overlay.classList.add("show"));
+      window.setTimeout(() => overlay.classList.add("fade-out"), 3200);
+      window.setTimeout(() => overlay.remove(), 3800);
+    }
+
+    // Reduced-motion visitors: skip straight to the badge, no flight animation
+    if (reduceMotion) {
+      toggle.classList.add("bon-bounce");
+      window.setTimeout(() => toggle.classList.remove("bon-bounce"), 700);
+      showBadge();
+      return;
+    }
+
+    const rect = toggle.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const flyer = document.createElement("div");
+    flyer.id = "bon-message-flyer";
+    flyer.textContent = "✉️";
+    flyer.style.left = (centerX - 18) + "px";
+    flyer.style.top  = (centerY - 18) + "px";
+    document.body.appendChild(flyer);
+
+    // Frame 1: envelope folds in place at the toggle
+    requestAnimationFrame(() => {
+      flyer.classList.add("fold");
+    });
+
+    // Frame 2: morph into a rocket and launch upward with a trail
+    window.setTimeout(() => {
+      flyer.classList.remove("fold");
+      flyer.textContent = "🚀";
+      flyer.classList.add("launch");
+
+      // trail particles trailing the rocket upward
+      const trailCount = 6;
+      for (let i = 0; i < trailCount; i++) {
+        window.setTimeout(() => {
+          const spark = document.createElement("span");
+          spark.className = "bon-message-trail";
+          spark.textContent = "•";
+          spark.style.left = (centerX - 3) + "px";
+          spark.style.top  = (centerY - 3) + "px";
+          document.body.appendChild(spark);
+          requestAnimationFrame(() => spark.classList.add("rise"));
+          window.setTimeout(() => spark.remove(), 700);
+        }, i * 70);
+      }
+    }, 520);
+
+    // Frame 3: cleanup + toggle reacts + badge appears
+    window.setTimeout(() => {
+      flyer.remove();
+      toggle.classList.add("bon-bounce");
+      window.setTimeout(() => toggle.classList.remove("bon-bounce"), 700);
+      showBadge();
+    }, 1300);
+  }
+
   function trackAchievement() {
     const met = markCatMet(ACTIVE_CAT_KEY);
     renderPawProgress();
@@ -905,6 +1126,13 @@ LEAD CAPTURE RULES:
 
     themeToggle.addEventListener("click", playRun);
   })();
+
+  /* ─────────────────────────────────────────
+     MESSAGE-SENT LISTENER
+     contact.html dispatches this custom event
+     right after a successful Formspree submit.
+  ───────────────────────────────────────── */
+  window.addEventListener("bon:messageSent", celebrateMessageSent);
 
   /* ─────────────────────────────────────────
      RUN MASCOT ANIMATIONS

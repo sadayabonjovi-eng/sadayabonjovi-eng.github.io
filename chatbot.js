@@ -640,6 +640,8 @@ LEAD CAPTURE RULES:
           console.error("Failed to send lead:", err);
         });
 
+        celebrateLeadCaptured(leadName);
+
         reply = reply.replace(/\[LEAD:[^\]]+\]/gi, "").trim();
       }
 
@@ -682,21 +684,65 @@ LEAD CAPTURE RULES:
   }, 3000);
 
   /* ─────────────────────────────────────────
-     ACHIEVEMENT UI — paw-print progress dots
-     Renders 4 small dots; filled teal for each
-     cat met so far. Lives next to the tag label.
+     ACHIEVEMENT UI — paw-print progress badge
+     Renders 4 small dots + a "x/4" count; filled
+     teal for each cat met so far. Now sized to
+     actually be readable, not a tiny ghost mark.
   ───────────────────────────────────────── */
   function renderPawProgress() {
     const met = getCatsMet();
-    pawProgress.innerHTML = CAT_ORDER.map(key => {
+    const dots = CAT_ORDER.map(key => {
       const filled = met.indexOf(key) !== -1;
       const c = CATS[key];
       return `<span class="bon-paw-dot${filled ? " met" : ""}" title="${c.name}">🐾</span>`;
     }).join("");
 
+    pawProgress.innerHTML = dots + `<span class="bon-paw-count">${met.length}/${CAT_ORDER.length}</span>`;
+
     if (met.length > 0) {
       pawProgress.classList.add("show");
     }
+    if (met.length >= CAT_ORDER.length) {
+      pawProgress.classList.add("complete");
+    }
+  }
+
+  /* ─────────────────────────────────────────
+     LEAD CAPTURED CELEBRATION — the single
+     biggest moment on the site: a visitor just
+     shared their name + email to connect with
+     Bon. Bigger/warmer than the crew celebration.
+  ───────────────────────────────────────── */
+  function celebrateLeadCaptured(leadName) {
+    const overlay = document.createElement("div");
+    overlay.id = "bon-lead-celebration";
+    overlay.setAttribute("aria-hidden", "true");
+    overlay.innerHTML = `
+      <div class="bon-lead-card">
+        <div class="bon-lead-paws">🐾🐾🐾🐾🐾</div>
+        <strong>Thanks, ${leadName}!</strong>
+        <span>Bon will reach out personally soon 🎉</span>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement("span");
+      p.className = "bon-confetti-paw bon-confetti-paw--lead";
+      p.textContent = "🐾";
+      p.style.left = Math.random() * 100 + "vw";
+      p.style.animationDelay = (Math.random() * 0.5) + "s";
+      p.style.fontSize = (0.9 + Math.random() * 1.1) + "rem";
+      overlay.appendChild(p);
+    }
+
+    window.requestAnimationFrame(() => overlay.classList.add("show"));
+
+    toggle.classList.add("bon-bounce");
+    window.setTimeout(() => toggle.classList.remove("bon-bounce"), 700);
+
+    window.setTimeout(() => overlay.classList.add("fade-out"), 3600);
+    window.setTimeout(() => overlay.remove(), 4200);
   }
 
   /* ─────────────────────────────────────────

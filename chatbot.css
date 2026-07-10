@@ -492,6 +492,149 @@
   bottom: 104px;
 }
 
+/* ── Achievement: paw-print progress dots ── */
+#bon-paw-progress {
+  position: absolute;
+  bottom: -6px;
+  right: 4px;
+  display: flex;
+  gap: 3px;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+#bon-paw-progress.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bon-paw-dot {
+  font-size: 0.68rem;
+  filter: grayscale(1) opacity(0.35);
+  transition: filter 0.3s ease;
+}
+
+.bon-paw-dot.met {
+  filter: grayscale(0) opacity(1) drop-shadow(0 0 2px rgba(94, 234, 212, 0.6));
+}
+
+#bon-chat-widget.open #bon-paw-progress {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Crew celebration overlay ── */
+#bon-crew-celebration {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#bon-crew-celebration.show {
+  opacity: 1;
+}
+
+#bon-crew-celebration.fade-out {
+  opacity: 0;
+}
+
+.bon-crew-card {
+  background: #131a22;
+  border: 1px solid #5eead4;
+  border-radius: 10px;
+  padding: 1.4rem 1.8rem;
+  text-align: center;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+  transform: scale(0.85);
+  transition: transform 0.5s ease;
+}
+
+#bon-crew-celebration.show .bon-crew-card {
+  transform: scale(1);
+}
+
+.bon-crew-paws {
+  font-size: 1.4rem;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.2em;
+}
+
+.bon-crew-card strong {
+  display: block;
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 1rem;
+  color: #5eead4;
+  letter-spacing: 0.03em;
+}
+
+.bon-crew-card span {
+  display: block;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.85rem;
+  color: #dde3ea;
+  margin-top: 0.3rem;
+}
+
+/* confetti paws falling from the top */
+.bon-confetti-paw {
+  position: fixed;
+  top: -40px;
+  font-size: 1rem;
+  color: #5eead4;
+  animation: bon-confetti-fall 1.8s ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes bon-confetti-fall {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(340deg); opacity: 0; }
+}
+
+body.dark-mode .bon-crew-card {
+  background: #f5f2ea;
+  border-color: #0f8f7e;
+}
+body.dark-mode .bon-crew-card strong { color: #0f8f7e; }
+body.dark-mode .bon-crew-card span   { color: #1b232c; }
+body.dark-mode .bon-confetti-paw     { color: #0f8f7e; }
+
+@media (prefers-reduced-motion: reduce) {
+  #bon-crew-celebration,
+  #bon-crew-celebration.show,
+  .bon-crew-card,
+  .bon-confetti-paw {
+    animation: none;
+    transition: none;
+  }
+  .bon-confetti-paw { display: none; }
+}
+
+/* ── Scroll reaction: one-time "peek & wave" ── */
+@keyframes bon-peek-wave {
+  0%   { transform: rotate(0deg) translateY(0); }
+  20%  { transform: rotate(-10deg) translateY(-4px); }
+  40%  { transform: rotate(8deg) translateY(-2px); }
+  60%  { transform: rotate(-6deg) translateY(-3px); }
+  80%  { transform: rotate(4deg) translateY(0); }
+  100% { transform: rotate(0deg) translateY(0); }
+}
+
+#bon-chat-toggle.bon-peek-wave {
+  animation: bon-peek-wave 0.9s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #bon-chat-toggle.bon-peek-wave { animation: none; }
+}
+
 /* ── Paw-swipe handoff element ── */
 #bon-paw-swipe {
   position: absolute;
@@ -834,6 +977,18 @@ body.dark-mode .bon-intro-caption span {
   #bon-cat-tag {
     font-size: 0.6rem;
     padding: 0.25rem 0.55rem;
+  }
+
+  .bon-crew-card {
+    padding: 1.1rem 1.3rem;
+  }
+
+  .bon-crew-card strong {
+    font-size: 0.88rem;
+  }
+
+  .bon-crew-card span {
+    font-size: 0.76rem;
   }
 }
 

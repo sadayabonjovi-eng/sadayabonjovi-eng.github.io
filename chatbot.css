@@ -1,6 +1,7 @@
 /* =============================================
    Bon's Portfolio Chatbot — chatbot.css
    Matches your existing portfolio design system
+   + Interactive Cat Mascot System additions
    ============================================= */
 
 #bon-chat-widget {
@@ -61,7 +62,6 @@
   background: #131a22;
   cursor: pointer;
   padding: 0;
-  overflow: hidden;
   box-shadow: 0 4px 20px rgba(94, 234, 212, 0.25);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: flex;
@@ -71,7 +71,8 @@
   overflow: visible;
 }
 
-#bon-chat-toggle:hover {
+#bon-chat-toggle:hover,
+#bon-chat-toggle.bon-hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 28px rgba(94, 234, 212, 0.4);
 }
@@ -383,6 +384,307 @@
   fill: #0d1117;
 }
 
+/* ═══════════════════════════════════════════
+   CAT MASCOT SYSTEM — NEW STYLES
+   ═══════════════════════════════════════════ */
+
+/* ── Idle bob/breathing loop ── */
+@keyframes bon-bob {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-3px); }
+}
+
+#bon-chat-toggle.bon-idle {
+  animation: bon-bob 3.2s ease-in-out infinite;
+}
+
+/* pause idle bob while hovered/open so it doesn't fight the hover lift */
+#bon-chat-toggle.bon-idle:hover,
+#bon-chat-widget.open #bon-chat-toggle.bon-idle {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #bon-chat-toggle.bon-idle { animation: none; }
+}
+
+/* ── Hover perk-up (tilt) ── */
+#bon-chat-toggle.bon-hover {
+  transform: translateY(-3px) rotate(-4deg);
+}
+
+/* ── Tap reaction (paw taps the avatar) ── */
+@keyframes bon-tap-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(94, 234, 212, 0.6); }
+  100% { box-shadow: 0 0 0 14px rgba(94, 234, 212, 0); }
+}
+
+#bon-chat-toggle.bon-tapped {
+  animation: bon-tap-pulse 0.5s ease-out;
+}
+
+/* ── Reaction bounce ("oh, my turn!") ── */
+@keyframes bon-bounce-react {
+  0%   { transform: scale(1) translateY(0); }
+  30%  { transform: scale(1.12) translateY(-10px); }
+  55%  { transform: scale(0.96) translateY(2px); }
+  75%  { transform: scale(1.04) translateY(-3px); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+#bon-chat-toggle.bon-bounce {
+  animation: bon-bounce-react 0.6s ease-out;
+}
+
+/* ── Settle-in (end of homepage intro, Salt takes position) ── */
+@keyframes bon-settle {
+  0%   { transform: scale(0.4); opacity: 0; }
+  60%  { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+#bon-chat-toggle.bon-settle-in {
+  animation: bon-settle 0.6s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #bon-chat-toggle.bon-tapped,
+  #bon-chat-toggle.bon-bounce,
+  #bon-chat-toggle.bon-settle-in {
+    animation: none;
+  }
+}
+
+/* ── "On duty: [Cat Name]" tag label ── */
+#bon-cat-tag {
+  position: absolute;
+  bottom: 68px;
+  right: 0;
+  background: #131a22;
+  border: 1px solid #5eead4;
+  color: #5eead4;
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.65rem;
+  border-radius: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+#bon-cat-tag.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* hide the tag once the "chat with me" hint bubble would show, and once chat is open */
+#bon-chat-widget.open #bon-cat-tag {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* if the toggle's own ::before hint bubble is present, keep the tag from overlapping —
+   nudge the tag up a bit higher so both can coexist briefly */
+#bon-cat-tag.show ~ #bon-chat-toggle::before {
+  bottom: 104px;
+}
+
+/* ── Paw-swipe handoff element ── */
+#bon-paw-swipe {
+  position: absolute;
+  bottom: 14px;
+  right: -80px;
+  width: 46px;
+  height: 46px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#bon-paw-swipe::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: 2px solid #5eead4;
+  border-radius: 50% 50% 50% 4px;
+  position: relative;
+}
+
+/* simple paw shape using an outline circle + three small toe circles, in the site's teal outline style */
+#bon-paw-swipe::after {
+  content: "🐾";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.6rem;
+  filter: drop-shadow(0 0 0 #5eead4);
+  color: #5eead4;
+}
+
+#bon-paw-swipe.swipe-in {
+  opacity: 1;
+  animation: bon-paw-in 0.55s ease-out forwards;
+}
+
+#bon-paw-swipe.swipe-out {
+  animation: bon-paw-out 0.35s ease-in forwards;
+}
+
+@keyframes bon-paw-in {
+  0%   { right: -80px; opacity: 0; transform: rotate(-25deg); }
+  100% { right: 4px;   opacity: 1; transform: rotate(0deg); }
+}
+
+@keyframes bon-paw-out {
+  0%   { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.6); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #bon-paw-swipe.swipe-in,
+  #bon-paw-swipe.swipe-out {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   HOMEPAGE FIRST-VISIT INTRO OVERLAY
+   ═══════════════════════════════════════════ */
+
+#bon-intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(13, 17, 23, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.2rem;
+  flex-wrap: wrap;
+  padding: 2rem;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#bon-intro-overlay.show {
+  opacity: 1;
+}
+
+#bon-intro-overlay.fade-out {
+  opacity: 0;
+}
+
+.bon-intro-cat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#bon-intro-overlay.show .bon-intro-cat {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bon-intro-cat img {
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
+}
+
+.bon-intro-caption {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.bon-intro-cat.speaking .bon-intro-caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bon-intro-cat.speaking img {
+  animation: bon-intro-perk 0.5s ease-out;
+}
+
+@keyframes bon-intro-perk {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.1) translateY(-6px); }
+  100% { transform: scale(1); }
+}
+
+.bon-intro-caption strong {
+  display: block;
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 0.95rem;
+  color: #5eead4;
+  letter-spacing: 0.05em;
+}
+
+.bon-intro-caption span {
+  display: block;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.82rem;
+  color: #dde3ea;
+  margin-top: 0.2rem;
+  max-width: 160px;
+}
+
+/* Ash, Pepper, Amber walk off in different directions */
+.bon-intro-cat.walk-off {
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  opacity: 0;
+}
+
+.bon-intro-cat[data-cat="ash"].walk-off    { transform: translate(-160px, 40px) scale(0.7); }
+.bon-intro-cat[data-cat="pepper"].walk-off { transform: translate(0, 120px) scale(0.7); }
+.bon-intro-cat[data-cat="amber"].walk-off  { transform: translate(160px, 40px) scale(0.7); }
+
+/* Salt stays, then drifts toward the corner where the widget lives */
+.bon-intro-cat[data-cat="salt"].stay {
+  transition: opacity 0.9s ease, transform 0.9s ease;
+  transform: translate(calc(50vw - 120px), calc(50vh - 80px)) scale(0.4);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #bon-intro-overlay,
+  #bon-intro-overlay.show,
+  #bon-intro-overlay.fade-out,
+  .bon-intro-cat,
+  .bon-intro-cat.speaking img,
+  .bon-intro-cat.walk-off,
+  .bon-intro-cat[data-cat="salt"].stay {
+    transition: none;
+    animation: none;
+  }
+}
+
+@media (max-width: 700px) {
+  #bon-intro-overlay {
+    gap: 1.2rem;
+  }
+  .bon-intro-cat img {
+    width: 92px;
+    height: 92px;
+  }
+  .bon-intro-caption span {
+    font-size: 0.74rem;
+    max-width: 120px;
+  }
+}
+
 /* ── Light mode overrides (matches your .dark-mode body class) ── */
 body.dark-mode #bon-chat-toggle::before {
   background: #0f8f7e;
@@ -479,6 +781,33 @@ body.dark-mode #bon-chat-send {
 }
 body.dark-mode #bon-chat-send svg { fill: #f5f2ea; }
 
+/* light-mode mascot overrides */
+body.dark-mode #bon-cat-tag {
+  background: #f5f2ea;
+  border-color: #0f8f7e;
+  color: #0f8f7e;
+}
+
+body.dark-mode #bon-paw-swipe::before {
+  border-color: #0f8f7e;
+}
+
+body.dark-mode #bon-paw-swipe::after {
+  color: #0f8f7e;
+}
+
+body.dark-mode #bon-intro-overlay {
+  background: rgba(245, 242, 234, 0.92);
+}
+
+body.dark-mode .bon-intro-caption strong {
+  color: #0f8f7e;
+}
+
+body.dark-mode .bon-intro-caption span {
+  color: #1b232c;
+}
+
 /* ── Mobile ── */
 @media (max-width: 480px) {
   #bon-chat-widget {
@@ -500,6 +829,11 @@ body.dark-mode #bon-chat-send svg { fill: #f5f2ea; }
   #bon-chat-input {
     font-size: 16px;
     min-height: 44px;
+  }
+
+  #bon-cat-tag {
+    font-size: 0.6rem;
+    padding: 0.25rem 0.55rem;
   }
 }
 

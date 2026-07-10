@@ -1,6 +1,7 @@
 /* =============================================
    Bon's Portfolio AI Chatbot — chatbot.js
    Powered by Groq (FREE)
+   + Interactive Cat Mascot System
 
    SETUP INSTRUCTIONS:
    1. Go to console.groq.com → sign up free (no credit card)
@@ -20,14 +21,103 @@
 (function () {
 
   /* ─────────────────────────────────────────
-     CONFIG — edit these two values
+     CONFIG — fallback photo (used if no cat matches)
   ───────────────────────────────────────── */
-  const PHOTO_PATH = "files/profile-photo.png.png";
+  const FALLBACK_PHOTO_PATH = "files/profile-photo.png.png";
 
   /* ─────────────────────────────────────────
-     SESSION STORAGE HELPERS
+     CAT MASCOT SYSTEM
+     Each cat "owns" a set of pages. We match
+     the current page filename against this table
+     to decide which cat, tagline, and photo to show.
+  ───────────────────────────────────────── */
+  const CATS = {
+    salt: {
+      name: "Salt",
+      role: "Guide",
+      tagline: "Your guide in.",
+      intro: "Hi, I'm Salt — your guide in!",
+      photo: "files/salt-adventurer.png"
+    },
+    ash: {
+      name: "Ash",
+      role: "Builder",
+      tagline: "Builder on duty.",
+      intro: "Hi, I'm Ash — builder on duty!",
+      photo: "files/ash-mechanic.png"
+    },
+    pepper: {
+      name: "Pepper",
+      role: "Trust & Legal",
+      tagline: "Keeping things honest.",
+      intro: "Hi, I'm Pepper — keeping things honest!",
+      photo: "files/pepper-knight.png"
+    },
+    amber: {
+      name: "Amber",
+      role: "Greeter",
+      tagline: "Say hello.",
+      intro: "Hi, I'm Amber — say hello!",
+      photo: "files/amber-astronaut.png"
+    }
+  };
+
+  // Pages that are NOT project pages but still map to a specific cat
+  const PAGE_MAP = {
+    "index.html": "salt",
+    "": "salt",              // root path (e.g. sadayabonjovi-eng.github.io/)
+    "about.html": "salt",
+    "privacy-policy.html": "pepper",
+    "contact.html": "amber",
+    "automation.html": "ash"
+  };
+
+  // Any page not found above falls back to this list of "Ash" project pages
+  const ASH_PROJECT_PAGES = [
+    "booking-agent.html",
+    "chief-sizzling-grill.html",
+    "content-pipeline.html",
+    "expense-tracker.html",
+    "gmail-management.html",
+    "google-calendar.html",
+    "google-drive-management.html",
+    "job-search-agent.html",
+    "lead-qualification.html",
+    "messenger-ai-agent.html",
+    "notion-client-onboarding.html",
+    "order-automation.html",
+    "review-agent.html",
+    "slideshow.html",
+    "trello-onboarding.html",
+    "va-skills.html",
+    "weather-bot.html",
+    "projects.html"
+  ];
+
+  function getCurrentPageFile() {
+    const path = window.location.pathname;
+    const file = path.substring(path.lastIndexOf("/") + 1);
+    return file.toLowerCase();
+  }
+
+  function getActiveCatKey() {
+    const file = getCurrentPageFile();
+    if (PAGE_MAP.hasOwnProperty(file)) return PAGE_MAP[file];
+    if (ASH_PROJECT_PAGES.indexOf(file) !== -1) return "ash";
+    // Default fallback: treat unknown pages as Salt's (homepage-style) territory
+    return "salt";
+  }
+
+  const ACTIVE_CAT_KEY = getActiveCatKey();
+  const ACTIVE_CAT = CATS[ACTIVE_CAT_KEY];
+  const PHOTO_PATH = ACTIVE_CAT ? ACTIVE_CAT.photo : FALLBACK_PHOTO_PATH;
+
+  /* ─────────────────────────────────────────
+     SESSION / LOCAL STORAGE HELPERS
   ───────────────────────────────────────── */
   const STORAGE_KEY = "bon_chat_history";
+  const LAST_CAT_KEY = "bon_last_active_cat";      // sessionStorage — for handoff direction
+  const INTRO_SEEN_KEY = "bon_intro_seen";         // localStorage — one-time intro gate
 
   function saveHistory(hist) {
     try {
@@ -42,8 +132,28 @@
     } catch { return []; }
   }
 
-  function clearHistory() {
-    sessionStorage.removeItem(STORAGE_KEY);
+  function getLastActiveCat() {
+    try {
+      return sessionStorage.getItem(LAST_CAT_KEY);
+    } catch { return null; }
+  }
+
+  function setLastActiveCat(catKey) {
+    try {
+      sessionStorage.setItem(LAST_CAT_KEY, catKey);
+    } catch (e) {}
+  }
+
+  function hasSeenIntro() {
+    try {
+      return localStorage.getItem(INTRO_SEEN_KEY) === "1";
+    } catch { return true; } // if storage blocked, don't force intro
+  }
+
+  function markIntroSeen() {
+    try {
+      localStorage.setItem(INTRO_SEEN_KEY, "1");
+    } catch (e) {}
   }
 
   /* ─────────────────────────────────────────
@@ -131,10 +241,12 @@ LEAD CAPTURE RULES:
   const widget = document.createElement("div");
   widget.id = "bon-chat-widget";
   widget.innerHTML = `
+    <div id="bon-cat-tag" aria-hidden="true"></div>
+    <div id="bon-paw-swipe" aria-hidden="true"></div>
     <div id="bon-chat-window" role="dialog" aria-label="Chat with Bon Sadaya" aria-modal="true">
       <div id="bon-chat-header">
         <div class="avatar-wrap">
-          <img src="${PHOTO_PATH}" alt="Bon Sadaya">
+          <img src="${PHOTO_PATH}" alt="Bon Sadaya" onerror="this.onerror=null;this.src='${FALLBACK_PHOTO_PATH}';">
         </div>
         <div class="info">
           <strong>Bon Sadaya</strong>
@@ -159,7 +271,7 @@ LEAD CAPTURE RULES:
       </div>
     </div>
     <button id="bon-chat-toggle" aria-label="Open chat with Bon" aria-expanded="false">
-      <img src="${PHOTO_PATH}" alt="">
+      <img src="${PHOTO_PATH}" alt="" onerror="this.onerror=null;this.src='${FALLBACK_PHOTO_PATH}';">
       <span id="bon-notif-dot" aria-hidden="true"></span>
     </button>
   `;
@@ -175,6 +287,131 @@ LEAD CAPTURE RULES:
   const input     = document.getElementById("bon-chat-input");
   const sendBtn   = document.getElementById("bon-chat-send");
   const notifDot  = document.getElementById("bon-notif-dot");
+  const catTag    = document.getElementById("bon-cat-tag");
+  const pawSwipe  = document.getElementById("bon-paw-swipe");
+
+  /* ─────────────────────────────────────────
+     CAT TAG LABEL ("On duty: [Cat Name]")
+  ───────────────────────────────────────── */
+  function showCatTag() {
+    if (!ACTIVE_CAT) return;
+    catTag.textContent = "On duty: " + ACTIVE_CAT.name;
+    catTag.classList.add("show");
+  }
+
+  /* ─────────────────────────────────────────
+     TAG-IN HANDOFF ANIMATION
+     Runs once per page load, only when the
+     active cat differs from the last one seen
+     (i.e. an actual page-to-page handoff),
+     OR on very first visit to any page.
+  ───────────────────────────────────────── */
+  function runHandoffAnimation() {
+    const lastCat = getLastActiveCat();
+    const isHandoff = lastCat && lastCat !== ACTIVE_CAT_KEY;
+    const isFirstEver = !lastCat;
+
+    setLastActiveCat(ACTIVE_CAT_KEY);
+
+    if (!isHandoff && !isFirstEver) {
+      // Same cat as last page — just settle into idle, no swipe/bounce needed
+      showCatTag();
+      toggle.classList.add("bon-idle");
+      return;
+    }
+
+    // Paw swipes in, taps the toggle, cat reacts, tag fades in
+    pawSwipe.classList.add("swipe-in");
+
+    window.setTimeout(() => {
+      toggle.classList.add("bon-tapped");
+      pawSwipe.classList.add("swipe-out");
+    }, 550);
+
+    window.setTimeout(() => {
+      toggle.classList.remove("bon-tapped");
+      toggle.classList.add("bon-bounce");
+      showCatTag();
+    }, 850);
+
+    window.setTimeout(() => {
+      toggle.classList.remove("bon-bounce");
+      toggle.classList.add("bon-idle");
+    }, 1450);
+
+    window.setTimeout(() => {
+      pawSwipe.classList.remove("swipe-in", "swipe-out");
+    }, 1700);
+  }
+
+  /* ─────────────────────────────────────────
+     HOMEPAGE FIRST-VISIT INTRO SEQUENCE
+     Only runs on index.html (Salt's page),
+     only once per visitor (localStorage-gated).
+  ───────────────────────────────────────── */
+  function runHomepageIntroIfNeeded() {
+    const file = getCurrentPageFile();
+    const isHomepage = file === "index.html" || file === "";
+    if (!isHomepage || hasSeenIntro()) return;
+
+    markIntroSeen();
+
+    const introOrder = ["salt", "ash", "pepper", "amber"];
+    const overlay = document.createElement("div");
+    overlay.id = "bon-intro-overlay";
+    overlay.setAttribute("aria-hidden", "true");
+    overlay.innerHTML = introOrder.map(key => {
+      const c = CATS[key];
+      return `
+        <div class="bon-intro-cat" data-cat="${key}">
+          <img src="${c.photo}" alt="" onerror="this.onerror=null;this.src='${FALLBACK_PHOTO_PATH}';">
+          <div class="bon-intro-caption">
+            <strong>${c.name}</strong>
+            <span>${c.intro}</span>
+          </div>
+        </div>
+      `;
+    }).join("");
+    document.body.appendChild(overlay);
+
+    const catEls = overlay.querySelectorAll(".bon-intro-cat");
+
+    // Step 1: fade/slide all 4 in together
+    window.requestAnimationFrame(() => {
+      overlay.classList.add("show");
+    });
+
+    // Step 2: each introduces itself, staggered
+    catEls.forEach((el, i) => {
+      window.setTimeout(() => {
+        el.classList.add("speaking");
+      }, 700 + i * 750);
+    });
+
+    // Step 3: Ash, Pepper, Amber walk off; Salt stays
+    const walkOffDelay = 700 + introOrder.length * 750 + 600;
+    window.setTimeout(() => {
+      catEls.forEach(el => {
+        if (el.dataset.cat === "salt") {
+          el.classList.add("stay");
+        } else {
+          el.classList.add("walk-off");
+        }
+      });
+    }, walkOffDelay);
+
+    // Step 4: remove overlay, Salt settles into widget position
+    window.setTimeout(() => {
+      overlay.classList.add("fade-out");
+    }, walkOffDelay + 900);
+
+    window.setTimeout(() => {
+      overlay.remove();
+      toggle.classList.add("bon-settle-in");
+      showCatTag();
+      window.setTimeout(() => toggle.classList.remove("bon-settle-in"), 700);
+    }, walkOffDelay + 1400);
+  }
 
   /* ─────────────────────────────────────────
      AUTO-GROW TEXTAREA
@@ -217,7 +454,10 @@ LEAD CAPTURE RULES:
     input.focus();
 
     if (messages.children.length === 0 && history.length === 0) {
-      addMsg("bot", "Hi there! 👋 I'm Bon — feel free to ask me about my skills, projects, or how to work together.");
+      const greeting = ACTIVE_CAT
+        ? `Hi there! 👋 I'm Bon — ${ACTIVE_CAT.name} walked you over here. Feel free to ask me about my skills, projects, or how to work together.`
+        : "Hi there! 👋 I'm Bon — feel free to ask me about my skills, projects, or how to work together.";
+      addMsg("bot", greeting);
       showQuickReplies();
     }
   }
@@ -233,6 +473,14 @@ LEAD CAPTURE RULES:
   closeBtn.addEventListener("click", closeChat);
   document.addEventListener("keydown", e => {
     if (e.key === "Escape" && isOpen) closeChat();
+  });
+
+  // Hover perk-up (skip on touch-only devices via CSS :hover already scoping this)
+  toggle.addEventListener("mouseenter", () => {
+    toggle.classList.add("bon-hover");
+  });
+  toggle.addEventListener("mouseleave", () => {
+    toggle.classList.remove("bon-hover");
   });
 
   /* ─────────────────────────────────────────
@@ -386,8 +634,22 @@ LEAD CAPTURE RULES:
   restoreChatUI();
 
   /* Show notif dot after 3s if chat hasn't been opened */
-  setTimeout(() => {
+  window.setTimeout(() => {
     if (!isOpen) notifDot.style.display = "block";
   }, 3000);
+
+  /* ─────────────────────────────────────────
+     RUN MASCOT ANIMATIONS
+     Homepage intro takes priority on first-ever
+     visit; otherwise run the tag-in handoff.
+  ───────────────────────────────────────── */
+  const file = getCurrentPageFile();
+  const isHomepage = file === "index.html" || file === "";
+
+  if (isHomepage && !hasSeenIntro()) {
+    runHomepageIntroIfNeeded();
+  } else {
+    runHandoffAnimation();
+  }
 
 })();

@@ -830,6 +830,83 @@ LEAD CAPTURE RULES:
   }
 
   /* ─────────────────────────────────────────
+     DARK MODE GAG — cat runs to the theme
+     toggle and flips it like a light switch.
+     Works on any page with a #theme-toggle
+     button, since chatbot.js loads everywhere.
+  ───────────────────────────────────────── */
+  (function setupLightSwitchGag() {
+    const themeToggle = document.getElementById("theme-toggle");
+    if (!themeToggle) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) return;
+
+    const RUNNER_SIZE = 46;
+
+    function playRun() {
+      const startRect = toggle.getBoundingClientRect();
+      const endRect = themeToggle.getBoundingClientRect();
+
+      const runner = document.createElement("div");
+      runner.id = "bon-light-runner";
+      runner.innerHTML =
+        `<img src="${PHOTO_PATH}" alt="" onerror="this.onerror=null;this.src='${FALLBACK_PHOTO_PATH}';">`;
+      document.body.appendChild(runner);
+
+      const startLeft = startRect.left + startRect.width / 2 - RUNNER_SIZE / 2;
+      const startTop  = startRect.top + startRect.height / 2 - RUNNER_SIZE / 2;
+      runner.style.left = startLeft + "px";
+      runner.style.top  = startTop + "px";
+
+      toggle.classList.add("bon-hidden-runner");
+
+      // frame 1: sprint over to the switch
+      requestAnimationFrame(() => {
+        runner.classList.add("running", "run-anim");
+        const targetLeft = endRect.left + endRect.width / 2 - RUNNER_SIZE / 2 - 30;
+        const targetTop  = endRect.top + endRect.height / 2 - RUNNER_SIZE / 2;
+        runner.style.left = targetLeft + "px";
+        runner.style.top  = targetTop + "px";
+      });
+
+      // frame 2: arrive, flip the switch, lights flicker
+      window.setTimeout(() => {
+        runner.classList.remove("run-anim");
+
+        const paw = document.createElement("div");
+        paw.id = "bon-switch-paw";
+        paw.textContent = "\uD83D\uDC3E";
+        paw.style.left = (endRect.left + endRect.width / 2 - 12) + "px";
+        paw.style.top  = (endRect.top - 8) + "px";
+        document.body.appendChild(paw);
+        paw.classList.add("flip");
+        window.setTimeout(() => paw.remove(), 420);
+
+        document.body.classList.add("bon-flicker");
+        window.setTimeout(() => document.body.classList.remove("bon-flicker"), 550);
+      }, 580);
+
+      // frame 3: sprint back home
+      window.setTimeout(() => {
+        runner.classList.add("run-anim");
+        runner.style.left = startLeft + "px";
+        runner.style.top  = startTop + "px";
+      }, 920);
+
+      // frame 4: cleanup, real avatar reappears
+      window.setTimeout(() => {
+        runner.remove();
+        toggle.classList.remove("bon-hidden-runner");
+        toggle.classList.add("bon-bounce");
+        window.setTimeout(() => toggle.classList.remove("bon-bounce"), 600);
+      }, 1500);
+    }
+
+    themeToggle.addEventListener("click", playRun);
+  })();
+
+  /* ─────────────────────────────────────────
      RUN MASCOT ANIMATIONS
      Homepage intro takes priority on first-ever
      visit; otherwise run the tag-in handoff.

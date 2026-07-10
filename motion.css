@@ -1,0 +1,84 @@
+/* ==========================================================================
+   motion.css — shared scroll-reveal + hover motion for the whole site
+   Include on every page, after style.css:
+   <link rel="stylesheet" href="motion.css">
+   Works with motion.js (auto-applies .reveal to common content blocks).
+   ========================================================================== */
+
+/* Respect people who've asked for less motion — bail out cleanly */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---- Scroll reveal (applied via motion.js) ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .6s cubic-bezier(.16,.8,.3,1),
+              transform .6s cubic-bezier(.16,.8,.3,1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- Hover lift for cards / interactive blocks ---- */
+.project-card,
+.category-card,
+.info-card,
+.demo-box,
+.notice-box {
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.project-card:hover,
+.category-card:hover,
+.info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px -16px rgba(0,0,0,.55);
+  border-color: var(--signal);
+}
+
+/* Links that act like buttons get a little more feedback */
+.demo-link,
+.view-all,
+.back-link {
+  transition: transform .18s ease, opacity .18s ease, color .18s ease, border-color .18s ease;
+}
+.demo-link:hover { transform: translateY(-2px); }
+.view-all:hover { transform: translateX(2px); }
+
+/* ---- Hero load-in (no JS needed, fires on page load) ---- */
+@keyframes motion-hero-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+header .hero-text > * {
+  animation: motion-hero-in .65s cubic-bezier(.16,.8,.3,1) both;
+}
+header .hero-text > *:nth-child(1) { animation-delay: .02s; }
+header .hero-text > *:nth-child(2) { animation-delay: .08s; }
+header .hero-text > *:nth-child(3) { animation-delay: .14s; }
+header .hero-text > *:nth-child(4) { animation-delay: .20s; }
+
+nav {
+  animation: motion-hero-in .5s cubic-bezier(.16,.8,.3,1) both;
+  animation-delay: .28s;
+}
+
+/* ---- Status dot pulses a touch more deliberately ---- */
+.pulse {
+  animation: motion-pulse 1.8s ease-in-out infinite;
+}
+@keyframes motion-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .45; }
+}
+
+/* ---- Stagger helper (set by motion.js as inline transition-delay) ---- */
+.reveal-stagger { transition-delay: var(--reveal-delay, 0ms); }

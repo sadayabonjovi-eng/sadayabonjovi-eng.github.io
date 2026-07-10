@@ -264,6 +264,7 @@
             successMessage.style.display = 'block';
             form.reset();
             charCount.textContent = '0 / 500 characters';
+            window.dispatchEvent(new CustomEvent('bon:messageSent'));
           } else {
             alert('There was a problem sending your message. Please try again.');
           }

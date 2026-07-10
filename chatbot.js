@@ -942,9 +942,9 @@ LEAD CAPTURE RULES:
      moment a visitor has met all 4 cats.
   ───────────────────────────────────────── */
   function celebrateFullCrew() {
+    markBadgeEarned("crew");
     if (hasCelebratedCrew()) return;
     markCrewCelebrated();
-    markBadgeEarned("crew");
 
     const overlay = document.createElement("div");
     overlay.id = "bon-crew-celebration";
@@ -984,9 +984,9 @@ LEAD CAPTURE RULES:
      Contact-form submission.
   ───────────────────────────────────────── */
   function celebrateMessageSent() {
+    markBadgeEarned("message_sent");
     if (hasCelebratedMessageSent()) return;
     markMessageSentCelebrated();
-    markBadgeEarned("message_sent");
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -1081,9 +1081,9 @@ LEAD CAPTURE RULES:
      Fires once, ever, on the first CV click.
   ───────────────────────────────────────── */
   function celebrateCvDownload() {
+    markBadgeEarned("cv_download");
     if (hasCelebratedCvDownload()) return;
     markCvDownloadCelebrated();
-    markBadgeEarned("cv_download");
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 

@@ -252,6 +252,20 @@
     return ALL_BADGES.every(b => earned.indexOf(b) !== -1);
   }
 
+  const CV_DOWNLOAD_KEY = "bon_cv_download_celebrated";
+
+  function hasCelebratedCvDownload() {
+    try {
+      return localStorage.getItem(CV_DOWNLOAD_KEY) === "1";
+    } catch { return true; }
+  }
+
+  function markCvDownloadCelebrated() {
+    try {
+      localStorage.setItem(CV_DOWNLOAD_KEY, "1");
+    } catch (e) {}
+  }
+
   /* ─────────────────────────────────────────
      SYSTEM PROMPT — who Bon is
   ───────────────────────────────────────── */
@@ -416,6 +430,25 @@ LEAD CAPTURE RULES:
       display: block;
       color: var(--muted, #7d8b99);
       font-size: .78rem;
+    }
+    #bon-briefcase-flyer {
+      position: fixed;
+      z-index: 10000;
+      font-size: 1.4rem;
+      line-height: 1;
+      pointer-events: none;
+      opacity: 0;
+      transform: scale(0.7);
+      transition: left .5s cubic-bezier(.2,.7,.3,1), opacity .3s ease, transform .5s ease;
+    }
+    #bon-briefcase-flyer.deliver {
+      opacity: 1;
+      transform: scale(1);
+    }
+    #bon-briefcase-flyer.drop {
+      transform: scale(0.5) translateY(6px);
+      opacity: 0;
+      transition: transform .35s ease, opacity .35s ease;
     }
     .bon-confetti-paw--message {
       position: fixed;
@@ -1040,6 +1073,84 @@ LEAD CAPTURE RULES:
     }, 1300);
   }
 
+  /* ─────────────────────────────────────────
+     CV-DOWNLOAD CELEBRATION — "Classified Intel
+     Retrieved" (Signal Trail egg #2). Cat does a
+     salute/bounce, a briefcase icon flies in and
+     "delivers" at the toggle, then the badge card.
+     Fires once, ever, on the first CV click.
+  ───────────────────────────────────────── */
+  function celebrateCvDownload() {
+    if (hasCelebratedCvDownload()) return;
+    markCvDownloadCelebrated();
+    markBadgeEarned("cv_download");
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function showBadge() {
+      const overlay = document.createElement("div");
+      overlay.id = "bon-cv-celebration";
+      overlay.setAttribute("aria-hidden", "true");
+      overlay.innerHTML = `
+        <div class="bon-message-card">
+          <div class="bon-message-icon">💼</div>
+          <strong>Classified Intel Retrieved</strong>
+          <span>CV secured — good luck out there 🫡</span>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+
+      for (let i = 0; i < 14; i++) {
+        const p = document.createElement("span");
+        p.className = "bon-confetti-paw bon-confetti-paw--message";
+        p.textContent = "🐾";
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.animationDelay = (Math.random() * 0.4) + "s";
+        p.style.fontSize = (0.8 + Math.random() * 0.9) + "rem";
+        overlay.appendChild(p);
+      }
+
+      window.requestAnimationFrame(() => overlay.classList.add("show"));
+      window.setTimeout(() => overlay.classList.add("fade-out"), 3200);
+      window.setTimeout(() => overlay.remove(), 3800);
+    }
+
+    // Salute/bounce on the toggle either way — this part isn't motion-heavy
+    toggle.classList.add("bon-bounce");
+    window.setTimeout(() => toggle.classList.remove("bon-bounce"), 700);
+
+    if (reduceMotion) {
+      showBadge();
+      return;
+    }
+
+    // Briefcase flies in from off-screen and "delivers" at the toggle
+    const rect = toggle.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const briefcase = document.createElement("div");
+    briefcase.id = "bon-briefcase-flyer";
+    briefcase.textContent = "💼";
+    briefcase.style.left = (centerX - 130) + "px";
+    briefcase.style.top  = (centerY - 18) + "px";
+    document.body.appendChild(briefcase);
+
+    requestAnimationFrame(() => {
+      briefcase.classList.add("deliver");
+      briefcase.style.left = (centerX - 14) + "px";
+    });
+
+    window.setTimeout(() => {
+      briefcase.classList.add("drop");
+    }, 520);
+
+    window.setTimeout(() => {
+      briefcase.remove();
+      showBadge();
+    }, 900);
+  }
+
   function trackAchievement() {
     const met = markCatMet(ACTIVE_CAT_KEY);
     renderPawProgress();
@@ -1170,6 +1281,7 @@ LEAD CAPTURE RULES:
      right after a successful Formspree submit.
   ───────────────────────────────────────── */
   window.addEventListener("bon:messageSent", celebrateMessageSent);
+  window.addEventListener("bon:cvDownloaded", celebrateCvDownload);
 
   /* ─────────────────────────────────────────
      RUN MASCOT ANIMATIONS

@@ -218,6 +218,41 @@
   }
 
   /* ─────────────────────────────────────────
+     SIGNAL TRAIL — shared badge tracker
+     Accumulates earned badges across all 3 eggs
+     (crew, cv_download, message_sent) into one
+     array, so a future Boss Fight unlock can
+     check "3 of 3 earned" in one place instead
+     of re-deriving it from separate flags.
+  ───────────────────────────────────────── */
+  const BADGES_EARNED_KEY = "bon_badges_earned";
+  const ALL_BADGES = ["crew", "cv_download", "message_sent"];
+
+  function getBadgesEarned() {
+    try {
+      const raw = localStorage.getItem(BADGES_EARNED_KEY);
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    } catch { return []; }
+  }
+
+  function markBadgeEarned(badgeKey) {
+    try {
+      const earned = getBadgesEarned();
+      if (earned.indexOf(badgeKey) === -1) {
+        earned.push(badgeKey);
+        localStorage.setItem(BADGES_EARNED_KEY, JSON.stringify(earned));
+      }
+      return earned;
+    } catch { return getBadgesEarned(); }
+  }
+
+  function hasAllBadges() {
+    const earned = getBadgesEarned();
+    return ALL_BADGES.every(b => earned.indexOf(b) !== -1);
+  }
+
+  /* ─────────────────────────────────────────
      SYSTEM PROMPT — who Bon is
   ───────────────────────────────────────── */
   const SYSTEM = `You are Bon — Bon Jovi F. Sadaya — speaking in the first person as a friendly, professional digital version of yourself on your portfolio website. You're a Filipino freelancer based in Cebu, Philippines, transitioning from ~7 years of Philippine Coast Guard service into remote work as a Virtual Assistant.
@@ -876,6 +911,7 @@ LEAD CAPTURE RULES:
   function celebrateFullCrew() {
     if (hasCelebratedCrew()) return;
     markCrewCelebrated();
+    markBadgeEarned("crew");
 
     const overlay = document.createElement("div");
     overlay.id = "bon-crew-celebration";
@@ -917,6 +953,7 @@ LEAD CAPTURE RULES:
   function celebrateMessageSent() {
     if (hasCelebratedMessageSent()) return;
     markMessageSentCelebrated();
+    markBadgeEarned("message_sent");
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 

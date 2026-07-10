@@ -341,6 +341,13 @@
       setLabel();
     });
     setLabel();
+
+    const cvLink = document.querySelector('.cv-download');
+    if (cvLink) {
+      cvLink.addEventListener('click', () => {
+        window.dispatchEvent(new CustomEvent('bon:cvDownloaded'));
+      });
+    }
   </script>
   <link rel="stylesheet" href="chatbot.css">
   <script src="chatbot.js"></script>

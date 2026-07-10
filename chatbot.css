@@ -492,17 +492,23 @@
   bottom: 104px;
 }
 
-/* ── Achievement: paw-print progress dots ── */
+/* ── Achievement: paw-print progress badge ── */
 #bon-paw-progress {
   position: absolute;
-  bottom: -6px;
-  right: 4px;
+  bottom: -34px;
+  right: 0;
   display: flex;
-  gap: 3px;
+  align-items: center;
+  gap: 5px;
+  background: #131a22;
+  border: 1px solid #26313c;
+  border-radius: 20px;
+  padding: 0.28rem 0.6rem;
   opacity: 0;
   transform: translateY(4px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition: opacity 0.4s ease, transform 0.4s ease, border-color 0.3s ease;
   pointer-events: none;
+  white-space: nowrap;
 }
 
 #bon-paw-progress.show {
@@ -510,19 +516,143 @@
   transform: translateY(0);
 }
 
+#bon-paw-progress.complete {
+  border-color: #5eead4;
+}
+
 .bon-paw-dot {
-  font-size: 0.68rem;
-  filter: grayscale(1) opacity(0.35);
-  transition: filter 0.3s ease;
+  font-size: 0.95rem;
+  filter: grayscale(1) opacity(0.3);
+  transition: filter 0.3s ease, transform 0.3s ease;
+  line-height: 1;
 }
 
 .bon-paw-dot.met {
-  filter: grayscale(0) opacity(1) drop-shadow(0 0 2px rgba(94, 234, 212, 0.6));
+  filter: grayscale(0) opacity(1) drop-shadow(0 0 3px rgba(94, 234, 212, 0.7));
+  transform: scale(1.1);
+}
+
+.bon-paw-count {
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: #7d8b99;
+}
+
+#bon-paw-progress.complete .bon-paw-count {
+  color: #5eead4;
 }
 
 #bon-chat-widget.open #bon-paw-progress {
   opacity: 0;
   pointer-events: none;
+}
+
+body.dark-mode #bon-paw-progress {
+  background: #f5f2ea;
+  border-color: #d6cfbf;
+}
+body.dark-mode #bon-paw-progress.complete { border-color: #0f8f7e; }
+body.dark-mode .bon-paw-count { color: #6b7682; }
+body.dark-mode #bon-paw-progress.complete .bon-paw-count { color: #0f8f7e; }
+body.dark-mode .bon-paw-dot.met {
+  filter: grayscale(0) opacity(1) drop-shadow(0 0 3px rgba(15, 143, 126, 0.7));
+}
+
+@media (max-width: 480px) {
+  #bon-paw-progress {
+    bottom: -30px;
+    padding: 0.22rem 0.5rem;
+    gap: 4px;
+  }
+  .bon-paw-dot { font-size: 0.82rem; }
+  .bon-paw-count { font-size: 0.62rem; }
+}
+
+/* ── Lead-captured celebration (biggest moment on the site) ── */
+#bon-lead-celebration {
+  position: fixed;
+  inset: 0;
+  z-index: 10002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#bon-lead-celebration.show {
+  opacity: 1;
+}
+
+#bon-lead-celebration.fade-out {
+  opacity: 0;
+}
+
+.bon-lead-card {
+  background: #131a22;
+  border: 1.5px solid #5eead4;
+  border-radius: 12px;
+  padding: 1.7rem 2.1rem;
+  text-align: center;
+  box-shadow: 0 16px 56px rgba(0, 0, 0, 0.55), 0 0 0 6px rgba(94, 234, 212, 0.08);
+  transform: scale(0.82);
+  transition: transform 0.55s cubic-bezier(.2,1.4,.4,1);
+}
+
+#bon-lead-celebration.show .bon-lead-card {
+  transform: scale(1);
+}
+
+.bon-lead-paws {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.18em;
+}
+
+.bon-lead-card strong {
+  display: block;
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 1.15rem;
+  color: #5eead4;
+  letter-spacing: 0.02em;
+}
+
+.bon-lead-card span {
+  display: block;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.92rem;
+  color: #dde3ea;
+  margin-top: 0.35rem;
+}
+
+.bon-confetti-paw--lead {
+  font-weight: bold;
+}
+
+body.dark-mode .bon-lead-card {
+  background: #f5f2ea;
+  border-color: #0f8f7e;
+}
+body.dark-mode .bon-lead-card strong { color: #0f8f7e; }
+body.dark-mode .bon-lead-card span   { color: #1b232c; }
+
+@media (prefers-reduced-motion: reduce) {
+  #bon-lead-celebration,
+  #bon-lead-celebration.show,
+  .bon-lead-card {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .bon-lead-card {
+    padding: 1.3rem 1.5rem;
+  }
+  .bon-lead-card strong { font-size: 1rem; }
+  .bon-lead-card span   { font-size: 0.8rem; }
 }
 
 /* ── Crew celebration overlay ── */

@@ -6,7 +6,7 @@
 
 #bon-chat-widget {
   position: fixed;
-  bottom: 2.2rem;
+  bottom: 3.5rem;
   right: 1.5rem;
   z-index: 9999;
   font-family: "Helvetica Neue", Arial, sans-serif;
@@ -606,15 +606,14 @@ body.bon-flicker::after {
 }
 
 /* ── Achievement: paw-print progress badge ──
-   FIX (this pass): any offset that put this badge *below* the toggle
-   risked being clipped by the real viewport edge (mobile address bar /
-   home-indicator safe area etc). Moved it to sit beside the toggle,
-   vertically centered, instead — no bottom-edge risk, and it no longer
-   overlaps the toggle button either. */
+   Sits below the toggle. The widget's own `bottom` offset was
+   increased to 3.5rem (mobile: 3rem) specifically so this badge has
+   real clearance from the actual screen edge at these negative
+   offsets, instead of clipping or overlapping the toggle. */
 #bon-paw-progress {
   position: absolute;
-  bottom: 15px; /* roughly vertically centers the ~26px-tall badge against the 58px toggle */
-  right: 68px;  /* sits to the left of the toggle (58px wide) with a small gap, instead of below it */
+  bottom: -34px; /* sits below the toggle; safe now that the widget itself has 3.5rem of clearance from the screen edge */
+  right: 0;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -623,7 +622,7 @@ body.bon-flicker::after {
   border-radius: 20px;
   padding: 0.28rem 0.6rem;
   opacity: 0;
-  transform: translateX(4px);
+  transform: translateY(4px);
   transition: opacity 0.4s ease, transform 0.4s ease, border-color 0.3s ease;
   pointer-events: none;
   white-space: nowrap;
@@ -631,7 +630,7 @@ body.bon-flicker::after {
 
 #bon-paw-progress.show {
   opacity: 1;
-  transform: translateX(0);
+  transform: translateY(0);
 }
 
 #bon-paw-progress.complete {
@@ -679,8 +678,8 @@ body.dark-mode .bon-paw-dot.met {
 
 @media (max-width: 480px) {
   #bon-paw-progress {
-    bottom: 13px;
-    right: 62px;
+    bottom: -28px;
+    right: 0;
     padding: 0.22rem 0.5rem;
     gap: 4px;
   }
@@ -1203,7 +1202,7 @@ body.dark-mode .bon-intro-caption span {
 /* ── Mobile ── */
 @media (max-width: 480px) {
   #bon-chat-widget {
-    bottom: 1.6rem;
+    bottom: 3rem;
     right: 1rem;
   }
 

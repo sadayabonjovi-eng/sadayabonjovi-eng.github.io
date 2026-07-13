@@ -121,8 +121,8 @@
     padding: 0 3.2rem; /* room for arrow buttons */
   }
   .carousel-stage {
-    height: 160px;
-    overflow: hidden; /* clip the track so only the visible cards show */
+    height: 220px;
+    perspective: 1100px;
     cursor: grab;
     touch-action: pan-y;
     outline: none;
@@ -132,15 +132,19 @@
     outline-offset: 6px;
   }
   .carousel-ring {
-    display: flex;
-    align-items: stretch;
-    gap: 1.2rem;
+    width: 100%;
     height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
     will-change: transform;
   }
   .carousel-card {
-    flex: 0 0 230px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
     width: 230px;
+    height: 140px;
+    margin: -70px 0 0 -115px;
     background: var(--bg-2);
     border: 1px solid var(--line);
     border-radius: 8px;
@@ -150,6 +154,7 @@
     justify-content: space-between;
     text-decoration: none;
     color: var(--ink);
+    backface-visibility: hidden;
     transition: border-color .2s, box-shadow .2s;
     user-select: none;
   }
@@ -182,7 +187,7 @@
     margin-top: .6rem;
   }
   @media (max-width: 560px) {
-    .carousel-card { flex-basis: 190px; width: 190px; }
+    .carousel-card { width: 190px; margin-left: -95px; }
   }
 
   /* Visible prev/next controls for .carousel-3d, injected by carousel-3d.js */

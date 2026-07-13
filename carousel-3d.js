@@ -6,50 +6,42 @@
     var n = cards.length;
     if (!n || !stage || !ring) return;
 
-    function getStep() {
-      // card width + the flex gap between cards, read live so resize keeps it accurate
-      var cardRect = cards[0].getBoundingClientRect();
-      var gap = parseFloat(getComputedStyle(ring).columnGap || getComputedStyle(ring).gap || 0) || 0;
-      return cardRect.width + gap;
-    }
+    var angleStep = 360 / n;
 
-    var index = 0;
-    var offset = 0; // current translateX in px (negative moves left)
+    function positionCards(cardWidth) {
+      var radius = Math.round((cardWidth / 2) / Math.tan(Math.PI / n)) + 60;
+      cards.forEach(function (card, i) {
+        var angle = angleStep * i;
+        card.style.transform = 'rotateY(' + angle + 'deg) translateZ(' + radius + 'px)';
+      });
+    }
+    positionCards(root.dataset.cardWidth ? parseInt(root.dataset.cardWidth, 10) : 230);
+
+    var rotation = 0;
     var dragging = false;
     var moved = false;
     var startX = 0;
-    var startOffset = 0;
+    var startRotation = 0;
     var autoTimer = null;
     var resumeTimer = null;
 
-    function maxIndex() { return n - 1; }
+    // Continuous idle drift — slow and steady, not a stepped/jump-cut auto-advance
+    var AUTO_SPEED_DEG = 0.028; // per tick — slow, deliberate spin
+    var AUTO_TICK_MS = 30;
 
     function apply(withTransition) {
-      ring.style.transition = withTransition ? 'transform .32s ease' : 'none';
-      ring.style.transform = 'translateX(' + offset + 'px)';
-      prevBtn.disabled = index <= 0;
-      nextBtn.disabled = index >= maxIndex();
-    }
-
-    function goTo(newIndex, withTransition) {
-      index = Math.max(0, Math.min(maxIndex(), newIndex));
-      offset = -index * getStep();
-      apply(withTransition !== false);
-    }
-
-    function step(direction) {
-      goTo(index + direction, true);
-      stopAuto();
-      scheduleResume();
+      ring.style.transition = withTransition
+        ? 'transform .55s cubic-bezier(.22,.9,.32,1)'
+        : 'none';
+      ring.style.transform = 'rotateY(' + rotation + 'deg)';
     }
 
     function startAuto() {
       stopAuto();
       autoTimer = setInterval(function () {
-        var next = index + 1;
-        if (next > maxIndex()) next = 0; // loop back to the start
-        goTo(next, true);
-      }, 3200);
+        rotation -= AUTO_SPEED_DEG;
+        apply(false);
+      }, AUTO_TICK_MS);
     }
     function stopAuto() {
       if (autoTimer) clearInterval(autoTimer);
@@ -57,16 +49,25 @@
     }
     function scheduleResume() {
       clearTimeout(resumeTimer);
-      resumeTimer = setTimeout(startAuto, 2600);
+      resumeTimer = setTimeout(startAuto, 2400);
     }
 
-    // Drag to slide, snaps to the nearest card on release
+    // Snap forward/back by exactly one card, with a smooth transition —
+    // used by arrow buttons and arrow keys
+    function step(direction) {
+      stopAuto();
+      rotation -= direction * angleStep;
+      apply(true);
+      scheduleResume();
+    }
+
+    // Drag: free-spins the wheel directly under the pointer, no snapping
     stage.addEventListener('pointerdown', function (e) {
       if (e.button !== undefined && e.button !== 0) return;
       dragging = true;
       moved = false;
       startX = e.clientX;
-      startOffset = offset;
+      startRotation = rotation;
       stopAuto();
       clearTimeout(resumeTimer);
       stage.style.cursor = 'grabbing';
@@ -76,22 +77,13 @@
       var dx = e.clientX - startX;
       if (Math.abs(dx) > 4) moved = true;
       if (moved) e.preventDefault();
-      offset = startOffset + dx;
+      rotation = startRotation + dx * 0.4;
       apply(false);
     }, { passive: false });
-    function endDrag(e) {
+    function endDrag() {
       if (!dragging) return;
       dragging = false;
       stage.style.cursor = 'grab';
-      var dx = (e && e.clientX !== undefined ? e.clientX : startX) - startX;
-      var threshold = getStep() * 0.2;
-      if (dx <= -threshold) {
-        goTo(index + 1, true);
-      } else if (dx >= threshold) {
-        goTo(index - 1, true);
-      } else {
-        goTo(index, true); // snap back to current card
-      }
       scheduleResume();
     }
     document.addEventListener('pointerup', endDrag);
@@ -99,7 +91,7 @@
 
     stage.setAttribute('tabindex', '0');
     stage.setAttribute('role', 'group');
-    stage.setAttribute('aria-label', 'Drag to browse project cards, or use the arrow buttons / arrow keys');
+    stage.setAttribute('aria-label', 'Drag to rotate project cards, or use the arrow buttons / arrow keys');
     stage.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowRight') { step(1); }
       if (e.key === 'ArrowLeft') { step(-1); }
@@ -133,11 +125,14 @@
     nav.appendChild(nextBtn);
     root.appendChild(nav);
 
-    goTo(0, false);
+    apply(false);
     startAuto();
 
     window.addEventListener('resize', function () {
-      goTo(index, false); // re-snap to the same card at the new card width
+      var newCardWidth = root.dataset.cardWidth
+        ? parseInt(root.dataset.cardWidth, 10)
+        : (window.innerWidth < 560 ? 190 : 230);
+      positionCards(newCardWidth);
     });
   }
 

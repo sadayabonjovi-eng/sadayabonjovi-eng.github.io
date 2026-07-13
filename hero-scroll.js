@@ -78,6 +78,20 @@
     return v || fallback;
   }
 
+  // Convert '#rrggbb' + 0-1 alpha into 'rgba(...)' — avoids concatenating an
+  // 8-digit hex alpha suffix onto a color string, which throws an invalid
+  // color exception in some browsers/webviews and silently kills the rest
+  // of that draw() call.
+  function rgba(hex, alpha) {
+    var h = hex.replace('#', '');
+    if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+    var r = parseInt(h.substr(0, 2), 16);
+    var g = parseInt(h.substr(2, 2), 16);
+    var b = parseInt(h.substr(4, 2), 16);
+    if (isNaN(r) || isNaN(g) || isNaN(b)) return 'rgba(94,234,212,' + alpha + ')';
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+  }
+
   // ── Node definitions — 5 nodes forming a pipeline ──
   // Positions are in normalised 0–1 space, mapped to canvas at render time
   var NODE_DEFS = [
@@ -127,6 +141,14 @@
 
   // ── Draw ──
   function draw() {
+    try {
+      drawFrame();
+    } catch (err) {
+      console.error('hero-scroll draw() failed:', err);
+    }
+  }
+
+  function drawFrame() {
     var W = canvas.width;
     var H = canvas.height;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -240,7 +262,7 @@
         // Glow
         var grad = ctx.createRadialGradient(px, py, 0, px, py, 14);
         grad.addColorStop(0,   signal);
-        grad.addColorStop(0.4, signal + '88');
+        grad.addColorStop(0.4, rgba(signal, 0.53));
         grad.addColorStop(1,   'transparent');
         ctx.beginPath();
         ctx.arc(px, py, 14, 0, Math.PI * 2);
@@ -272,7 +294,7 @@
       // Soft outer glow
       var glowR = NODE_R * 2.1;
       var glow = ctx.createRadialGradient(nd._cx, nd._cy, 0, nd._cx, nd._cy, glowR);
-      glow.addColorStop(0, col + '55');
+      glow.addColorStop(0, rgba(col, 0.33));
       glow.addColorStop(1, 'transparent');
       ctx.beginPath();
       ctx.arc(nd._cx, nd._cy, glowR, 0, Math.PI * 2);

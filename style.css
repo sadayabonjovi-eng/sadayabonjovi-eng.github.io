@@ -12,6 +12,16 @@
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
+
+  /* ===== Global horizontal-scroll safety net =====
+     Prevents the whole page from becoming zoomable/scrollable
+     sideways if any element (nav, hero canvas, etc.) ever
+     exceeds the viewport width again. */
+  html, body{
+    overflow-x:hidden;
+    max-width:100%;
+  }
+
   body{
     margin:0;
     background:var(--bg);
@@ -185,7 +195,8 @@
     max-width:920px;
     margin:0 auto;
     display:flex;
-    gap:2.2rem;
+    flex-wrap:wrap;
+    gap:1.2rem 2.2rem; /* row-gap column-gap — gives breathing room when wrapping */
     padding:1.1rem 1.5rem;
     font-family:var(--mono);
     font-size:.85rem;
@@ -194,6 +205,7 @@
   nav a{
     color:var(--muted);
     text-decoration:none;
+    white-space:nowrap; /* stops labels like /how-i-work breaking mid-word at hyphens */
     transition:color .2s ease;
   }
   nav a:hover, nav a:focus-visible{ color:var(--signal); }
@@ -201,7 +213,7 @@
 
   /* ===== Mobile tap-target sizing ===== */
   @media (max-width:640px){
-    nav{ gap:1.4rem; }
+    nav{ gap:1rem 1.4rem; }
     nav a{
       display:inline-flex;
       align-items:center;
@@ -358,7 +370,10 @@
     display:flex;
     justify-content:space-between;
     flex-wrap:wrap;
-    gap:.5rem;
+    gap:.5rem 1rem;
+  }
+  footer a{
+    white-space:nowrap; /* stops labels like /how-i-work breaking mid-word at hyphens */
   }
 
   @media (max-width:600px){

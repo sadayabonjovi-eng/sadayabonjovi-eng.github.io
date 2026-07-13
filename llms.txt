@@ -1,0 +1,20 @@
+# Bon Jovi F. Sadaya
+
+> Administrative & Operational Virtual Assistant who builds Make.com and Zapier automation systems — AI lead agents, order processing pipelines, and reservation systems — backed by 7 years of Philippine Coast Guard operations experience. Based in Cebu City, Philippines.
+
+Bon Jovi F. Sadaya is available for remote work in administrative support, operations management, data management, and automation setup. Certified in Make.com (Advanced, AI Agent Builder) and Zapier (Intermediate Zaps, Building AI Agents).
+
+## Pages
+
+- [Home](https://sadayabonjovi-eng.github.io/index.html): Overview of services and featured automation projects.
+- [About](https://sadayabonjovi-eng.github.io/about.html): Background, Coast Guard service record, certifications, and skills.
+- [How I Work](https://sadayabonjovi-eng.github.io/how-i-work.html): Process for scoping automations, choosing tools (Make.com vs. Zapier vs. custom code), debugging, and client communication.
+- [Projects](https://sadayabonjovi-eng.github.io/projects.html): Index of all deployed automation projects.
+- [Messenger AI Lead Agent](https://sadayabonjovi-eng.github.io/messenger-ai-agent.html): AI agent qualifying leads inside Facebook Messenger, with full build log and a documented JSON-escaping bug fix.
+- [AI Order Processing & Retention System](https://sadayabonjovi-eng.github.io/order-automation.html): Zapier pipeline that extracts order details via AI, calculates totals, and runs a retention sequence.
+- [Reservation Automation (GoHighLevel)](https://sadayabonjovi-eng.github.io/chief-sizzling-grill.html): Full booking-to-retention pipeline built in GoHighLevel, with a multi-part build log documenting real bugs found and fixed.
+- [Contact](https://sadayabonjovi-eng.github.io/contact.html): Email, phone, and LinkedIn contact details.
+
+## Skills
+
+Email management, scheduling and reminders, data entry and tracking, documentation and reporting, customer support, Make.com and Zapier workflow builds, AI tool integration (Groq, ChatGPT, Gemini, Claude), Google Workspace.

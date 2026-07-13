@@ -1,12 +1,11 @@
 /* =============================================
    Bon's Portfolio — hero-scroll.js
-   Hero Orbit — interactive 3D satellite scene
-   showing the 3 flagship automation projects
-   orbiting a central hub.
+   Hero Orbit — interactive 3D GLOBE showing all
+   5 automation projects placed on the surface
+   of a real sphere (longitude + latitude), with
+   decorative latitude rings for depth.
 
-   Ported from the standalone "Hero Orbit —
-   Prototype" demo into a self-contained,
-   self-mounting script:
+   Self-contained, self-mounting script:
      - injects its own scoped CSS (prefixed
        hero-orbit-* so nothing collides with
        existing site styles)
@@ -14,20 +13,34 @@
          <div id="hero-orbit-mount"></div>
      - if that mount point isn't found, this
        logs a clear console warning and does
-       NOT render anything — no silent failure,
-       no guessing at where to inject itself
-       into your layout.
+       NOT render anything.
+     - on successful mount, hides the static SVG
+       fallback that lives next to it in .hero-art
+       (that SVG stays as the safety net if this
+       script ever fails to find its mount).
 
-   TO USE: add this one line wherever the hero
-   visual should live (likely the second column
-   of index.html's header, since other pages
-   override that header to a single column):
+   INTERACTION MODEL:
+     - Auto-rotates by default (idle spin)
+     - Drag / swipe (mouse OR touch, same pointer
+       events) to orbit the view — works identically
+       on desktop and mobile
+     - Pinch (touch) or Ctrl+wheel (desktop
+       trackpad/mouse) to zoom in/out
+     - Releasing resumes auto-rotate after a pause
+     - prefers-reduced-motion disables the automatic
+       idle spin only — manual drag/pinch/zoom still
+       work either way
 
-     <div id="hero-orbit-mount"></div>
-
-   ...then include this file before </body>:
-
-     <script src="hero-scroll.js"></script>
+   GEOMETRY NOTE:
+     Each node's position is a true point on a unit
+     sphere (radius R), placed with:
+       arm:      rotateY(theta) rotateX(-phi)
+       satWrap:  translateZ(R)
+     ...so the whole thing is a real sphere, not a
+     flat ring — rotating it from any angle keeps
+     every node on the surface, and latitude rings
+     (flat discs laid at rotateX(90deg) translateZ)
+     shrink toward the poles just like a globe.
    ============================================= */
 
 (function () {
@@ -38,25 +51,27 @@
   if (!mount) {
     console.warn(
       '[hero-scroll.js] No element with id="' + MOUNT_ID + '" found on this page — ' +
-      "the Hero Orbit scene was not rendered. Add <div id=\"" + MOUNT_ID + "\"></div> " +
+      "the Hero Orbit globe was not rendered. Add <div id=\"" + MOUNT_ID + "\"></div> " +
       "wherever the hero visual should appear, then reload."
     );
     return;
   }
 
+  /* Hide the static SVG fallback that lives alongside the mount —
+     it stays in the DOM as a no-JS / failure safety net only. */
+  const heroArt = mount.closest(".hero-art");
+  if (heroArt) {
+    const fallbackSvg = heroArt.querySelector("svg");
+    if (fallbackSvg) fallbackSvg.style.display = "none";
+  }
+
   /* ─────────────────────────────────────────
      SCOPED STYLES
-     All selectors prefixed hero-orbit-* to
-     avoid collisions with existing site CSS.
-     Uses the site's own CSS variable tokens
-     (--signal, --bg-2, etc.) where available,
-     with fallbacks in case a page hasn't
-     defined them.
   ───────────────────────────────────────── */
   const styles = document.createElement("style");
   styles.textContent = `
     #${MOUNT_ID} {
-      --ho-radius: 145px;
+      --ho-radius: 150px;
     }
     .hero-orbit-panel {
       max-width: 460px;
@@ -97,14 +112,30 @@
       transform-style: preserve-3d;
       transform: rotateX(-14deg) rotateY(0deg) scale(1);
     }
-    .hero-orbit-floor {
+
+    /* ---- latitude rings (decorative, give the "globe" read) ---- */
+    .hero-orbit-ring {
       position: absolute;
       left: 50%; top: 50%;
-      width: 230px; height: 230px;
-      margin: -115px 0 0 -115px;
       border-radius: 50%;
-      background: radial-gradient(ellipse at center, rgba(94,234,212,.12) 0%, transparent 70%);
-      transform: rotateX(90deg) translateZ(-40px);
+      border: 1px solid rgba(94,234,212,.22);
+      transform-style: preserve-3d;
+      pointer-events: none;
+    }
+    .hero-orbit-ring.hero-orbit-equator {
+      border-color: rgba(94,234,212,.34);
+    }
+
+    /* ---- faint background dots scattered on the sphere for texture ---- */
+    .hero-orbit-dot {
+      position: absolute;
+      left: 0; top: 0;
+      width: 4px; height: 4px;
+      margin: -2px 0 0 -2px;
+      border-radius: 50%;
+      background: var(--muted, #7d8b99);
+      opacity: .35;
+      pointer-events: none;
     }
 
     .hero-orbit-hub {
@@ -147,7 +178,7 @@
       height: 2px; width: var(--ho-radius);
       background: linear-gradient(90deg, var(--signal, #5eead4), rgba(94,234,212,0));
       transform-origin: 0 50%;
-      opacity: .6;
+      opacity: .55;
     }
     .hero-orbit-sat-wrap { position: absolute; left: 0; top: 0; transform-style: preserve-3d; }
     .hero-orbit-sat-billboard { position: absolute; left: 0; top: 0; width: 104px; height: 60px; margin: -30px 0 0 -52px; }
@@ -215,6 +246,17 @@
       display: block;
       margin-bottom: 3px;
     }
+    .hero-orbit-caption .hero-orbit-view {
+      display: inline-block;
+      margin-top: 6px;
+      font-family: var(--mono, monospace);
+      font-size: .68rem;
+      letter-spacing: .05em;
+      color: var(--signal, #5eead4);
+      text-decoration: none;
+      border-bottom: 1px solid var(--signal-dim, #2b5c54);
+    }
+    .hero-orbit-caption .hero-orbit-view:hover { border-color: currentColor; }
     .hero-orbit-stage-info.hero-orbit-focused .hero-orbit-hint { opacity: 0; }
     .hero-orbit-stage-info.hero-orbit-focused .hero-orbit-caption { opacity: 1; transform: translateY(0); }
 
@@ -232,48 +274,125 @@
       <div class="hero-orbit-scene" id="heroOrbitScene">
         <div class="hero-orbit-halo"></div>
         <div class="hero-orbit-world" id="heroOrbitWorld">
-          <div class="hero-orbit-floor"></div>
-          <div class="hero-orbit-hub">
-            <div class="hero-orbit-hub-glow"></div>
-            <div class="hero-orbit-hub-box"><span>BS</span></div>
-          </div>
-          <!-- satellites injected below -->
+          <!-- latitude rings + hub + satellites injected below -->
         </div>
       </div>
 
       <div class="hero-orbit-stage-info" id="heroOrbitStageInfo">
-        <p class="hero-orbit-hint" id="heroOrbitHint">Drag to look around · Scroll/pinch to zoom · Tap a node</p>
+        <p class="hero-orbit-hint" id="heroOrbitHint">Drag to look around · Pinch/Ctrl+scroll to zoom · Tap a node</p>
         <p class="hero-orbit-caption" id="heroOrbitCaption">
           <span class="hero-orbit-tag" id="heroOrbitCaptionTag">TAG</span>
           <span id="heroOrbitCaptionText">Text</span>
+          <a href="#" class="hero-orbit-view" id="heroOrbitCaptionLink">→ view_project</a>
         </p>
       </div>
     </div>
   `;
-
-  /* ─────────────────────────────────────────
-     SATELLITE DATA — the 3 flagship projects
-  ───────────────────────────────────────── */
-  const SAT = [
-    { key: "messenger", angle: 0, label: "MESSENGER AI\nLEAD AGENT", icon: "💬", warn: false,
-      caption: "Live on Facebook Messenger — qualifies leads 24/7 and logs them automatically." },
-    { key: "order", angle: 120, label: "ORDER\nAUTOMATION", icon: "📦", warn: false,
-      caption: "Extracts order details by AI, calculates totals, then runs the full retention loop." },
-    { key: "reservation", angle: 240, label: "RESERVATION\n(GOHIGHLEVEL)", icon: "📅", warn: true,
-      caption: "Booking automation built in GoHighLevel — checks and confirms every reservation." }
-  ];
 
   const world = mount.querySelector("#heroOrbitWorld");
   const scene = mount.querySelector("#heroOrbitScene");
   const stageInfo = mount.querySelector("#heroOrbitStageInfo");
   const captionTag = mount.querySelector("#heroOrbitCaptionTag");
   const captionText = mount.querySelector("#heroOrbitCaptionText");
+  const captionLink = mount.querySelector("#heroOrbitCaptionLink");
+
+  /* ---- hub (dead center of the sphere) ---- */
+  const hub = document.createElement("div");
+  hub.className = "hero-orbit-hub";
+  hub.innerHTML = `
+    <div class="hero-orbit-hub-glow"></div>
+    <div class="hero-orbit-hub-box"><span>BS</span></div>
+  `;
+  world.appendChild(hub);
+
+  /* ─────────────────────────────────────────
+     LATITUDE RINGS (decorative globe lines)
+     Each ring is a flat disc laid in the XZ
+     plane at a given latitude, radius shrinks
+     toward the poles like real lines of latitude.
+  ───────────────────────────────────────── */
+  const RING_LATITUDES = [-55, -28, 0, 28, 55]; // degrees
+  const ringEls = [];
+  RING_LATITUDES.forEach((lat) => {
+    const ring = document.createElement("div");
+    ring.className = "hero-orbit-ring" + (lat === 0 ? " hero-orbit-equator" : "");
+    world.appendChild(ring);
+    ringEls.push({ el: ring, lat });
+  });
+
+  function layoutRings() {
+    const R = parseFloat(getComputedStyle(mount).getPropertyValue("--ho-radius")) || 150;
+    ringEls.forEach(({ el, lat }) => {
+      const rad = (lat * Math.PI) / 180;
+      const ringRadius = R * Math.cos(rad) * 1.05; // slightly outside node radius
+      const yOffset = R * Math.sin(rad);
+      el.style.width = ringRadius * 2 + "px";
+      el.style.height = ringRadius * 2 + "px";
+      el.style.marginLeft = -ringRadius + "px";
+      el.style.marginTop = -ringRadius + "px";
+      el.style.transform = `rotateX(90deg) translateZ(${yOffset}px)`;
+    });
+  }
+
+  /* ─────────────────────────────────────────
+     BACKGROUND TEXTURE DOTS (scattered, non-interactive)
+  ───────────────────────────────────────── */
+  const DOT_COUNT = 22;
+  const dotEls = [];
+  for (let i = 0; i < DOT_COUNT; i++) {
+    // spread pseudo-randomly across the sphere surface
+    const theta = (i * 137.5) % 360; // golden-angle spread for even distribution
+    const phi = -70 + (i * 53) % 140; // between -70 and 70
+    const dot = document.createElement("div");
+    dot.className = "hero-orbit-dot";
+
+    const arm = document.createElement("div");
+    arm.className = "hero-orbit-arm";
+    const wrap = document.createElement("div");
+    wrap.className = "hero-orbit-sat-wrap";
+    wrap.appendChild(dot);
+    arm.appendChild(wrap);
+    world.appendChild(arm);
+
+    dotEls.push({ arm, wrap, theta, phi });
+  }
+
+  function layoutDots() {
+    const R = parseFloat(getComputedStyle(mount).getPropertyValue("--ho-radius")) || 150;
+    const dotR = R * 1.18; // just outside the node sphere, background texture
+    dotEls.forEach(({ arm, wrap, theta, phi }) => {
+      arm.style.transform = `rotateY(${theta}deg) rotateX(${-phi}deg)`;
+      wrap.style.transform = `translateZ(${dotR}px)`;
+    });
+  }
+
+  /* ─────────────────────────────────────────
+     SATELLITE DATA — all 5 automation projects,
+     placed at real longitude (theta) + latitude
+     (phi) points on the sphere.
+  ───────────────────────────────────────── */
+  const SAT = [
+    { key: "messenger", theta: 0, phi: 8, label: "MESSENGER AI\nLEAD AGENT", icon: "💬", warn: false,
+      href: "messenger-ai-agent.html",
+      caption: "Live on Facebook Messenger — qualifies leads 24/7 and logs them automatically." },
+    { key: "order", theta: 72, phi: -18, label: "ORDER\nAUTOMATION", icon: "📦", warn: false,
+      href: "order-automation.html",
+      caption: "Extracts order details by AI, calculates totals, then runs the full retention loop." },
+    { key: "reservation", theta: 144, phi: 18, label: "RESERVATION\n(GOHIGHLEVEL)", icon: "📅", warn: true,
+      href: "chief-sizzling-grill.html",
+      caption: "Booking automation built in GoHighLevel — checks and confirms every reservation." },
+    { key: "booking", theta: 216, phi: -8, label: "BOOKING\nAI AGENT", icon: "🗓️", warn: false,
+      href: "booking-agent.html",
+      caption: "Tally form to Google Calendar check, AI-proposed alternatives, and auto-confirmation." },
+    { key: "trello", theta: 288, phi: 4, label: "TRELLO\nONBOARDING", icon: "🗂️", warn: false,
+      href: "trello-onboarding.html",
+      caption: "A 7-stage client pipeline in Trello — checklists, due dates, and alerts, all automatic." }
+  ];
 
   const satNodes = [];
   SAT.forEach((s, i) => {
     const arm = document.createElement("div");
     arm.className = "hero-orbit-arm";
-    arm.style.transform = `rotateY(${s.angle}deg)`;
 
     const spoke = document.createElement("div");
     spoke.className = "hero-orbit-spoke";
@@ -295,18 +414,26 @@
     arm.appendChild(satWrap);
     world.appendChild(arm);
 
-    satNodes.push({ node, satWrap, billboard, spoke, angle: s.angle });
+    satNodes.push({ node, satWrap, billboard, spoke, arm, theta: s.theta, phi: s.phi });
   });
 
-  function setRadius() {
-    const r = parseFloat(getComputedStyle(mount).getPropertyValue("--ho-radius")) || 145;
+  function layoutSatellites() {
+    const R = parseFloat(getComputedStyle(mount).getPropertyValue("--ho-radius")) || 150;
     satNodes.forEach(s => {
-      s.spoke.style.width = r + "px";
-      s.satWrap.style.transform = `translateX(${r}px)`;
+      s.arm.style.transform = `rotateY(${s.theta}deg) rotateX(${-s.phi}deg)`;
+      s.spoke.style.width = R + "px";
+      s.spoke.style.transform = "translateZ(0)"; // spoke stays in the arm's local XZ plane
+      s.satWrap.style.transform = `translateZ(${R}px)`;
     });
   }
-  setRadius();
-  window.addEventListener("resize", setRadius);
+
+  function layoutAll() {
+    layoutRings();
+    layoutDots();
+    layoutSatellites();
+  }
+  layoutAll();
+  window.addEventListener("resize", layoutAll);
 
   /* ─────────────────────────────────────────
      ROTATION (both axes) + ZOOM STATE
@@ -334,12 +461,13 @@
     if (focusedIndex === i) { clearFocus(); return; }
     focusedIndex = i;
     clearTimeout(resumeTimer);
-    targetYaw = shortestTarget(currentYaw, -SAT[i].angle);
+    targetYaw = shortestTarget(currentYaw, -SAT[i].theta);
     targetZoom = 1.28;
     satNodes.forEach((s, idx) => s.node.classList.toggle("hero-orbit-active", idx === i));
     stageInfo.classList.add("hero-orbit-focused");
     captionTag.textContent = SAT[i].label.replace("\n", " ");
     captionText.textContent = SAT[i].caption;
+    captionLink.href = SAT[i].href;
   }
   function clearFocus() {
     focusedIndex = -1;
@@ -358,7 +486,7 @@
     }, delay);
   }
 
-  /* ---- drag to look around (both axes) ---- */
+  /* ---- drag / swipe to look around (both axes, mouse + touch unified via pointer events) ---- */
   scene.addEventListener("pointerdown", (e) => {
     dragging = true;
     scene.classList.add("hero-orbit-dragging");
@@ -373,8 +501,8 @@
     lastX = e.clientX; lastY = e.clientY;
     targetYaw += dx * 0.4;
     currentYaw += dx * 0.4;
-    targetPitch = clamp(targetPitch - dy * 0.3, -50, 20);
-    currentPitch = clamp(currentPitch - dy * 0.3, -50, 20);
+    targetPitch = clamp(targetPitch - dy * 0.3, -60, 60);
+    currentPitch = clamp(currentPitch - dy * 0.3, -60, 60);
   });
   function endDrag() {
     if (!dragging) return;
@@ -392,10 +520,10 @@
   scene.addEventListener("wheel", (e) => {
     if (!e.ctrlKey) return; // avoid hijacking normal page scroll
     e.preventDefault();
-    targetZoom = clamp(targetZoom - e.deltaY * 0.0016, 0.7, 1.6);
+    targetZoom = clamp(targetZoom - e.deltaY * 0.0016, 0.6, 1.8);
   }, { passive: false });
 
-  /* ---- pinch to zoom (touch) ---- */
+  /* ---- pinch to zoom (touch) — same on mobile as desktop, no separate fallback ---- */
   let pinchStartDist = null, pinchStartZoom = 1;
   scene.addEventListener("touchstart", (e) => {
     if (e.touches.length === 2) {
@@ -408,7 +536,7 @@
     if (e.touches.length === 2 && pinchStartDist) {
       e.preventDefault();
       const d = dist(e.touches[0], e.touches[1]);
-      targetZoom = clamp(pinchStartZoom * (d / pinchStartDist), 0.7, 1.6);
+      targetZoom = clamp(pinchStartZoom * (d / pinchStartDist), 0.6, 1.8);
     }
   }, { passive: false });
   scene.addEventListener("touchend", (e) => { if (e.touches.length < 2) pinchStartDist = null; });
@@ -429,9 +557,12 @@
     currentZoom += (targetZoom - currentZoom) * 0.12;
 
     world.style.transform = `rotateX(${currentPitch}deg) rotateY(${currentYaw}deg) scale(${currentZoom})`;
+
     satNodes.forEach(s => {
-      const counter = -(s.angle + currentYaw);
-      s.billboard.style.transform = `rotateY(${counter}deg)`;
+      // counter-rotate the billboard so the pill/label keep facing the camera
+      // (counters this node's own latitude tilt + its longitude + the world's current yaw)
+      const counterYaw = -(s.theta + currentYaw);
+      s.billboard.style.transform = `rotateX(${s.phi}deg) rotateY(${counterYaw}deg)`;
     });
 
     requestAnimationFrame(frame);

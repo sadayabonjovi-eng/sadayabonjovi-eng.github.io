@@ -5,29 +5,51 @@
     var cards = Array.prototype.slice.call(root.querySelectorAll('.carousel-card'));
     var n = cards.length;
     if (!n || !stage || !ring) return;
-    var cardWidth = root.dataset.cardWidth ? parseInt(root.dataset.cardWidth, 10) : 230;
-    var angleStep = 360 / n;
-    var radius = Math.round((cardWidth / 2) / Math.tan(Math.PI / n)) + 60;
-    cards.forEach(function (card, i) {
-      var angle = angleStep * i;
-      card.style.transform = 'rotateY(' + angle + 'deg) translateZ(' + radius + 'px)';
-    });
-    var rotation = -angleStep * 0;
+
+    function getStep() {
+      // card width + the flex gap between cards, read live so resize keeps it accurate
+      var cardRect = cards[0].getBoundingClientRect();
+      var gap = parseFloat(getComputedStyle(ring).columnGap || getComputedStyle(ring).gap || 0) || 0;
+      return cardRect.width + gap;
+    }
+
+    var index = 0;
+    var offset = 0; // current translateX in px (negative moves left)
     var dragging = false;
     var moved = false;
     var startX = 0;
-    var startRotation = 0;
+    var startOffset = 0;
     var autoTimer = null;
     var resumeTimer = null;
-    function apply() {
-      ring.style.transform = 'rotateY(' + rotation + 'deg)';
+
+    function maxIndex() { return n - 1; }
+
+    function apply(withTransition) {
+      ring.style.transition = withTransition ? 'transform .32s ease' : 'none';
+      ring.style.transform = 'translateX(' + offset + 'px)';
+      prevBtn.disabled = index <= 0;
+      nextBtn.disabled = index >= maxIndex();
     }
+
+    function goTo(newIndex, withTransition) {
+      index = Math.max(0, Math.min(maxIndex(), newIndex));
+      offset = -index * getStep();
+      apply(withTransition !== false);
+    }
+
+    function step(direction) {
+      goTo(index + direction, true);
+      stopAuto();
+      scheduleResume();
+    }
+
     function startAuto() {
       stopAuto();
       autoTimer = setInterval(function () {
-        rotation += 0.045;
-        apply();
-      }, 30);
+        var next = index + 1;
+        if (next > maxIndex()) next = 0; // loop back to the start
+        goTo(next, true);
+      }, 3200);
     }
     function stopAuto() {
       if (autoTimer) clearInterval(autoTimer);
@@ -35,22 +57,16 @@
     }
     function scheduleResume() {
       clearTimeout(resumeTimer);
-      resumeTimer = setTimeout(startAuto, 2200);
+      resumeTimer = setTimeout(startAuto, 2600);
     }
-    // Shared step handler used by keyboard arrows AND the new visible buttons
-    function step(direction) {
-      // direction: 1 = next/right, -1 = prev/left
-      rotation -= direction * angleStep;
-      apply();
-      stopAuto();
-      scheduleResume();
-    }
+
+    // Drag to slide, snaps to the nearest card on release
     stage.addEventListener('pointerdown', function (e) {
       if (e.button !== undefined && e.button !== 0) return;
       dragging = true;
       moved = false;
       startX = e.clientX;
-      startRotation = rotation;
+      startOffset = offset;
       stopAuto();
       clearTimeout(resumeTimer);
       stage.style.cursor = 'grabbing';
@@ -60,20 +76,30 @@
       var dx = e.clientX - startX;
       if (Math.abs(dx) > 4) moved = true;
       if (moved) e.preventDefault();
-      rotation = startRotation + dx * 0.45;
-      apply();
+      offset = startOffset + dx;
+      apply(false);
     }, { passive: false });
-    function endDrag() {
+    function endDrag(e) {
       if (!dragging) return;
       dragging = false;
       stage.style.cursor = 'grab';
+      var dx = (e && e.clientX !== undefined ? e.clientX : startX) - startX;
+      var threshold = getStep() * 0.2;
+      if (dx <= -threshold) {
+        goTo(index + 1, true);
+      } else if (dx >= threshold) {
+        goTo(index - 1, true);
+      } else {
+        goTo(index, true); // snap back to current card
+      }
       scheduleResume();
     }
     document.addEventListener('pointerup', endDrag);
     document.addEventListener('pointercancel', endDrag);
+
     stage.setAttribute('tabindex', '0');
     stage.setAttribute('role', 'group');
-    stage.setAttribute('aria-label', 'Drag to rotate project cards, or use the arrow buttons / arrow keys');
+    stage.setAttribute('aria-label', 'Drag to browse project cards, or use the arrow buttons / arrow keys');
     stage.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowRight') { step(1); }
       if (e.key === 'ArrowLeft') { step(-1); }
@@ -84,9 +110,7 @@
       });
     });
 
-    // --- Visible prev/next buttons (new) ---
-    // These make navigation discoverable without relying on anyone finding
-    // the keyboard shortcut or knowing to click-drag first.
+    // Visible prev/next buttons
     var nav = document.createElement('div');
     nav.className = 'carousel-nav';
 
@@ -102,30 +126,21 @@
     nextBtn.setAttribute('aria-label', 'Next card');
     nextBtn.innerHTML = '&#8594;';
 
-    prevBtn.addEventListener('click', function () {
-      step(-1);
-      stage.focus();
-    });
-    nextBtn.addEventListener('click', function () {
-      step(1);
-      stage.focus();
-    });
+    prevBtn.addEventListener('click', function () { step(-1); stage.focus(); });
+    nextBtn.addEventListener('click', function () { step(1); stage.focus(); });
 
     nav.appendChild(prevBtn);
     nav.appendChild(nextBtn);
     root.appendChild(nav);
 
-    apply();
+    goTo(0, false);
     startAuto();
+
     window.addEventListener('resize', function () {
-      var newCardWidth = root.dataset.cardWidth ? parseInt(root.dataset.cardWidth, 10) : (window.innerWidth < 560 ? 190 : 230);
-      var newRadius = Math.round((newCardWidth / 2) / Math.tan(Math.PI / n)) + 60;
-      cards.forEach(function (card, i) {
-        var angle = angleStep * i;
-        card.style.transform = 'rotateY(' + angle + 'deg) translateZ(' + newRadius + 'px)';
-      });
+      goTo(index, false); // re-snap to the same card at the new card width
     });
   }
+
   function init() {
     document.querySelectorAll('.carousel-3d').forEach(initCarousel);
   }

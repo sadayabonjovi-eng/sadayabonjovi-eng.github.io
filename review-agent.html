@@ -427,10 +427,10 @@
       <p>This is the actual Make.com scenario running live. Every module visible here is active and deployed.</p>
       <div class="diagram-wrap" style="padding:1rem;">
         <img
-          src="files/review-scenario-overview.png"
+          src="files/review-scenario-overview.webp"
           alt="Live Make.com scenario — Review AI Agent full pipeline with three branches"
           style="width:100%; border-radius:6px; display:block;"
-        >
+         loading="lazy">
       </div>
       <p class="scenario-caption">
         // live scenario — Tally trigger → filter → router → negative/neutral/positive branches → Gemini + Parse JSON where needed → Gmail → Sheets
@@ -442,19 +442,19 @@
       <h2>// screenshots</h2>
       <div class="shot-grid">
         <figure>
-          <img src="files/review-owner-alert-email.png" alt="Owner alert email for a negative review, showing the AI-drafted apology awaiting approval">
+          <img src="files/review-owner-alert-email.webp" alt="Owner alert email for a negative review, showing the AI-drafted apology awaiting approval" loading="lazy">
           <figcaption>// negative branch — owner alert email with the AI-drafted apology, held for approval before it ever reaches the customer</figcaption>
         </figure>
         <figure>
-          <img src="files/review-neutral-customer-email.png" alt="Direct customer email for a neutral review, warm and light in tone">
+          <img src="files/review-neutral-customer-email.webp" alt="Direct customer email for a neutral review, warm and light in tone" loading="lazy">
           <figcaption>// neutral branch — AI-drafted reply sent straight to the customer, warm but not over-apologetic</figcaption>
         </figure>
         <figure>
-          <img src="files/review-positive-customer-email.png" alt="Templated thank-you email for a positive review">
+          <img src="files/review-positive-customer-email.webp" alt="Templated thank-you email for a positive review" loading="lazy">
           <figcaption>// positive branch — simple templated thank-you, no AI call made</figcaption>
         </figure>
         <figure>
-          <img src="files/review-sheets-log.png" alt="Google Sheets log with one row per branch — negative, neutral, positive">
+          <img src="files/review-sheets-log.webp" alt="Google Sheets log with one row per branch — negative, neutral, positive" loading="lazy">
           <figcaption>// Google Sheets log — one row per branch, sentiment, status, and owner-notified tracked per review</figcaption>
         </figure>
       </div>

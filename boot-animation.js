@@ -22,6 +22,11 @@
     'white-space:pre;text-align:left;';
   overlay.appendChild(linesEl);
 
+  var hideChatStyle = document.createElement('style');
+  hideChatStyle.textContent =
+    '#bon-chat-widget{opacity:0!important;pointer-events:none!important;transition:none!important;}';
+  document.head.appendChild(hideChatStyle);
+
   var style = document.createElement('style');
   style.textContent =
     '.boot-cursor{display:inline-block;margin-left:2px;animation:boot-blink 1s steps(1) infinite;}' +
@@ -73,6 +78,14 @@
       setTimeout(function () {
         overlay.remove();
       }, 400);
+      setTimeout(function () {
+        hideChatStyle.remove();
+        var chatWidget = document.getElementById('bon-chat-widget');
+        if (chatWidget) {
+          chatWidget.style.transition = 'opacity .5s ease';
+          chatWidget.style.opacity = '';
+        }
+      }, 700);
     }, 250);
   }
 

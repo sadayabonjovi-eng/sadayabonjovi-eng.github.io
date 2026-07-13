@@ -63,18 +63,33 @@
   cursor: pointer;
   padding: 0;
   box-shadow: 0 4px 20px rgba(94, 234, 212, 0.25);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: visible;
+  perspective: 600px;
+  transform-style: preserve-3d;
+  animation: bon-idle-float 4.5s ease-in-out infinite;
 }
 
 #bon-chat-toggle:hover,
 #bon-chat-toggle.bon-hover {
-  transform: translateY(-3px);
   box-shadow: 0 6px 28px rgba(94, 234, 212, 0.4);
+}
+
+@keyframes bon-idle-float {
+  0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
+  50%       { transform: translateY(-5px) rotateX(4deg) rotateY(-4deg); }
+}
+
+#bon-chat-widget.open #bon-chat-toggle {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #bon-chat-toggle { animation: none; }
 }
 
 #bon-chat-toggle img {

@@ -526,6 +526,32 @@ LEAD CAPTURE RULES:
   const pawProgress = document.getElementById("bon-paw-progress");
 
   /* ─────────────────────────────────────────
+     3D TILT ON THE LAUNCHER BUBBLE
+     Idle float runs via CSS keyframes. On
+     hover, we take over with a live tilt that
+     tracks the cursor, then hand back to the
+     idle animation on mouseleave.
+  ───────────────────────────────────────── */
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduceMotion && toggle) {
+    toggle.addEventListener("mouseenter", function () {
+      toggle.style.animationPlayState = "paused";
+    });
+    toggle.addEventListener("mousemove", function (e) {
+      const rect = toggle.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      const rotateY = px * 22;
+      const rotateX = -py * 22;
+      toggle.style.transform = `translateY(-3px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    toggle.addEventListener("mouseleave", function () {
+      toggle.style.transform = "";
+      toggle.style.animationPlayState = "running";
+    });
+  }
+
+  /* ─────────────────────────────────────────
      CAT TAG LABEL ("On duty: [Cat Name]")
   ───────────────────────────────────────── */
   function showCatTag() {

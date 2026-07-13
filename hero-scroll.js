@@ -48,7 +48,7 @@
 
   // ── Canvas setup ──
   var canvas = document.createElement('canvas');
-  canvas.style.cssText = 'width:100%;height:100%;display:block;border-radius:8px;';
+  canvas.style.cssText = 'display:block;border-radius:8px;';
   canvas.setAttribute('aria-hidden', 'true');
 
   // Replace static SVG with canvas
@@ -58,9 +58,15 @@
   // Size canvas to match hero-art
   function sizeCanvas() {
     var rect = heroArt.getBoundingClientRect();
+    var w = rect.width || heroArt.offsetWidth || 280;
+    var h = rect.height || heroArt.offsetHeight || 280;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
+    // Set explicit pixel CSS size — do not rely on height:100% against a
+    // flex/min-height parent, which can resolve to 0 depending on load order.
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
   }
   sizeCanvas();
 
@@ -92,7 +98,10 @@
   ];
 
   // ── Animation state ──
-  var progress = 0;       // 0 → 1, driven by scroll
+  // Start fully assembled (1) rather than 0 — the hero must never render
+  // blank on first paint, before the user has scrolled at all. Scroll only
+  // drives the text crossfade and the signal pulse from here on.
+  var progress = 1;
   var pulseT = 0;         // 0 → 1, loops — the travelling signal dot
 
   // ── Get scroll progress 0–1 based on hero section position ──
@@ -319,10 +328,11 @@
   }
 
   // ── Scroll listener ──
+  // Node/pipeline artwork stays fully assembled (progress = 1) at all times.
+  // Only the text crossfade follows real scroll position.
   var rafId = null;
   function onScroll() {
-    progress = getScrollProgress();
-    updateText(progress);
+    updateText(getScrollProgress());
     if (rafId) return;
     rafId = requestAnimationFrame(function () {
       rafId = null;
@@ -332,23 +342,16 @@
 
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  // ── Animation loop for pulse (only runs when pipeline assembled) ──
+  // ── Animation loop for the travelling signal pulse — runs continuously ──
   var looping = false;
   function startLoop() {
     if (looping) return;
     looping = true;
     (function loop() {
-      if (progress < 0.65) { looping = false; return; }
       draw();
       requestAnimationFrame(loop);
     })();
   }
-
-  // Watch progress to start pulse loop
-  var _origOnScroll = onScroll;
-  window.addEventListener('scroll', function () {
-    if (progress >= 0.65) startLoop();
-  }, { passive: true });
 
   // ── Resize ──
   window.addEventListener('resize', function () {
@@ -361,8 +364,9 @@
   var mo = new MutationObserver(function () { draw(); });
   mo.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
-  // ── Initial draw ──
+  // ── Initial draw — fully assembled, pulse running from the start ──
   sizeCanvas();
   draw();
+  startLoop();
 
 })();

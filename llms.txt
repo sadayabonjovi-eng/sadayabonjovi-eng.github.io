@@ -13,6 +13,22 @@ Bon Jovi F. Sadaya is available for remote work in administrative support, opera
 - [Messenger AI Lead Agent](https://sadayabonjovi-eng.github.io/messenger-ai-agent.html): AI agent qualifying leads inside Facebook Messenger, with full build log and a documented JSON-escaping bug fix.
 - [AI Order Processing & Retention System](https://sadayabonjovi-eng.github.io/order-automation.html): Zapier pipeline that extracts order details via AI, calculates totals, and runs a retention sequence.
 - [Reservation Automation (GoHighLevel)](https://sadayabonjovi-eng.github.io/chief-sizzling-grill.html): Full booking-to-retention pipeline built in GoHighLevel, with a multi-part build log documenting real bugs found and fixed.
+- [Automation Builds](https://sadayabonjovi-eng.github.io/automation.html): Index of additional automation pipelines, each with a trigger, automated steps, decision logic, and a tested result.
+- [Activepieces Messenger AI Chatbot](https://sadayabonjovi-eng.github.io/activepieces-messenger-chatbot.html): A second Messenger AI chatbot rebuilt on Activepieces, with webhook verification, conversation memory, and Groq AI replies.
+- [Booking AI Agent](https://sadayabonjovi-eng.github.io/booking-agent.html): Tally-to-Google-Calendar booking agent with AI-proposed alternative times and automatic confirmation email.
+- [AI Content Publishing Pipeline](https://sadayabonjovi-eng.github.io/content-pipeline.html): Automated daily content pipeline from AI script generation to YouTube and Instagram publishing.
+- [Expense & Income Tracker](https://sadayabonjovi-eng.github.io/expense-tracker.html): A Google Sheets-based financial tracker for small business owners and freelancers.
+- [Gmail Inbox Management System](https://sadayabonjovi-eng.github.io/gmail-management.html): Structured email management system built for client delegation without password sharing.
+- [Google Calendar Management System](https://sadayabonjovi-eng.github.io/google-calendar.html): Multi-client calendar management system for scheduling and recurring tasks.
+- [Google Drive Management](https://sadayabonjovi-eng.github.io/google-drive-management.html): Permission-controlled Google Drive system covering folder architecture and access management.
+- [Job-Search Agent](https://sadayabonjovi-eng.github.io/job-search-agent.html): Automated job-search pipeline that scans job boards daily and generates tailored resumes and cover letters.
+- [Live AI Lead Qualification Agent](https://sadayabonjovi-eng.github.io/lead-qualification.html): The conversational AI agent running live on this portfolio, qualifying visitor leads automatically.
+- [Notion Client & Project Onboarding System](https://sadayabonjovi-eng.github.io/notion-client-onboarding.html): A relational Notion dashboard for running a freelance client pipeline end to end.
+- [Review AI Agent](https://sadayabonjovi-eng.github.io/review-agent.html): Review response agent that routes submissions by star rating and drafts replies with AI.
+- [Trello Client Onboarding Automation](https://sadayabonjovi-eng.github.io/trello-onboarding.html): Automated Trello pipeline moving client cards across onboarding stages with zero manual input.
+- [Core VA Skills](https://sadayabonjovi-eng.github.io/va-skills.html): Manual, detail-driven virtual assistant skills that complement the automation work.
+- [Email Weather Bot](https://sadayabonjovi-eng.github.io/weather-bot.html): Daily automated weather report written in natural language by AI and delivered by email.
+- [Portfolio Slideshow](https://sadayabonjovi-eng.github.io/slideshow.html): Visual walkthrough of skills, background, and projects, built in Google Slides.
 - [Contact](https://sadayabonjovi-eng.github.io/contact.html): Email, phone, and LinkedIn contact details.
 
 ## Skills

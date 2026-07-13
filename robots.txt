@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sadayabonjovi-eng.github.io/sitemap.xml

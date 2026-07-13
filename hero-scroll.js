@@ -26,6 +26,10 @@
        on desktop and mobile
      - Pinch (touch) or Ctrl+wheel (desktop
        trackpad/mouse) to zoom in/out
+     - Tap OR click a node to focus it — handled via
+       a single pointer-based hit-test (see notes by
+       endDrag() below) so it behaves identically on
+       mouse and touchscreen devices
      - Releasing resumes auto-rotate after a pause
      - prefers-reduced-motion disables the automatic
        idle spin only — manual drag/pinch/zoom still
@@ -201,6 +205,7 @@
       transition: transform .2s ease, box-shadow .2s ease;
       font-size: 20px;
     }
+    .hero-orbit-sat-node .hero-orbit-pill svg { display: block; }
     .hero-orbit-sat-node.hero-orbit-warn .hero-orbit-pill { border-color: var(--warn, #f0b86e); }
     .hero-orbit-sat-node:hover .hero-orbit-pill { transform: scale(1.08); }
     .hero-orbit-sat-node.hero-orbit-active .hero-orbit-pill { box-shadow: 0 0 0 4px var(--signal-dim, #2b5c54); }
@@ -370,7 +375,17 @@
      SATELLITE DATA — all 5 automation projects,
      placed at real longitude (theta) + latitude
      (phi) points on the sphere.
+
+     NOTE on icons: GoHighLevel was previously using
+     the same calendar emoji (📅) as the Booking node
+     (🗓️) — the two read as duplicates at a glance.
+     It now uses an inline funnel SVG instead, since
+     GoHighLevel is fundamentally a lead-funnel/CRM
+     platform, and it also reads more crisply than an
+     emoji at this pill size.
   ───────────────────────────────────────── */
+  const FUNNEL_ICON = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/></svg>`;
+
   const SAT = [
     { key: "messenger", theta: 0, phi: 8, label: "MESSENGER AI\nLEAD AGENT", icon: "💬", warn: false,
       href: "messenger-ai-agent.html",
@@ -378,7 +393,7 @@
     { key: "order", theta: 72, phi: -18, label: "ORDER\nAUTOMATION", icon: "📦", warn: false,
       href: "order-automation.html",
       caption: "Extracts order details by AI, calculates totals, then runs the full retention loop." },
-    { key: "reservation", theta: 144, phi: 18, label: "RESERVATION\n(GOHIGHLEVEL)", icon: "📅", warn: true,
+    { key: "reservation", theta: 144, phi: 18, label: "RESERVATION\n(GOHIGHLEVEL)", icon: FUNNEL_ICON, warn: true,
       href: "chief-sizzling-grill.html",
       caption: "Booking automation built in GoHighLevel — checks and confirms every reservation." },
     { key: "booking", theta: 216, phi: -8, label: "BOOKING\nAI AGENT", icon: "🗓️", warn: false,
@@ -407,7 +422,11 @@
     const node = document.createElement("div");
     node.className = "hero-orbit-sat-node" + (s.warn ? " hero-orbit-warn" : "");
     node.innerHTML = `<div class="hero-orbit-pill">${s.icon}</div><div class="hero-orbit-sat-label">${s.label.replace("\n", "<br>")}</div>`;
-    node.addEventListener("click", (e) => { e.stopPropagation(); toggleFocus(i); });
+    // NOTE: node-level click handling was removed on purpose — see the
+    // comment above endDrag() for why a per-node "click" listener silently
+    // fails for mouse users once the scene captures the pointer. Tap/click
+    // is now detected centrally in endDrag() via elementFromPoint, which
+    // behaves identically for mouse, touch, and pen.
 
     billboard.appendChild(node);
     satWrap.appendChild(billboard);
@@ -443,6 +462,7 @@
   let autoYaw = 0;
   let currentZoom = 1, targetZoom = 1;
   let dragging = false, lastX = 0, lastY = 0;
+  let pointerDownX = 0, pointerDownY = 0, pointerMoved = false;
   let focusedIndex = -1;
   let resumeTimer = null;
 
@@ -477,7 +497,6 @@
     autoYaw = currentYaw;
     scheduleResume(300);
   }
-  scene.addEventListener("click", () => { if (focusedIndex !== -1) clearFocus(); });
 
   function scheduleResume(delay) {
     clearTimeout(resumeTimer);
@@ -491,6 +510,8 @@
     dragging = true;
     scene.classList.add("hero-orbit-dragging");
     lastX = e.clientX; lastY = e.clientY;
+    pointerDownX = e.clientX; pointerDownY = e.clientY;
+    pointerMoved = false;
     scene.setPointerCapture(e.pointerId);
     clearTimeout(resumeTimer);
   });
@@ -503,13 +524,43 @@
     currentYaw += dx * 0.4;
     targetPitch = clamp(targetPitch - dy * 0.3, -60, 60);
     currentPitch = clamp(currentPitch - dy * 0.3, -60, 60);
+
+    if (Math.abs(e.clientX - pointerDownX) > 6 || Math.abs(e.clientY - pointerDownY) > 6) {
+      pointerMoved = true;
+    }
   });
-  function endDrag() {
+
+  /* ---- endDrag also doubles as unified tap/click handling ----
+     Why not just use "click" on each node? Because scene.setPointerCapture()
+     above (needed so drag-to-look-around keeps working even if the pointer
+     leaves the scene) retargets ALL subsequent pointer/mouse events —
+     including the synthetic "click" — to the capturing element (the scene),
+     not whatever DOM node is visually under the pointer. That silently broke
+     mouse clicks on nodes (touch sometimes still worked because some
+     browsers hit-test touch-driven clicks differently).
+     The fix: do our own hit-test here with elementFromPoint, which is
+     unaffected by pointer capture and works identically for mouse, touch,
+     and pen. If the pointer barely moved since pointerdown, treat it as a
+     tap/click rather than a drag. */
+  function endDrag(e) {
     if (!dragging) return;
     dragging = false;
     scene.classList.remove("hero-orbit-dragging");
     autoYaw = currentYaw;
     targetYaw = currentYaw;
+
+    if (!pointerMoved && e && typeof e.clientX === "number") {
+      const hit = document.elementFromPoint(e.clientX, e.clientY);
+      const nodeEl = hit && hit.closest(".hero-orbit-sat-node");
+      if (nodeEl) {
+        const idx = satNodes.findIndex(s => s.node === nodeEl);
+        if (idx !== -1) { toggleFocus(idx); return; }
+      } else if (focusedIndex !== -1) {
+        clearFocus();
+        return;
+      }
+    }
+
     if (focusedIndex === -1) scheduleResume(1200);
   }
   scene.addEventListener("pointerup", endDrag);

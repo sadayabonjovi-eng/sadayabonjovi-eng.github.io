@@ -95,11 +95,11 @@
   // ── Node definitions — 5 nodes forming a pipeline ──
   // Positions are in normalised 0–1 space, mapped to canvas at render time
   var NODE_DEFS = [
-    { id: 0, label: 'INPUT',   nx: 0.12, ny: 0.25, icon: 'input', role: 'signal' },
-    { id: 1, label: 'AI',      nx: 0.35, ny: 0.50, icon: 'ai',    role: 'signal' },
-    { id: 2, label: 'ROUTE',   nx: 0.60, ny: 0.28, icon: 'route', role: 'signal' },
-    { id: 3, label: 'LOG',     nx: 0.60, ny: 0.72, icon: 'log',   role: 'signal' },
-    { id: 4, label: 'ALERT',   nx: 0.88, ny: 0.50, icon: 'alert', role: 'warn'   },
+    { id: 0, label: 'INPUT',   nx: 0.12, ny: 0.25, icon: 'link',  color: '#7f77dd' },
+    { id: 1, label: 'AI',      nx: 0.35, ny: 0.50, icon: 'robot', color: '#f7f7f2' },
+    { id: 2, label: 'ROUTE',   nx: 0.60, ny: 0.28, icon: 'route', color: '#5dcaa5' },
+    { id: 3, label: 'LOG',     nx: 0.60, ny: 0.72, icon: 'code',  color: '#e0637a' },
+    { id: 4, label: 'ALERT',   nx: 0.88, ny: 0.50, icon: 'spark', color: '#e8935c' },
   ];
 
   // Edges that form the pipeline
@@ -289,13 +289,14 @@
       var nd = NODE_DEFS[n];
       if (!nd._alpha || nd._alpha <= 0) continue;
 
-      var col = nd.role === 'warn' ? warn : signal;
+      var col = nd.color || signal;
       ctx.globalAlpha = nd._alpha;
 
-      // Soft outer glow
-      var glowR = NODE_R * 2.1;
-      var glow = ctx.createRadialGradient(nd._cx, nd._cy, 0, nd._cx, nd._cy, glowR);
-      glow.addColorStop(0, rgba(col, 0.33));
+      // Wider, stronger outer glow — neon halo like the reference art
+      var glowR = NODE_R * 2.6;
+      var glow = ctx.createRadialGradient(nd._cx, nd._cy, NODE_R * 0.6, nd._cx, nd._cy, glowR);
+      glow.addColorStop(0, rgba(col, 0.55));
+      glow.addColorStop(0.5, rgba(col, 0.18));
       glow.addColorStop(1, 'transparent');
       ctx.beginPath();
       ctx.arc(nd._cx, nd._cy, glowR, 0, Math.PI * 2);
@@ -307,9 +308,16 @@
       ctx.arc(nd._cx, nd._cy, NODE_R, 0, Math.PI * 2);
       ctx.fillStyle = bg2;
       ctx.fill();
+
+      // Bright ring — drawn twice for a crisper neon edge
       ctx.strokeStyle = col;
-      ctx.lineWidth = 1.75;
+      ctx.lineWidth = 2.25;
       ctx.stroke();
+      ctx.save();
+      ctx.shadowColor = col;
+      ctx.shadowBlur = 8;
+      ctx.stroke();
+      ctx.restore();
 
       // Icon
       drawIcon(nd.icon, nd._cx, nd._cy, NODE_R * 0.5, col);
@@ -337,21 +345,59 @@
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    if (type === 'input') {
+    if (type === 'link') {
+      // Two overlapping rounded links (chain-link glyph)
       ctx.beginPath();
-      ctx.moveTo(-r * 0.55, 0);
-      ctx.lineTo(r * 0.3, 0);
-      ctx.moveTo(r * 0.05, -r * 0.35);
-      ctx.lineTo(r * 0.5, 0);
-      ctx.lineTo(r * 0.05, r * 0.35);
+      ctx.ellipse(-r * 0.28, -r * 0.28, r * 0.34, r * 0.22, -Math.PI / 4, 0, Math.PI * 2);
       ctx.stroke();
-    } else if (type === 'ai') {
       ctx.beginPath();
-      ctx.moveTo(0, -r * 0.6);
-      ctx.quadraticCurveTo(r * 0.12, -r * 0.12, r * 0.6, 0);
-      ctx.quadraticCurveTo(r * 0.12, r * 0.12, 0, r * 0.6);
-      ctx.quadraticCurveTo(-r * 0.12, r * 0.12, -r * 0.6, 0);
-      ctx.quadraticCurveTo(-r * 0.12, -r * 0.12, 0, -r * 0.6);
+      ctx.ellipse(r * 0.28, r * 0.28, r * 0.34, r * 0.22, -Math.PI / 4, 0, Math.PI * 2);
+      ctx.stroke();
+    } else if (type === 'robot') {
+      // Simple robot head — square with antenna and two eyes
+      var rw = r * 1.1, rh = r * 0.85;
+      ctx.beginPath();
+      ctx.moveTo(-rw / 2 + rh * 0.25, -rh / 2);
+      ctx.lineTo(rw / 2 - rh * 0.25, -rh / 2);
+      ctx.quadraticCurveTo(rw / 2, -rh / 2, rw / 2, -rh / 2 + rh * 0.25);
+      ctx.lineTo(rw / 2, rh / 2 - rh * 0.25);
+      ctx.quadraticCurveTo(rw / 2, rh / 2, rw / 2 - rh * 0.25, rh / 2);
+      ctx.lineTo(-rw / 2 + rh * 0.25, rh / 2);
+      ctx.quadraticCurveTo(-rw / 2, rh / 2, -rw / 2, rh / 2 - rh * 0.25);
+      ctx.lineTo(-rw / 2, -rh / 2 + rh * 0.25);
+      ctx.quadraticCurveTo(-rw / 2, -rh / 2, -rw / 2 + rh * 0.25, -rh / 2);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(0, -rh / 2);
+      ctx.lineTo(0, -rh / 2 - r * 0.25);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(0, -rh / 2 - r * 0.3, r * 0.06, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(-rw * 0.2, 0, r * 0.09, 0, Math.PI * 2);
+      ctx.arc(rw * 0.2, 0, r * 0.09, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (type === 'code') {
+      ctx.beginPath();
+      ctx.moveTo(-r * 0.15, -r * 0.55);
+      ctx.lineTo(-r * 0.45, 0);
+      ctx.lineTo(-r * 0.15, r * 0.55);
+      ctx.moveTo(r * 0.15, -r * 0.55);
+      ctx.lineTo(r * 0.45, 0);
+      ctx.lineTo(r * 0.15, r * 0.55);
+      ctx.stroke();
+    } else if (type === 'spark') {
+      ctx.beginPath();
+      ctx.moveTo(0, -r * 0.65);
+      ctx.lineTo(r * 0.16, -r * 0.16);
+      ctx.lineTo(r * 0.65, 0);
+      ctx.lineTo(r * 0.16, r * 0.16);
+      ctx.lineTo(0, r * 0.65);
+      ctx.lineTo(-r * 0.16, r * 0.16);
+      ctx.lineTo(-r * 0.65, 0);
+      ctx.lineTo(-r * 0.16, -r * 0.16);
       ctx.closePath();
       ctx.fill();
     } else if (type === 'route') {

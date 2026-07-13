@@ -118,6 +118,7 @@
   }
   .carousel-3d {
     position: relative;
+    padding: 0 3.2rem; /* room for arrow buttons */
   }
   .carousel-stage {
     height: 220px;
@@ -186,6 +187,53 @@
   }
   @media (max-width: 560px) {
     .carousel-card { width: 190px; margin-left: -95px; }
+  }
+
+  /* Visible prev/next controls for .carousel-3d, injected by carousel-3d.js */
+  .carousel-nav {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    pointer-events: none; /* let drag/keys through the empty space between buttons */
+  }
+  .carousel-arrow {
+    pointer-events: auto;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color .2s, color .2s, transform .15s;
+  }
+  .carousel-arrow:hover {
+    border-color: var(--signal);
+    color: var(--signal);
+    transform: scale(1.06);
+  }
+  .carousel-arrow:focus-visible {
+    outline: 1px solid var(--signal);
+    outline-offset: 2px;
+  }
+  .carousel-arrow-prev { margin-left: -3.2rem; }
+  .carousel-arrow-next { margin-right: -3.2rem; }
+
+  @media (max-width: 560px) {
+    .carousel-3d { padding: 0 2.6rem; }
+    .carousel-arrow { width: 34px; height: 34px; font-size: .9rem; }
+    .carousel-arrow-prev { margin-left: -2.6rem; }
+    .carousel-arrow-next { margin-right: -2.6rem; }
   }
 </style>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "fe15fefdc42f4c5598fcf20b4a6d0ec6"}'></script><!-- End Cloudflare Web Analytics -->
@@ -310,7 +358,7 @@
             </a>
           </div>
         </div>
-        <div class="carousel-hint">drag left / right — or use arrow keys</div>
+        <div class="carousel-hint">drag left / right — or use the arrows / arrow keys</div>
       </div>
     </div>
 
@@ -352,7 +400,7 @@
             </a>
           </div>
         </div>
-        <div class="carousel-hint">drag left / right — or use arrow keys</div>
+        <div class="carousel-hint">drag left / right — or use the arrows / arrow keys</div>
       </div>
     </div>
 

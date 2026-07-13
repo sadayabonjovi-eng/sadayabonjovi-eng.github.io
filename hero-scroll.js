@@ -112,10 +112,11 @@
   ];
 
   // ── Animation state ──
-  // Floor of 0.4 means the pipeline is always at least partially visible on
-  // first paint (never blank) — scrolling still drives it the rest of the
-  // way to fully assembled, edges drawn, pulse running.
-  var PROGRESS_FLOOR = 0.4;
+  // Floor of 0 means the pipeline starts fully scattered/separated on first
+  // paint — nodes sit at their off-canvas SCATTER positions until the user
+  // scrolls, at which point they assemble, edges draw in, then the pulse
+  // starts running.
+  var PROGRESS_FLOOR = 0;
   var progress = PROGRESS_FLOOR;
   var pulseT = 0;         // 0 → 1, loops — the travelling signal dot
 
@@ -429,8 +430,9 @@
   }
 
   // ── Scroll listener ──
-  // Node/pipeline artwork sits at PROGRESS_FLOOR by default and assembles
-  // further as the hero scrolls, but never drops back to fully blank.
+  // Node/pipeline artwork starts fully scattered (PROGRESS_FLOOR = 0) and
+  // assembles as the hero scrolls, connecting nodes and finally running
+  // the signal pulse once assembled.
   var rafId = null;
   function onScroll() {
     progress = PROGRESS_FLOOR + (1 - PROGRESS_FLOOR) * getScrollProgress();

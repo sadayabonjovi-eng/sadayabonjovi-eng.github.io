@@ -1235,7 +1235,7 @@
   <script>
     const toggle = document.getElementById('theme-toggle');
     function isDark() { return document.body.classList.contains('dark-mode'); }
-    function setLabel() { toggle.textContent = isDark() ? 'Switch to Light' : 'Switch to Dark'; }
+    function setLabel() { toggle.textContent = isDark() ? 'Switch to Dark' : 'Switch to Light'; }
     toggle.addEventListener('click', () => { document.body.classList.toggle('dark-mode'); setLabel(); });
     setLabel();
   </script>

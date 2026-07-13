@@ -81,11 +81,11 @@
   // ── Node definitions — 5 nodes forming a pipeline ──
   // Positions are in normalised 0–1 space, mapped to canvas at render time
   var NODE_DEFS = [
-    { id: 0, label: 'INPUT',   nx: 0.12, ny: 0.25 },
-    { id: 1, label: 'AI',      nx: 0.35, ny: 0.50 },
-    { id: 2, label: 'ROUTE',   nx: 0.60, ny: 0.28 },
-    { id: 3, label: 'LOG',     nx: 0.60, ny: 0.72 },
-    { id: 4, label: 'ALERT',   nx: 0.88, ny: 0.50 },
+    { id: 0, label: 'INPUT',   nx: 0.12, ny: 0.25, icon: 'input', role: 'signal' },
+    { id: 1, label: 'AI',      nx: 0.35, ny: 0.50, icon: 'ai',    role: 'signal' },
+    { id: 2, label: 'ROUTE',   nx: 0.60, ny: 0.28, icon: 'route', role: 'signal' },
+    { id: 3, label: 'LOG',     nx: 0.60, ny: 0.72, icon: 'log',   role: 'signal' },
+    { id: 4, label: 'ALERT',   nx: 0.88, ny: 0.50, icon: 'alert', role: 'warn'   },
   ];
 
   // Edges that form the pipeline
@@ -98,10 +98,11 @@
   ];
 
   // ── Animation state ──
-  // Start fully assembled (1) rather than 0 — the hero must never render
-  // blank on first paint, before the user has scrolled at all. Scroll only
-  // drives the text crossfade and the signal pulse from here on.
-  var progress = 1;
+  // Floor of 0.4 means the pipeline is always at least partially visible on
+  // first paint (never blank) — scrolling still drives it the rest of the
+  // way to fully assembled, edges drawn, pulse running.
+  var PROGRESS_FLOOR = 0.4;
+  var progress = PROGRESS_FLOOR;
   var pulseT = 0;         // 0 → 1, loops — the travelling signal dot
 
   // ── Get scroll progress 0–1 based on hero section position ──
@@ -138,6 +139,7 @@
 
     var signal  = cssVar('--signal',      '#5eead4');
     var signalD = cssVar('--signal-dim',  '#2b5c54');
+    var warn    = cssVar('--warn',        '#f0b86e');
     var ink     = cssVar('--ink',         '#dde3ea');
     var muted   = cssVar('--muted',       '#7d8b99');
     var bg2     = cssVar('--bg-2',        '#131a22');
@@ -257,34 +259,111 @@
       }
     }
 
-    // ── Draw nodes ──
-    var NODE_R = Math.min(w, h) * 0.065;
+    // ── Draw nodes — circular, glowing, with a simple line icon ──
+    var NODE_R = Math.min(w, h) * 0.075;
 
     for (var n = 0; n < NODE_DEFS.length; n++) {
       var nd = NODE_DEFS[n];
       if (!nd._alpha || nd._alpha <= 0) continue;
 
+      var col = nd.role === 'warn' ? warn : signal;
       ctx.globalAlpha = nd._alpha;
 
-      // Box
-      var bw = NODE_R * 2.4;
-      var bh = NODE_R * 1.5;
+      // Soft outer glow
+      var glowR = NODE_R * 2.1;
+      var glow = ctx.createRadialGradient(nd._cx, nd._cy, 0, nd._cx, nd._cy, glowR);
+      glow.addColorStop(0, col + '55');
+      glow.addColorStop(1, 'transparent');
       ctx.beginPath();
-      ctx.roundRect(nd._cx - bw / 2, nd._cy - bh / 2, bw, bh, 5);
+      ctx.arc(nd._cx, nd._cy, glowR, 0, Math.PI * 2);
+      ctx.fillStyle = glow;
+      ctx.fill();
+
+      // Circle body
+      ctx.beginPath();
+      ctx.arc(nd._cx, nd._cy, NODE_R, 0, Math.PI * 2);
       ctx.fillStyle = bg2;
       ctx.fill();
-      ctx.strokeStyle = signal;
-      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = col;
+      ctx.lineWidth = 1.75;
       ctx.stroke();
 
-      // Label
-      ctx.font = '500 ' + Math.round(NODE_R * 0.55) + 'px "JetBrains Mono", monospace';
-      ctx.fillStyle = signal;
+      // Icon
+      drawIcon(nd.icon, nd._cx, nd._cy, NODE_R * 0.5, col);
+
+      // Label — small caps, sits below the circle
+      ctx.font = '500 ' + Math.round(NODE_R * 0.4) + 'px "JetBrains Mono", monospace';
+      ctx.fillStyle = muted;
       ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(nd.label, nd._cx, nd._cy);
+      ctx.textBaseline = 'top';
+      ctx.fillText(nd.label, nd._cx, nd._cy + NODE_R + 6);
 
       ctx.globalAlpha = 1;
+    }
+
+    ctx.restore();
+  }
+
+  // ── Minimal line icons, drawn centered at (cx, cy) with radius r ──
+  function drawIcon(type, cx, cy, r, color) {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = Math.max(1.3, r * 0.16);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    if (type === 'input') {
+      ctx.beginPath();
+      ctx.moveTo(-r * 0.55, 0);
+      ctx.lineTo(r * 0.3, 0);
+      ctx.moveTo(r * 0.05, -r * 0.35);
+      ctx.lineTo(r * 0.5, 0);
+      ctx.lineTo(r * 0.05, r * 0.35);
+      ctx.stroke();
+    } else if (type === 'ai') {
+      ctx.beginPath();
+      ctx.moveTo(0, -r * 0.6);
+      ctx.quadraticCurveTo(r * 0.12, -r * 0.12, r * 0.6, 0);
+      ctx.quadraticCurveTo(r * 0.12, r * 0.12, 0, r * 0.6);
+      ctx.quadraticCurveTo(-r * 0.12, r * 0.12, -r * 0.6, 0);
+      ctx.quadraticCurveTo(-r * 0.12, -r * 0.12, 0, -r * 0.6);
+      ctx.closePath();
+      ctx.fill();
+    } else if (type === 'route') {
+      ctx.beginPath();
+      ctx.moveTo(-r * 0.5, -r * 0.45);
+      ctx.lineTo(-r * 0.1, 0);
+      ctx.lineTo(-r * 0.5, r * 0.45);
+      ctx.moveTo(-r * 0.1, 0);
+      ctx.lineTo(r * 0.55, 0);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(-r * 0.5, -r * 0.45, r * 0.1, 0, Math.PI * 2);
+      ctx.arc(-r * 0.5, r * 0.45, r * 0.1, 0, Math.PI * 2);
+      ctx.arc(r * 0.55, 0, r * 0.1, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (type === 'log') {
+      ctx.beginPath();
+      ctx.moveTo(-r * 0.5, -r * 0.35); ctx.lineTo(r * 0.5, -r * 0.35);
+      ctx.moveTo(-r * 0.5, 0);         ctx.lineTo(r * 0.5, 0);
+      ctx.moveTo(-r * 0.5, r * 0.35);  ctx.lineTo(r * 0.2, r * 0.35);
+      ctx.stroke();
+    } else if (type === 'alert') {
+      ctx.beginPath();
+      ctx.moveTo(0, -r * 0.6);
+      ctx.lineTo(r * 0.58, r * 0.45);
+      ctx.lineTo(-r * 0.58, r * 0.45);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(0, -r * 0.15);
+      ctx.lineTo(0, r * 0.12);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(0, r * 0.3, r * 0.06, 0, Math.PI * 2);
+      ctx.fill();
     }
 
     ctx.restore();
@@ -328,11 +407,13 @@
   }
 
   // ── Scroll listener ──
-  // Node/pipeline artwork stays fully assembled (progress = 1) at all times.
-  // Only the text crossfade follows real scroll position.
+  // Node/pipeline artwork sits at PROGRESS_FLOOR by default and assembles
+  // further as the hero scrolls, but never drops back to fully blank.
   var rafId = null;
   function onScroll() {
+    progress = PROGRESS_FLOOR + (1 - PROGRESS_FLOOR) * getScrollProgress();
     updateText(getScrollProgress());
+    if (progress >= 0.65) startLoop();
     if (rafId) return;
     rafId = requestAnimationFrame(function () {
       rafId = null;
@@ -342,12 +423,13 @@
 
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  // ── Animation loop for the travelling signal pulse — runs continuously ──
+  // ── Animation loop for the travelling signal pulse ──
   var looping = false;
   function startLoop() {
     if (looping) return;
     looping = true;
     (function loop() {
+      if (progress < 0.65) { looping = false; return; }
       draw();
       requestAnimationFrame(loop);
     })();
@@ -364,9 +446,9 @@
   var mo = new MutationObserver(function () { draw(); });
   mo.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
-  // ── Initial draw — fully assembled, pulse running from the start ──
+  // ── Initial draw ──
   sizeCanvas();
   draw();
-  startLoop();
+  if (progress >= 0.65) startLoop();
 
 })();

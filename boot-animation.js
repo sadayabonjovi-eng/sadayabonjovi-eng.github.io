@@ -1,5 +1,17 @@
 (function () {
-  if (sessionStorage.getItem('boot-seen')) return;
+  function loadChatbot() {
+    var deferred = document.querySelector('script[type="text/boot-defer"]');
+    if (deferred) {
+      var s = document.createElement('script');
+      s.src = deferred.getAttribute('src');
+      deferred.parentNode.replaceChild(s, deferred);
+    }
+  }
+
+  if (sessionStorage.getItem('boot-seen')) {
+    document.addEventListener('DOMContentLoaded', loadChatbot);
+    return;
+  }
 
   var lines = [
     '> booting automate_with_bon.sys',
@@ -11,7 +23,7 @@
   var overlay = document.createElement('div');
   overlay.id = 'boot-overlay';
   overlay.style.cssText =
-    'position:fixed;inset:0;z-index:9999;background:var(--bg,#0d1117);' +
+    'position:fixed;inset:0;z-index:2147483647;background:var(--bg,#0d1117);' +
     'display:flex;align-items:center;justify-content:center;' +
     'font-family:"JetBrains Mono","Fira Code",ui-monospace,monospace;' +
     'transition:opacity .4s ease;opacity:1;';
@@ -21,11 +33,6 @@
     'color:var(--signal,#5eead4);font-size:.95rem;line-height:1.9;' +
     'white-space:pre;text-align:left;';
   overlay.appendChild(linesEl);
-
-  var hideChatStyle = document.createElement('style');
-  hideChatStyle.textContent =
-    '#bon-chat-widget{opacity:0!important;pointer-events:none!important;transition:none!important;}';
-  document.head.appendChild(hideChatStyle);
 
   var style = document.createElement('style');
   style.textContent =
@@ -77,15 +84,8 @@
       sessionStorage.setItem('boot-seen', '1');
       setTimeout(function () {
         overlay.remove();
+        loadChatbot();
       }, 400);
-      setTimeout(function () {
-        hideChatStyle.remove();
-        var chatWidget = document.getElementById('bon-chat-widget');
-        if (chatWidget) {
-          chatWidget.style.transition = 'opacity .5s ease';
-          chatWidget.style.opacity = '';
-        }
-      }, 700);
     }, 250);
   }
 

@@ -150,7 +150,15 @@
     align-items:center;
   }
   .hero-text{ grid-column:1; }
-  .hero-art{ grid-column:2; align-self:center; }
+  .hero-art{
+    grid-column:2;
+    align-self:center;
+    /* Give it a defined height so the canvas has something to size against */
+    min-height:280px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
   .hero-art svg{ width:100%; height:auto; display:block; }
   .welcome{
     font-family:var(--mono);
@@ -163,7 +171,7 @@
   }
   @media (max-width:760px){
     header{ grid-template-columns:1fr; }
-    .hero-art{ grid-column:1; order:-1; max-width:280px; margin:0 auto 1rem; }
+    .hero-art{ grid-column:1; order:-1; max-width:280px; margin:0 auto 1rem; min-height:180px; }
   }
   .status-line{
     font-family:var(--mono);
@@ -204,6 +212,7 @@
     max-width:640px;
     margin:0 0 1.4rem;
     color:var(--ink);
+    transition:opacity .5s ease;
   }
   header .lede strong{ color:var(--signal); font-weight:600; }
 
@@ -479,6 +488,7 @@
     <a href="projects.html" class="cv-button">→ run_projects()</a>
     </div>
     <div class="hero-art" aria-hidden="true">
+      <!-- Static SVG fallback (hidden by hero-scroll.js on desktop, shown on mobile/reduced-motion) -->
       <svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="glow" cx="50%" cy="50%" r="50%">
@@ -617,7 +627,9 @@
   </script>
   <link rel="stylesheet" href="chatbot.css">
   <script src="chatbot.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="network-bg.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="network-bg.js"></script>
+  <!-- Scroll-driven hero pipeline animation — desktop only, respects prefers-reduced-motion -->
+  <script src="hero-scroll.js"></script>
 </body>
 </html>

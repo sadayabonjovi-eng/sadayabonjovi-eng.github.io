@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How I Work — Bon Jovi F. Sadaya</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .principle-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1.2rem;
+    margin:1rem 0 1rem;
+    max-width:820px;
+  }
+  @media (max-width:580px){
+    .principle-grid{ grid-template-columns:1fr; }
+  }
+  .principle-card{
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:var(--bg-2);
+    padding:1.1rem 1.2rem;
+  }
+  .principle-card .entry-tag{ margin-bottom:.5rem; }
+  .principle-card p{ margin:0; max-width:none; font-size:.92rem; }
+
+  .decision-table{
+    width:100%;
+    max-width:820px;
+    border-collapse:collapse;
+    font-family:var(--mono);
+    font-size:.82rem;
+    margin:1rem 0 .5rem;
+  }
+  .decision-table th, .decision-table td{
+    border:1px solid var(--line);
+    padding:.6rem .8rem;
+    text-align:left;
+    vertical-align:top;
+  }
+  .decision-table th{
+    color:var(--muted);
+    font-weight:600;
+    text-transform:uppercase;
+    font-size:.7rem;
+    letter-spacing:.08em;
+    background:var(--bg-2);
+  }
+  .decision-table td strong{ color:var(--signal); }
+  @media (max-width:640px){
+    .decision-table, .decision-table thead, .decision-table tbody, .decision-table th, .decision-table td, .decision-table tr{
+      display:block;
+    }
+    .decision-table thead{ display:none; }
+    .decision-table tr{ border:1px solid var(--line); border-radius:6px; margin-bottom:.8rem; }
+    .decision-table td{ border:none; border-bottom:1px solid var(--line); }
+    .decision-table td:last-child{ border-bottom:none; }
+    .decision-table td::before{
+      content: attr(data-label);
+      display:block;
+      color:var(--muted);
+      font-size:.68rem;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-bottom:.2rem;
+    }
+  }
+</style>
+</head>
+<body>
+<script src="boot-animation.js"></script>
+
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode"></button>
+  </div>
+
+  <header style="grid-template-columns:1fr;">
+    <div class="hero-text">
+      <p class="welcome">How I work</p>
+      <div class="status-line"><span class="pulse"></span> Process, judgment, and how a build actually gets made</div>
+      <h1>Behind the Builds</h1>
+      <p class="lede">
+        The projects show what got built. This page is about
+        <strong>how I get there</strong> — how I scope a problem, choose a tool,
+        debug when something breaks, and keep a client in the loop the whole time.
+      </p>
+    </div>
+  </header>
+
+  <nav>
+    <a href="index.html">/home</a>
+    <a href="about.html">/about</a>
+    <a href="how-i-work.html">/how-i-work</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
+  </nav>
+
+  <div class="container">
+
+    <h2>// how i scope a new automation</h2>
+    <p class="container-intro">
+      Before any tool gets opened, I try to understand the actual problem —
+      not just the feature request.
+    </p>
+
+    <div class="pipeline">
+
+      <section class="project">
+        <span class="entry-tag">Step 1 · listen first</span>
+        <h3>Find the Real Bottleneck</h3>
+        <p>
+          Most requests arrive as "can you automate X." I ask what happens
+          right before and right after X — because the actual time sink is
+          often one step over from where the client is looking.
+          <strong>A form that's slow to fill out</strong> is a different
+          problem than <strong>a form nobody follows up on</strong>, even
+          though both get described the same way.
+        </p>
+      </section>
+
+      <section class="project">
+        <span class="entry-tag">Step 2 · map before building</span>
+        <h3>Sketch the Full Path</h3>
+        <p>
+          I trace the whole path end-to-end — trigger, decision points,
+          where data lands, who gets notified — before touching a build
+          canvas. This is where I catch edge cases early: duplicate
+          submissions, missing fields, what happens if an API call fails
+          halfway through.
+        </p>
+      </section>
+
+      <section class="project">
+        <span class="entry-tag">Step 3 · build the smallest version</span>
+        <h3>Ship the Core Path, Then Layer</h3>
+        <p>
+          I build the main success path first and test it with real data,
+          not sample data. Edge cases, error handling, and notifications
+          get layered on after the core flow is proven — so I'm never
+          debugging five new things at once.
+        </p>
+      </section>
+
+    </div>
+
+    <h2 style="margin-top:1rem;">// how i choose the tool</h2>
+    <p class="container-intro">
+      Make.com, Zapier, and custom code all solve overlapping problems —
+      the deciding factor is usually cost, complexity, and how much control
+      the client will need later.
+    </p>
+
+    <table class="decision-table">
+      <thead>
+        <tr>
+          <th>Situation</th>
+          <th>Tool I reach for</th>
+          <th>Why</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-label="Situation">Multi-branch logic, AI steps, higher volume</td>
+          <td data-label="Tool"><strong>Make.com</strong></td>
+          <td data-label="Why">Visual branching and iterators make complex conditional flows easier to debug and hand off later.</td>
+        </tr>
+        <tr>
+          <td data-label="Situation">Simple trigger-to-action, client already has an account</td>
+          <td data-label="Tool"><strong>Zapier</strong></td>
+          <td data-label="Why">Faster to set up for linear flows, and most small business owners already recognize the interface.</td>
+        </tr>
+        <tr>
+          <td data-label="Situation">Something no-code can't reach — custom parsing, one-off logic</td>
+          <td data-label="Tool"><strong>Custom code / API calls</strong></td>
+          <td data-label="Why">No-code tools hit real limits on custom data transforms; a short script is often more reliable than a workaround.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:2.5rem;">// how i debug when something breaks</h2>
+    <p class="container-intro">
+      Every automation breaks eventually — an API changes, a field renames
+      itself, a trigger fires twice. This is the part that doesn't show up
+      in a finished portfolio piece.
+    </p>
+
+    <div class="principle-grid">
+      <div class="principle-card">
+        <span class="entry-tag">01</span>
+        <p>
+          <strong>Reproduce before I touch anything.</strong> I find the
+          exact input that caused the failure before changing a single
+          module — guessing at fixes usually just moves the bug somewhere
+          harder to find.
+        </p>
+      </div>
+      <div class="principle-card">
+        <span class="entry-tag">02</span>
+        <p>
+          <strong>Check the data, not just the logic.</strong> Most
+          "broken automation" issues are a field that changed shape
+          upstream — a renamed column, a null value — not the workflow
+          itself.
+        </p>
+      </div>
+      <div class="principle-card">
+        <span class="entry-tag">03</span>
+        <p>
+          <strong>Add a safeguard, not just a patch.</strong> Once I know
+          why it broke, I add a filter or error-handler so the same class
+          of failure doesn't return in a different shape next month.
+        </p>
+      </div>
+      <div class="principle-card">
+        <span class="entry-tag">04</span>
+        <p>
+          <strong>Log what happened.</strong> A short written note on what
+          broke and what I changed means the next fix — mine or someone
+          else's — doesn't start from zero.
+        </p>
+      </div>
+    </div>
+
+    <h2 style="margin-top:2.5rem;">// how i communicate with clients</h2>
+    <p class="container-intro">
+      An automation running quietly in the background is only reassuring
+      if the client knows it's actually working.
+    </p>
+
+    <div class="pipeline">
+      <section class="project is-service">
+        <span class="entry-tag">Standing rule</span>
+        <h3>Show, Don't Just Tell</h3>
+        <p>
+          Instead of "the automation is done," I send what it actually
+          produced — a screenshot of the sheet updating, a sample email
+          it sent, a real lead flowing through end-to-end. Clients
+          running a business don't need workflow jargon; they need
+          proof it works.
+        </p>
+        <p>
+          I also flag risk plainly before building anything: what happens
+          if an API goes down, what a manual fallback looks like, and
+          where a human still needs to step in. No surprises after
+          launch.
+        </p>
+        <a href="contact.html" class="contact-btn">→ get_in_touch</a>
+      </section>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    const setLabel = () => {
+      toggle.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Light' : 'Switch to Dark';
+    };
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      setLabel();
+    });
+    setLabel();
+  </script>
+  <link rel="stylesheet" href="chatbot.css">
+  <script src="chatbot.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="network-bg.js"></script>
+</body>
+</html>

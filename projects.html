@@ -569,23 +569,24 @@
     }
 
     stage.addEventListener('pointerdown', function (e) {
+      if (e.button !== undefined && e.button !== 0) return;
       dragging = true;
       moved = false;
       startX = e.clientX;
       startRotation = rotation;
       stopAuto();
       clearTimeout(resumeTimer);
-      stage.setPointerCapture(e.pointerId);
       stage.style.cursor = 'grabbing';
     });
 
-    stage.addEventListener('pointermove', function (e) {
+    document.addEventListener('pointermove', function (e) {
       if (!dragging) return;
       var dx = e.clientX - startX;
       if (Math.abs(dx) > 4) moved = true;
+      if (moved) e.preventDefault();
       rotation = startRotation + dx * 0.45;
       apply();
-    });
+    }, { passive: false });
 
     function endDrag() {
       if (!dragging) return;
@@ -593,11 +594,8 @@
       stage.style.cursor = 'grab';
       scheduleResume();
     }
-    stage.addEventListener('pointerup', endDrag);
-    stage.addEventListener('pointercancel', endDrag);
-    stage.addEventListener('pointerleave', function () {
-      if (dragging) endDrag();
-    });
+    document.addEventListener('pointerup', endDrag);
+    document.addEventListener('pointercancel', endDrag);
 
     stage.setAttribute('tabindex', '0');
     stage.setAttribute('role', 'group');

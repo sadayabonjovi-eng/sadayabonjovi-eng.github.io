@@ -178,6 +178,46 @@
   }
   .notice-box strong { color: var(--warn); }
 
+  .tldr-box {
+    border: 1px solid var(--signal);
+    border-radius: 8px;
+    background: var(--bg-2);
+    padding: 1.3rem 1.5rem 1.5rem;
+    max-width: 820px;
+    margin-bottom: 2rem;
+  }
+  .tldr-box .tldr-label {
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin: 0 0 .7rem;
+  }
+  .tldr-box p {
+    font-size: .92rem;
+    line-height: 1.6;
+    color: var(--ink);
+    margin: 0 0 1rem;
+  }
+  .tldr-jumps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    font-family: var(--mono);
+    font-size: .74rem;
+  }
+  .tldr-jumps a {
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: .25rem .65rem;
+    background: var(--bg);
+    transition: color .2s, border-color .2s;
+  }
+  .tldr-jumps a:hover { color: var(--signal); border-color: var(--signal); }
+
   .back-link {
     font-family: var(--mono);
     font-size: .82rem;
@@ -243,7 +283,29 @@
       destroy-testing — is real work against a simulated business.
     </div>
 
-    <div class="section-block">
+    <div class="tldr-box">
+      <p class="tldr-label">// tl;dr</p>
+      <p>
+        A full reservation-to-retention pipeline built solo on GoHighLevel in four days:
+        intake routing, ownership assignment, a 2-round escalation ladder, real calendar
+        booking, appointment-ID capture, cancellation teardown, and review-response routing —
+        then deliberately broken to find what a "successful" workflow run doesn't tell you.
+        Found and fixed a silent wrong-date booking bug (dates drifted 2-3 months off with no
+        error), a calendar-type mismatch that silently rejected valid bookings, and closed the
+        gap where a fully-booked slot used to fail without telling the customer anything.
+      </p>
+      <div class="tldr-jumps">
+        <a href="#overview">Overview</a>
+        <a href="#bugs">3 bugs, breaking it on purpose</a>
+        <a href="#part-4">Part 4 — the wrong-date bug</a>
+        <a href="#part-5">Part 5 — calendar mismatch</a>
+        <a href="#part-6">Part 6 — review routing</a>
+        <a href="#limitations">Known limitations</a>
+        <a href="#demonstrates">What this demonstrates</a>
+      </div>
+    </div>
+
+    <div class="section-block" id="overview">
       <h2>// overview</h2>
       <p>
         The scope covered two halves of the same problem: a landing page with a reservation
@@ -270,7 +332,7 @@
       </div>
     </div>
 
-    <div class="section-block">
+    <div class="section-block" id="pipeline">
       <h2>// the full pipeline: booking → review → retention</h2>
       <p>
         The booking automation below is one stage of a larger customer-lifecycle system.
@@ -335,7 +397,7 @@
       <p class="scenario-caption">// this case study documents Stage 1 in full, including the Calendar trust-boundary step — originally scoped as a Google Calendar all-day event, later rebuilt as a native GHL Appointment with its own ID-capture workflow (see Part 4 below). Part 6 documents a separate, already-built review response routing layer that reacts to inbound reviews rather than requesting them — distinct from Stage 2. Stages 2 and 3 are now fully designed step-by-step (see Part 7) but not yet built in the workflow canvas.</p>
     </div>
 
-    <div class="section-block">
+    <div class="section-block" id="landing-page">
       <h2>// the landing page</h2>
       <p>
         Built entirely inside GHL's Funnel/Site editor as a single-scroll structure, with
@@ -363,7 +425,7 @@
       </p>
     </div>
 
-    <div class="section-block">
+    <div class="section-block" id="the-automation">
       <h2>// the automation</h2>
       <p>On paper, the base structure is simple:</p>
       <div class="diagram-wrap">
@@ -411,7 +473,7 @@
       <p class="scenario-caption">// getting each box to actually do what its label suggested is where the real work happened</p>
     </div>
 
-    <div class="section-block">
+    <div class="section-block" id="bugs">
       <h2>// three bugs found by breaking it on purpose</h2>
 
       <div class="bug-block">
@@ -482,7 +544,7 @@
       </div>
     </div>
 
-    <div class="section-block">
+    <div class="section-block" id="destroy-testing">
       <h2>// destroy-testing results</h2>
       <p>A deliberate "how can I break this" pass, run before trusting the automation with anything real.</p>
       <table class="step-table">
@@ -497,7 +559,7 @@
       </table>
     </div>
 
-    <div class="section-block">
+    <div class="section-block" id="silent-failure-gap">
       <h2>// closing the silent-failure gap</h2>
       <p>
         Originally the "Found" branch only notified staff — the customer who submitted the
@@ -511,7 +573,7 @@
       </div>
     </div>
 
-    <div class="section-block">
+    <div class="section-block" id="part-3">
       <h2>// part 3 — round-robin assignment &amp; escalation ladder</h2>
       <p>
         Once the Found/Not Found logic was solid, the automation was extended past "notify
@@ -681,7 +743,7 @@
       </div>
     </div>
 
-    <div class="section-block">
+    <div class="section-block" id="part-4">
       <h2>// part 4 — wiring up real appointments, and the bug that shipped wrong dates silently</h2>
       <p>
         With ownership and escalation solid, the last piece was turning a confirmed reservation
@@ -792,7 +854,7 @@
       <p class="scenario-caption">// re-tested with a brand-new contact after the fix — Book Appointment executed successfully and the calendar entry matched the submitted date exactly, closing out the bug</p>
     </div>
 
-    <div class="section-block">
+    <div class="section-block" id="part-5">
       <h2>// part 5 — calendar type mismatch, and closing the loop on failed bookings</h2>
       <p>
         With appointment creation working for the happy path, two more gaps surfaced: what
@@ -849,7 +911,7 @@
       <p class="scenario-caption">// this replaces an earlier assumption — that any Book Appointment failure meant a formatting bug (Bug 07) — with a proper distinction between "the workflow is broken" and "the workflow is working correctly and the slot is genuinely full"</p>
     </div>
 
-    <div class="section-block">
+    <div class="section-block" id="auto-close">
       <h2>// why reservations aren't auto-closed</h2>
       <p>
         Once the Calendar step was designed, an obvious next question came up: could the system
@@ -878,7 +940,7 @@
       <p class="scenario-caption">// conclusion: for this specific business, closing a reservation is correctly a human decision, not a gap to be automated away — the existing "Calendar Event ID already exists" safety-net (below) is the honest, proportionate handling for when that human step gets missed, rather than building an auto-close system to chase a signal that isn't there</p>
     </div>
 
-    <div class="section-block">
+    <div class="section-block" id="part-6">
       <h2>// part 6 — review response routing &amp; the Reviews AI safeguard</h2>
       <p>
         A separate piece, built after the booking system was stable: what happens once a real
@@ -1050,7 +1112,7 @@
       </div>
     </div>
 
-    <div class="section-block">
+    <div class="section-block" id="part-7">
       <h2>// part 7 — post-visit review request &amp; retention sequence (designed, unbuilt)</h2>
       <p>
         With booking (Stage 1) and inbound review routing (Part 6) both built, the remaining
@@ -1117,7 +1179,7 @@
       <p class="scenario-caption">// next implementation step: build this as a workflow triggered off the same Pipeline Stage Changed event used in Part 3, sharing the existing Calendar Event ID field as the anchor for the Wait 2 timing calculation</p>
     </div>
 
-    <div class="section-block">
+    <div class="section-block" id="limitations">
       <h2>// known limitations — documented honestly</h2>
       <p>Named on purpose, not glossed over, as part of the learning process.</p>
       <div class="info-card warning" style="max-width:820px;">
@@ -1136,7 +1198,7 @@
       </div>
     </div>
 
-    <div class="section-block">
+    <div class="section-block" id="demonstrates">
       <h2>// what this demonstrates</h2>
       <p>
         The common thread across all of this: reading past a tool's surface-level label to verify

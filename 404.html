@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="favicon.svg"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="theme-color" content="#0d1117">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+<title>404 — Page Not Found — Bon Jovi F. Sadaya</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="style.css">
+<style>
+  .error-wrap {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 4rem;
+    text-align: center;
+  }
+  .error-code {
+    font-family: var(--mono);
+    font-size: clamp(3.5rem, 14vw, 6rem);
+    font-weight: 700;
+    letter-spacing: -.02em;
+    color: var(--signal);
+    line-height: 1;
+    margin: 0 0 1rem;
+  }
+  .error-terminal {
+    text-align: left;
+    font-family: var(--mono);
+    font-size: .85rem;
+    line-height: 1.9;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-2);
+    padding: 1.2rem 1.5rem;
+    margin: 0 0 2rem;
+  }
+  .error-terminal .prompt { color: var(--signal); }
+  .error-terminal .path { color: var(--warn); }
+  .error-lede {
+    font-size: 1.05rem;
+    color: var(--ink);
+    margin: 0 0 2.2rem;
+    line-height: 1.6;
+  }
+  .error-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .9rem;
+    justify-content: center;
+  }
+</style>
+</head>
+<body>
+<script src="boot-animation.js"></script>
+
+  <div class="topstrip">
+    <span><span class="dot">●</span> system status: available for new workflows</span>
+    <button id="theme-toggle" aria-label="Toggle dark and light mode"></button>
+  </div>
+
+  <nav>
+    <a href="index.html">/home</a>
+    <a href="about.html">/about</a>
+    <a href="projects.html">/projects</a>
+    <a href="contact.html">/contact</a>
+  </nav>
+
+  <div class="error-wrap">
+    <p class="error-code">404</p>
+
+    <div class="error-terminal">
+      <span class="prompt">$</span> find_opportunity --path="<span class="path">/requested-page</span>"<br>
+      → Opportunity Not Found<br>
+      → No matching route in this pipeline
+    </div>
+
+    <p class="error-lede">
+      This page doesn't exist — or moved. Either way, no silent failure here:
+      you're getting an actual message instead of a broken link pretending
+      everything's fine.
+    </p>
+
+    <div class="error-actions">
+      <a href="index.html" class="cv-button">→ back to home</a>
+      <a href="projects.html" class="contact-btn">→ view projects</a>
+    </div>
+  </div>
+
+  <footer>
+    <span>© 2026 Bon Jovi F. Sadaya</span>
+    <span>hosted on GitHub Pages</span>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    function isDark() { return document.body.classList.contains('dark-mode'); }
+    function setLabel() { toggle.textContent = isDark() ? 'Switch to Light' : 'Switch to Dark'; }
+    toggle.addEventListener('click', () => { document.body.classList.toggle('dark-mode'); setLabel(); });
+    setLabel();
+  </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="network-bg.js"></script>
+</body>
+</html>

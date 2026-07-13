@@ -605,10 +605,15 @@ body.bon-flicker::after {
   bottom: 104px;
 }
 
-/* ── Achievement: paw-print progress badge ── */
+/* ── Achievement: paw-print progress badge ──
+   FIX: bottom offset was -34px (mobile: -30px), which put the badge
+   further below the widget's own bottom edge than the widget itself
+   sits above the true viewport edge (1.5rem = 24px desktop, 1rem =
+   16px mobile) — so the badge was rendering partly below the visible
+   screen. Pulled the offset in so it stays fully on-screen. */
 #bon-paw-progress {
   position: absolute;
-  bottom: -34px;
+  bottom: -16px;
   right: 0;
   display: flex;
   align-items: center;
@@ -674,7 +679,7 @@ body.dark-mode .bon-paw-dot.met {
 
 @media (max-width: 480px) {
   #bon-paw-progress {
-    bottom: -30px;
+    bottom: -10px;
     padding: 0.22rem 0.5rem;
     gap: 4px;
   }

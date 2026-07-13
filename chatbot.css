@@ -6,7 +6,7 @@
 
 #bon-chat-widget {
   position: fixed;
-  bottom: 1.5rem;
+  bottom: 2.2rem;
   right: 1.5rem;
   z-index: 9999;
   font-family: "Helvetica Neue", Arial, sans-serif;
@@ -606,15 +606,15 @@ body.bon-flicker::after {
 }
 
 /* ── Achievement: paw-print progress badge ──
-   FIX: bottom offset was -34px (mobile: -30px), which put the badge
-   further below the widget's own bottom edge than the widget itself
-   sits above the true viewport edge (1.5rem = 24px desktop, 1rem =
-   16px mobile) — so the badge was rendering partly below the visible
-   screen. Pulled the offset in so it stays fully on-screen. */
+   FIX (this pass): any offset that put this badge *below* the toggle
+   risked being clipped by the real viewport edge (mobile address bar /
+   home-indicator safe area etc). Moved it to sit beside the toggle,
+   vertically centered, instead — no bottom-edge risk, and it no longer
+   overlaps the toggle button either. */
 #bon-paw-progress {
   position: absolute;
-  bottom: -16px;
-  right: 0;
+  bottom: 15px; /* roughly vertically centers the ~26px-tall badge against the 58px toggle */
+  right: 68px;  /* sits to the left of the toggle (58px wide) with a small gap, instead of below it */
   display: flex;
   align-items: center;
   gap: 5px;
@@ -623,7 +623,7 @@ body.bon-flicker::after {
   border-radius: 20px;
   padding: 0.28rem 0.6rem;
   opacity: 0;
-  transform: translateY(4px);
+  transform: translateX(4px);
   transition: opacity 0.4s ease, transform 0.4s ease, border-color 0.3s ease;
   pointer-events: none;
   white-space: nowrap;
@@ -631,7 +631,7 @@ body.bon-flicker::after {
 
 #bon-paw-progress.show {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateX(0);
 }
 
 #bon-paw-progress.complete {
@@ -679,7 +679,8 @@ body.dark-mode .bon-paw-dot.met {
 
 @media (max-width: 480px) {
   #bon-paw-progress {
-    bottom: -10px;
+    bottom: 13px;
+    right: 62px;
     padding: 0.22rem 0.5rem;
     gap: 4px;
   }
@@ -1202,7 +1203,7 @@ body.dark-mode .bon-intro-caption span {
 /* ── Mobile ── */
 @media (max-width: 480px) {
   #bon-chat-widget {
-    bottom: 1rem;
+    bottom: 1.6rem;
     right: 1rem;
   }
 

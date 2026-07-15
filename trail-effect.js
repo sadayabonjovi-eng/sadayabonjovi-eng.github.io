@@ -14,8 +14,9 @@
 
   const TOKENS = ['++', '//', '**', '</', '/>', '${}', 'fn', 'let', '=>', '->', '{}', '()'];
 
-  let lastSpawn = 0;
-  const SPAWN_INTERVAL = 25; // ms between spawns — keeps characters close together
+  const SPAWN_SPACING = 22; // px between spawned tokens along the path
+  let lastX = null;
+  let lastY = null;
 
   function spawnToken(x, y) {
     const el = document.createElement('span');
@@ -62,13 +63,35 @@
   }
 
   function handleMove(e) {
-    const now = Date.now();
-    if (now - lastSpawn < SPAWN_INTERVAL) return;
-    lastSpawn = now;
     const { x, y } = getPos(e);
-    spawnToken(x, y);
+
+    if (lastX === null) {
+      lastX = x;
+      lastY = y;
+      spawnToken(x, y);
+      return;
+    }
+
+    const dx = x - lastX;
+    const dy = y - lastY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < SPAWN_SPACING) return;
+
+    // Walk along the segment from the last point to this one, dropping a
+    // token every SPAWN_SPACING px, so fast swipes don't leave gaps.
+    const steps = Math.floor(dist / SPAWN_SPACING);
+    for (let i = 1; i <= steps; i++) {
+      const t = (i * SPAWN_SPACING) / dist;
+      spawnToken(lastX + dx * t, lastY + dy * t);
+    }
+
+    lastX = x;
+    lastY = y;
   }
 
   header.addEventListener('mousemove', handleMove);
   header.addEventListener('touchmove', handleMove, { passive: true });
+  header.addEventListener('mouseleave', () => { lastX = null; lastY = null; });
+  header.addEventListener('touchend', () => { lastX = null; lastY = null; });
 })();

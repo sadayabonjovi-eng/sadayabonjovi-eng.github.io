@@ -1,5 +1,5 @@
 /* trail-effect.js
-   Cursor trail of code-flavored tokens, fired on hover over the hero <header>.
+   Cursor trail of code-flavored tokens, active across the full page.
    Uses the site's existing CSS variables (--signal, --warn, --mono) so it
    automatically matches dark/light mode without any extra config.
 */
@@ -14,7 +14,8 @@
 
   const TOKENS = ['++', '//', '**', '</', '/>', '${}', 'fn', 'let', '=>', '->', '{}', '()'];
 
-  const SPAWN_SPACING = 22; // px between spawned tokens along the path
+  const SPAWN_SPACING = 12; // px between spawned tokens — tighter so slow movement still trails
+  const MAX_STEPS_PER_MOVE = 6; // caps how many tokens one fast swipe can spawn at once
   let lastX = null;
   let lastY = null;
 
@@ -62,20 +63,8 @@
     return { x: e.clientX, y: e.clientY };
   }
 
-  function isInsideHeader(x, y) {
-    const rect = header.getBoundingClientRect();
-    return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
-  }
-
   function handleMove(e) {
     const { x, y } = getPos(e);
-    if (!isInsideHeader(x, y)) {
-      // Cursor left the header bounds — reset so we don't draw a long
-      // jump-line when it comes back.
-      lastX = null;
-      lastY = null;
-      return;
-    }
 
     if (lastX === null) {
       lastX = x;
@@ -91,8 +80,9 @@
     if (dist < SPAWN_SPACING) return;
 
     // Walk along the segment from the last point to this one, dropping a
-    // token every SPAWN_SPACING px, so fast swipes don't leave gaps.
-    const steps = Math.floor(dist / SPAWN_SPACING);
+    // token every SPAWN_SPACING px, so fast swipes don't leave gaps —
+    // but cap it so a huge fast swipe doesn't dump dozens of tokens at once.
+    const steps = Math.min(Math.floor(dist / SPAWN_SPACING), MAX_STEPS_PER_MOVE);
     for (let i = 1; i <= steps; i++) {
       const t = (i * SPAWN_SPACING) / dist;
       spawnToken(lastX + dx * t, lastY + dy * t);

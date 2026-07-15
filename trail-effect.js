@@ -62,8 +62,20 @@
     return { x: e.clientX, y: e.clientY };
   }
 
+  function isInsideHeader(x, y) {
+    const rect = header.getBoundingClientRect();
+    return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+  }
+
   function handleMove(e) {
     const { x, y } = getPos(e);
+    if (!isInsideHeader(x, y)) {
+      // Cursor left the header bounds — reset so we don't draw a long
+      // jump-line when it comes back.
+      lastX = null;
+      lastY = null;
+      return;
+    }
 
     if (lastX === null) {
       lastX = x;
@@ -90,8 +102,9 @@
     lastY = y;
   }
 
-  header.addEventListener('mousemove', handleMove);
-  header.addEventListener('touchmove', handleMove, { passive: true });
-  header.addEventListener('mouseleave', () => { lastX = null; lastY = null; });
-  header.addEventListener('touchend', () => { lastX = null; lastY = null; });
+  // Listen on window with capture:true so this fires BEFORE any child
+  // element (like the interactive 3D globe's own drag/zoom handlers) gets
+  // a chance to call stopPropagation() and swallow the event.
+  window.addEventListener('mousemove', handleMove, { capture: true });
+  window.addEventListener('touchmove', handleMove, { capture: true, passive: true });
 })();

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Drag Trail Effect — Themed</title>
+<style>
+  :root {
+    --bg: #0a0e14;
+    --grid-line: rgba(94, 234, 212, 0.06);
+    --teal: #5eead4;
+    --teal-dim: #2dd4bf;
+    --text-dim: #6b7789;
+  }
+
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--bg);
+    overflow: hidden;
+    cursor: crosshair;
+    font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, monospace;
+  }
+
+  /* subtle grid background to match the site */
+  #hero {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  #hero h1 {
+    color: #ffffff;
+    font-size: 4vw;
+    font-weight: 700;
+    letter-spacing: 1px;
+    z-index: 2;
+    pointer-events: none;
+    user-select: none;
+    text-align: center;
+  }
+
+  #hero .accent {
+    color: var(--teal);
+  }
+
+  #hint {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-dim);
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    z-index: 2;
+  }
+
+  .trail-char {
+    position: absolute;
+    pointer-events: none;
+    font-weight: 600;
+    font-family: "SF Mono", "JetBrains Mono", monospace;
+    z-index: 1;
+    will-change: transform, opacity;
+    color: var(--teal);
+    text-shadow: 0 0 6px var(--teal-dim), 0 0 12px rgba(45, 212, 191, 0.4);
+  }
+</style>
+</head>
+<body>
+
+<div id="hero">
+  <h1>Bon Jovi <span class="accent">Sadaya</span></h1>
+  <div id="hint">move your cursor anywhere // matches site theme</div>
+</div>
+
+<script>
+const hero = document.getElementById('hero');
+
+// code-flavored tokens to match the "creds//" / "run_projects()" terminal aesthetic
+const CHARS = ['++', '//', '**', '</', '/>', '${}', 'fn', 'let', '=>', '->', '{}', '()', '_', '0', '1'];
+
+// varied palette so each token gets its own color, like the reference trail
+const COLORS = [
+  '#e07a5f', // rust orange
+  '#c9a13b', // olive gold
+  '#61a0e8', // blue
+  '#d68fd6', // pink/mauve
+  '#5eead4', // teal (site accent)
+  '#8fbf6f', // olive green
+  '#f2c14e', // warm yellow
+];
+
+let lastSpawn = 0;
+const SPAWN_INTERVAL = 25;
+
+function spawnChar(x, y) {
+  const el = document.createElement('span');
+  el.className = 'trail-char';
+  const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+  el.textContent = CHARS[Math.floor(Math.random() * CHARS.length)];
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  el.style.fontSize = (13 + Math.random() * 14) + 'px';
+  el.style.opacity = (0.6 + Math.random() * 0.4).toString();
+  el.style.color = color;
+  el.style.textShadow = `0 0 6px ${color}, 0 0 12px ${color}66`;
+  el.style.transform = `translate(-50%, -50%) rotate(${(Math.random() * 20 - 10)}deg)`;
+
+  hero.appendChild(el);
+
+  const dx = (Math.random() - 0.5) * 36;
+  const dy = (Math.random() - 0.5) * 36 - 16;
+  const duration = 650 + Math.random() * 450;
+
+  requestAnimationFrame(() => {
+    el.style.transition = `transform ${duration}ms ease-out, opacity ${duration}ms ease-out`;
+    el.style.transform += ` translate(${dx}px, ${dy}px) scale(0.7)`;
+    el.style.opacity = '0';
+  });
+
+  setTimeout(() => el.remove(), duration + 50);
+}
+
+function getPos(e) {
+  if (e.touches && e.touches.length) {
+    return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  }
+  return { x: e.clientX, y: e.clientY };
+}
+
+function handleMove(e) {
+  const now = Date.now();
+  if (now - lastSpawn < SPAWN_INTERVAL) return;
+  lastSpawn = now;
+  const { x, y } = getPos(e);
+  spawnChar(x, y);
+}
+
+window.addEventListener('mousemove', handleMove);
+window.addEventListener('touchmove', handleMove, { passive: true });
+</script>
+
+</body>
+</html>

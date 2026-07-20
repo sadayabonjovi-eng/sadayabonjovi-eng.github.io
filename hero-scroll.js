@@ -384,22 +384,29 @@
      platform, and it also reads more crisply than an
      emoji at this pill size.
   ───────────────────────────────────────── */
-  const FUNNEL_ICON = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/></svg>`;
+  // All five node icons share one visual language: a thin outlined SVG
+  // in the site's signal-teal, same stroke weight and cap style, so they
+  // read as one coherent icon set rather than a mix of emoji + one SVG.
+  const FUNNEL_ICON    = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/></svg>`;
+  const CHAT_ICON       = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-3.8 7.1 8.5 8.5 0 0 1-9.4 0L3 21l1.4-4.7A8.38 8.38 0 0 1 3 11.5 8.5 8.5 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z"/></svg>`;
+  const BOX_ICON        = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8z"/><path d="M3.3 7 12 12l8.7-5"/><path d="M12 22V12"/></svg>`;
+  const CALENDAR_ICON   = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`;
+  const PIPELINE_ICON   = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>`;
 
   const SAT = [
-    { key: "messenger", theta: 0, phi: 8, label: "MESSENGER AI\nLEAD AGENT", icon: "💬", warn: false,
+    { key: "messenger", theta: 0, phi: 8, label: "MESSENGER AI\nLEAD AGENT", icon: CHAT_ICON, warn: false,
       href: "messenger-ai-agent.html",
       caption: "Live on Facebook Messenger — qualifies leads 24/7 and logs them automatically." },
-    { key: "order", theta: 72, phi: -18, label: "ORDER\nAUTOMATION", icon: "📦", warn: false,
+    { key: "order", theta: 72, phi: -18, label: "ORDER\nAUTOMATION", icon: BOX_ICON, warn: false,
       href: "order-automation.html",
       caption: "Extracts order details by AI, calculates totals, then runs the full retention loop." },
     { key: "reservation", theta: 144, phi: 18, label: "RESERVATION\n(GOHIGHLEVEL)", icon: FUNNEL_ICON, warn: true,
       href: "chief-sizzling-grill.html",
       caption: "Booking automation built in GoHighLevel — checks and confirms every reservation." },
-    { key: "booking", theta: 216, phi: -8, label: "BOOKING\nAI AGENT", icon: "🗓️", warn: false,
+    { key: "booking", theta: 216, phi: -8, label: "BOOKING\nAI AGENT", icon: CALENDAR_ICON, warn: false,
       href: "booking-agent.html",
       caption: "Tally form to Google Calendar check, AI-proposed alternatives, and auto-confirmation." },
-    { key: "trello", theta: 288, phi: 4, label: "TRELLO\nONBOARDING", icon: "🗂️", warn: false,
+    { key: "trello", theta: 288, phi: 4, label: "TRELLO\nONBOARDING", icon: PIPELINE_ICON, warn: false,
       href: "trello-onboarding.html",
       caption: "A 7-stage client pipeline in Trello — checklists, due dates, and alerts, all automatic." }
   ];

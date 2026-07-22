@@ -75,10 +75,10 @@
   const styles = document.createElement("style");
   styles.textContent = `
     #${MOUNT_ID} {
-      --ho-radius: 150px;
+      --ho-radius: 210px;
     }
     .hero-orbit-panel {
-      max-width: 460px;
+      max-width: 620px;
       width: 100%;
       text-align: center;
       margin: 0 auto;
@@ -96,7 +96,7 @@
     .hero-orbit-scene {
       position: relative;
       width: 100%;
-      max-width: 380px;
+      max-width: 520px;
       aspect-ratio: 1/1;
       margin: 20px auto 10px;
       perspective: 1000px;
@@ -145,13 +145,13 @@
     .hero-orbit-hub {
       position: absolute;
       left: 50%; top: 50%;
-      width: 82px; height: 82px;
-      margin: -41px 0 0 -41px;
+      width: 110px; height: 110px;
+      margin: -55px 0 0 -55px;
       transform-style: preserve-3d;
     }
     .hero-orbit-hub-glow {
       position: absolute;
-      inset: -28px;
+      inset: -38px;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(94,234,212,.5) 0%, transparent 70%);
       animation: heroOrbitPulse 3.2s ease-in-out infinite;
@@ -171,7 +171,7 @@
     @keyframes heroOrbitHubScale { 0%,100% { transform:scale(1); } 50% { transform:scale(1.04); } }
     .hero-orbit-hub-box span {
       font-family: var(--mono, monospace);
-      font-size: .65rem;
+      font-size: .78rem;
       color: var(--signal, #5eead4);
       letter-spacing: .05em;
     }
@@ -185,7 +185,7 @@
       opacity: .55;
     }
     .hero-orbit-sat-wrap { position: absolute; left: 0; top: 0; transform-style: preserve-3d; }
-    .hero-orbit-sat-billboard { position: absolute; left: 0; top: 0; width: 104px; height: 60px; margin: -30px 0 0 -52px; }
+    .hero-orbit-sat-billboard { position: absolute; left: 0; top: 0; width: 138px; height: 80px; margin: -40px 0 0 -69px; }
 
     .hero-orbit-sat-node {
       display: flex;
@@ -195,15 +195,15 @@
       cursor: pointer;
     }
     .hero-orbit-sat-node .hero-orbit-pill {
-      width: 52px; height: 52px;
-      border-radius: 14px;
+      width: 70px; height: 70px;
+      border-radius: 18px;
       background: var(--bg-2, #131a22);
       border: 1.5px solid var(--signal, #5eead4);
       display: flex;
       align-items: center;
       justify-content: center;
       transition: transform .2s ease, box-shadow .2s ease;
-      font-size: 20px;
+      font-size: 26px;
     }
     .hero-orbit-sat-node .hero-orbit-pill svg { display: block; }
     .hero-orbit-sat-node.hero-orbit-warn .hero-orbit-pill { border-color: var(--warn, #f0b86e); }
@@ -387,11 +387,11 @@
   // All five node icons share one visual language: a thin outlined SVG
   // in the site's signal-teal, same stroke weight and cap style, so they
   // read as one coherent icon set rather than a mix of emoji + one SVG.
-  const FUNNEL_ICON    = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/></svg>`;
-  const CHAT_ICON       = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-3.8 7.1 8.5 8.5 0 0 1-9.4 0L3 21l1.4-4.7A8.38 8.38 0 0 1 3 11.5 8.5 8.5 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z"/></svg>`;
-  const BOX_ICON        = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8z"/><path d="M3.3 7 12 12l8.7-5"/><path d="M12 22V12"/></svg>`;
-  const CALENDAR_ICON   = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`;
-  const PIPELINE_ICON   = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>`;
+  const FUNNEL_ICON    = `<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/></svg>`;
+  const CHAT_ICON       = `<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-3.8 7.1 8.5 8.5 0 0 1-9.4 0L3 21l1.4-4.7A8.38 8.38 0 0 1 3 11.5 8.5 8.5 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z"/></svg>`;
+  const BOX_ICON        = `<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8z"/><path d="M3.3 7 12 12l8.7-5"/><path d="M12 22V12"/></svg>`;
+  const CALENDAR_ICON   = `<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`;
+  const PIPELINE_ICON   = `<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="var(--signal, #5eead4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>`;
 
   const SAT = [
     { key: "messenger", theta: 0, phi: 8, label: "MESSENGER AI\nLEAD AGENT", icon: CHAT_ICON, warn: false,

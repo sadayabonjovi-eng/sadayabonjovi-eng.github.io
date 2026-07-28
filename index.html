@@ -249,6 +249,17 @@
   }
   .cv-button:hover{ transform:translateY(-2px); opacity:.9; }
 
+  /* ── Sticky nav wrapper ── */
+  .nav-wrap{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    transition:background .3s ease, border-color .3s ease;
+  }
   nav{
     max-width:920px;
     margin:0 auto;
@@ -259,10 +270,6 @@
     padding:1.1rem 1.5rem;
     font-family:var(--mono);
     font-size:.85rem;
-    background:var(--bg-2);
-    border-radius:6px;
-    border:1px solid var(--line);
-    border-bottom:1px solid var(--line);
   }
   nav a{
     color:var(--muted);
@@ -473,6 +480,118 @@
     flex-wrap:wrap;
     gap:.5rem;
   }
+
+  /* ── Technologies & Integrations — scrolling carousel ── */
+  .tech-carousel-section{
+    padding:2.5rem 0;
+    margin-bottom:2rem;
+    overflow:hidden;
+  }
+  .tech-carousel-section > h2{
+    text-align:center;
+    font-family:var(--mono);
+    font-size:.78rem;
+    letter-spacing:.25em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin:0 0 2rem;
+  }
+  .tech-row{
+    display:flex;
+    width:max-content;
+    gap:.75rem;
+    margin-bottom:.9rem;
+  }
+  .tech-track{
+    display:flex;
+    gap:.75rem;
+    animation:scroll-left 32s linear infinite;
+  }
+  .tech-row.reverse .tech-track{
+    animation:scroll-right 32s linear infinite;
+  }
+  @keyframes scroll-left{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(-50%); }
+  }
+  @keyframes scroll-right{
+    from{ transform:translateX(-50%); }
+    to{ transform:translateX(0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .tech-track{ animation:none; }
+  }
+  .tech-pill{
+    flex:none;
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    padding:.55rem 1.1rem;
+    background:var(--bg-2);
+    border:1px solid var(--line);
+    border-radius:999px;
+    font-family:var(--mono);
+    font-size:.82rem;
+    color:var(--ink);
+    white-space:nowrap;
+  }
+  .tech-pill .dot{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--signal);
+    flex:none;
+  }
+  .tech-carousel-section:hover .tech-track{
+    animation-play-state:paused;
+  }
+  .tech-row-wrap{
+    position:relative;
+    -webkit-mask-image:linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image:linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+
+  /* ── Back to top button ── */
+  #back-to-top{
+    position:fixed;
+    right:1.5rem;
+    bottom:1.5rem;
+    z-index:200;
+    width:44px;
+    height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--bg-2);
+    border:1px solid var(--line);
+    border-radius:50%;
+    color:var(--signal);
+    cursor:pointer;
+    font-family:var(--mono);
+    font-size:1.1rem;
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(10px);
+    transition:opacity .25s ease, transform .25s ease, border-color .2s ease, visibility .25s;
+    box-shadow:0 8px 24px rgba(0,0,0,.35);
+  }
+  #back-to-top.visible{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
+  }
+  #back-to-top:hover{
+    border-color:var(--signal);
+    transform:translateY(-3px);
+  }
+  #back-to-top:focus-visible{
+    outline:2px solid var(--signal);
+    outline-offset:2px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    #back-to-top{ transition:opacity .1s linear; }
+    #back-to-top:hover{ transform:none; }
+  }
 </style>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "fe15fefdc42f4c5598fcf20b4a6d0ec6"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
@@ -549,13 +668,75 @@
     </div>
   </header>
 
-  <nav>
-    <a href="privacy-policy.html">/privacy</a>
-    <a href="about.html">/about</a>
-    <a href="how-i-work.html">/how-i-work</a>
-    <a href="projects.html">/projects</a>
-    <a href="contact.html">/contact</a>
-  </nav>
+  <div class="nav-wrap">
+    <nav>
+      <a href="privacy-policy.html">/privacy</a>
+      <a href="about.html">/about</a>
+      <a href="how-i-work.html">/how-i-work</a>
+      <a href="projects.html">/projects</a>
+      <a href="contact.html">/contact</a>
+    </nav>
+  </div>
+
+  <div class="container tech-carousel-section">
+    <h2>// technologies &amp; integrations</h2>
+
+    <!-- Row 1 — scrolls left -->
+    <div class="tech-row-wrap">
+      <div class="tech-row">
+        <div class="tech-track">
+          <span class="tech-pill"><span class="dot"></span>Make.com</span>
+          <span class="tech-pill"><span class="dot"></span>Zapier</span>
+          <span class="tech-pill"><span class="dot"></span>GoHighLevel</span>
+          <span class="tech-pill"><span class="dot"></span>Activepieces</span>
+          <span class="tech-pill"><span class="dot"></span>Python</span>
+          <span class="tech-pill"><span class="dot"></span>JavaScript</span>
+          <span class="tech-pill"><span class="dot"></span>Groq AI</span>
+          <span class="tech-pill"><span class="dot"></span>Google Gemini</span>
+          <span class="tech-pill"><span class="dot"></span>Claude</span>
+          <span class="tech-pill"><span class="dot"></span>GitHub Actions</span>
+          <span class="tech-pill"><span class="dot"></span>Make.com</span>
+          <span class="tech-pill"><span class="dot"></span>Zapier</span>
+          <span class="tech-pill"><span class="dot"></span>GoHighLevel</span>
+          <span class="tech-pill"><span class="dot"></span>Activepieces</span>
+          <span class="tech-pill"><span class="dot"></span>Python</span>
+          <span class="tech-pill"><span class="dot"></span>JavaScript</span>
+          <span class="tech-pill"><span class="dot"></span>Groq AI</span>
+          <span class="tech-pill"><span class="dot"></span>Google Gemini</span>
+          <span class="tech-pill"><span class="dot"></span>Claude</span>
+          <span class="tech-pill"><span class="dot"></span>GitHub Actions</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2 — scrolls right -->
+    <div class="tech-row-wrap">
+      <div class="tech-row reverse">
+        <div class="tech-track">
+          <span class="tech-pill"><span class="dot"></span>Meta Messenger API</span>
+          <span class="tech-pill"><span class="dot"></span>REST APIs &amp; Webhooks</span>
+          <span class="tech-pill"><span class="dot"></span>Google Workspace</span>
+          <span class="tech-pill"><span class="dot"></span>Google Apps Script</span>
+          <span class="tech-pill"><span class="dot"></span>Trello (Butler)</span>
+          <span class="tech-pill"><span class="dot"></span>Notion</span>
+          <span class="tech-pill"><span class="dot"></span>Canva</span>
+          <span class="tech-pill"><span class="dot"></span>CapCut</span>
+          <span class="tech-pill"><span class="dot"></span>Tally Forms</span>
+          <span class="tech-pill"><span class="dot"></span>Prompt Engineering</span>
+          <span class="tech-pill"><span class="dot"></span>Meta Messenger API</span>
+          <span class="tech-pill"><span class="dot"></span>REST APIs &amp; Webhooks</span>
+          <span class="tech-pill"><span class="dot"></span>Google Workspace</span>
+          <span class="tech-pill"><span class="dot"></span>Google Apps Script</span>
+          <span class="tech-pill"><span class="dot"></span>Trello (Butler)</span>
+          <span class="tech-pill"><span class="dot"></span>Notion</span>
+          <span class="tech-pill"><span class="dot"></span>Canva</span>
+          <span class="tech-pill"><span class="dot"></span>CapCut</span>
+          <span class="tech-pill"><span class="dot"></span>Tally Forms</span>
+          <span class="tech-pill"><span class="dot"></span>Prompt Engineering</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="container">
 
@@ -594,7 +775,7 @@
 
       <!-- 3. GHL Reservation Automation -->
       <article class="feat-card">
-        <span class="feat-tag">No-Code · GoHighLevel · Featured</span>
+        <span class="feat-tag">No-Code · GoHighLevel · Practice Build</span>
         <h3>Reservation Automation (GoHighLevel)</h3>
         <p>
           A reservation landing page and CRM automation built inside <strong>GoHighLevel</strong> — the platform most in-demand right now among agencies and local businesses. Every submission is checked against existing bookings, then routed to confirm or flag it automatically.
@@ -622,7 +803,10 @@
         <li>Data entry & spreadsheet tracking</li>
         <li>Documentation & reporting</li>
         <li>Customer support & feedback handling</li>
-        <li>Make.com & Zapier workflow builds</li>
+        <li>Make.com, Zapier & Activepieces workflows</li>
+        <li>GoHighLevel CRM & automation</li>
+        <li>AI agent development (Groq, Gemini, Claude)</li>
+        <li>Python & JavaScript scripting</li>
       </ul>
       <a href="contact.html" class="warn-btn">→ get_in_touch</a>
     </div>
@@ -634,12 +818,28 @@
     <span>hosted on GitHub Pages</span>
   </footer>
 
+  <button id="back-to-top" aria-label="Back to top">↑</button>
+
   <script>
     const toggle = document.getElementById('theme-toggle');
     function isDark() { return document.body.classList.contains('dark-mode'); }
     function setLabel() { toggle.textContent = isDark() ? 'Switch to Dark' : 'Switch to Light'; }
     toggle.addEventListener('click', () => { document.body.classList.toggle('dark-mode'); setLabel(); });
     setLabel();
+
+    const backToTop = document.getElementById('back-to-top');
+    function toggleBackToTop() {
+      if (window.scrollY > 500) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    }
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+    toggleBackToTop();
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   </script>
   <link rel="stylesheet" href="chatbot.css">
   <script src="chatbot.js"></script>

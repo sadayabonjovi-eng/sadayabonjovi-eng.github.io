@@ -411,6 +411,10 @@ header .lede strong {
 ========================= */
 
 nav {
+  position: sticky;
+  top: 0.75rem;
+  z-index: 100;
+
   max-width: 980px;
 
   margin: 0 auto;
@@ -427,7 +431,7 @@ nav {
   border: 1px solid var(--line);
   border-radius: var(--radius);
 
-  background: color-mix(in srgb, var(--bg-2) 80%, transparent);
+  background: color-mix(in srgb, var(--bg-2) 92%, transparent);
 
   backdrop-filter: blur(12px);
 
@@ -742,4 +746,60 @@ nav a:hover::after {
   max-width: 620px;
 
   color: var(--muted);
+}
+
+/* =========================
+   BACK TO TOP BUTTON
+========================= */
+
+#back-to-top {
+  position: fixed;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 200;
+
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+
+  color: var(--signal);
+  cursor: pointer;
+
+  font-family: var(--mono);
+  font-size: 1.1rem;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+
+  transition: opacity .25s ease, transform .25s ease, border-color .2s ease, visibility .25s;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+}
+
+#back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+#back-to-top:hover {
+  border-color: var(--signal);
+  transform: translateY(-3px);
+}
+
+#back-to-top:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #back-to-top { transition: opacity .1s linear; }
+  #back-to-top:hover { transform: none; }
 }

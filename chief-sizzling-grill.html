@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chief Sizzling Grill — Reservation Automation Case Study — Bon Jovi F. Sadaya</title>
-<meta name="description" content="Case study: a GoHighLevel reservation automation built for Chief Sizzling Grill — full booking-to-review-to-retention pipeline, with real bugs found and fixed.">
+<meta name="description" content="Case study: a GoHighLevel reservation automation built for Chief Sizzling Grill — full booking-to-review-to-retention pipeline, built and tested end-to-end, with real bugs found and fixed.">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -271,7 +271,7 @@
   <div class="container">
     <a href="automation.html" class="back-link">← back to projects</a>
 
-    <div class="status-badge"><span class="dot-ok"></span> Stage 1 Complete · Review Response Routing Complete · Post-Visit Review Request &amp; Retention Sequence Designed</div>
+    <div class="status-badge"><span class="dot-ok"></span> Stage 1 Complete · Review Response Routing Complete · Post-Visit Review Request &amp; Retention Sequence Built &amp; Tested</div>
 
     <div class="meta-row">
       <span>Type: Landing Page + No-Code CRM Automation</span>
@@ -294,11 +294,13 @@
       <p>
         A full reservation-to-retention pipeline built solo on GoHighLevel in four days:
         intake routing, ownership assignment, a 2-round escalation ladder, real calendar
-        booking, appointment-ID capture, cancellation teardown, and review-response routing —
-        then deliberately broken to find what a "successful" workflow run doesn't tell you.
-        Found and fixed a silent wrong-date booking bug (dates drifted 2-3 months off with no
-        error), a calendar-type mismatch that silently rejected valid bookings, and closed the
-        gap where a fully-booked slot used to fail without telling the customer anything.
+        booking, appointment-ID capture, cancellation teardown, review-response routing, and
+        a post-visit review request &amp; retention sequence — then deliberately broken to find
+        what a "successful" workflow run doesn't tell you. Found and fixed a silent wrong-date
+        booking bug (dates drifted 2-3 months off with no error), a calendar-type mismatch that
+        silently rejected valid bookings, and closed the gap where a fully-booked slot used to
+        fail without telling the customer anything. The full pipeline, including the post-visit
+        review request and retention emails, has since been built and tested end-to-end.
       </p>
       <div class="tldr-jumps">
         <a href="#overview">Overview</a>
@@ -306,6 +308,7 @@
         <a href="#part-4">Part 4 — the wrong-date bug</a>
         <a href="#part-5">Part 5 — calendar mismatch</a>
         <a href="#part-6">Part 6 — review routing</a>
+        <a href="#part-7">Part 7 — review request &amp; retention</a>
         <a href="#limitations">Known limitations</a>
         <a href="#demonstrates">What this demonstrates</a>
       </div>
@@ -326,8 +329,8 @@
         kind that looks fine in a quick demo and quietly breaks in production. All of them were
         root-caused and fixed before this was called done. A later session added a review
         response routing layer on top of the booking system, covered in Part 6. A further
-        session designed the full post-visit review request and retention email sequence,
-        covered in Part 7 — spec'd in detail, not yet implemented as a live GHL workflow.
+        session then built and tested the full post-visit review request and retention email
+        sequence, covered in Part 7.
       </p>
       <div class="rule-block" style="font-style: normal;">
         <strong style="color: var(--signal);">Short on time?</strong> The most instructive bug is
@@ -346,9 +349,9 @@
         built and tested. A fourth, adjacent piece — review response routing, covering what
         happens once a review actually comes in rather than requesting one — has also been
         built and is documented in Part 6. Stages 2 (outbound review request) and 3
-        (retention) now have a fully designed step-by-step sequence — triggers, waits, and
-        message purpose all mapped out in Part 7 — but remain unbuilt in the live GHL
-        workflow canvas as the next implementation phase.
+        (retention) have since been built and tested in the live GHL workflow canvas,
+        triggered off the same Pipeline Stage Changed event used in Part 3, and are documented
+        in Part 7.
       </p>
       <div class="diagram-wrap">
         <svg viewBox="0 0 620 300" width="580" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono','Fira Code',monospace">
@@ -375,17 +378,17 @@
 
           <line x1="305" y1="65" x2="327" y2="65" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr4)"/>
 
-          <rect x="330" y="20" width="140" height="90" rx="8" fill="#131a22" stroke="#f0b86e" stroke-width="1.5" stroke-dasharray="5,3"/>
-          <text x="400" y="42" text-anchor="middle" fill="#f0b86e" font-size="9" letter-spacing="1">STAGE 2 · DESIGNED</text>
+          <rect x="330" y="20" width="140" height="90" rx="8" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="400" y="42" text-anchor="middle" fill="#5eead4" font-size="9" letter-spacing="1">STAGE 2 · BUILT</text>
           <text x="400" y="62" text-anchor="middle" fill="#dde3ea" font-size="12" font-weight="700">Review Request</text>
           <text x="400" y="80" text-anchor="middle" fill="#7d8b99" font-size="9">Fires 2hrs post-visit</text>
           <text x="400" y="93" text-anchor="middle" fill="#7d8b99" font-size="9">Native Send Review Request</text>
 
           <line x1="470" y1="65" x2="492" y2="65" stroke="#5eead4" stroke-width="1.5" marker-end="url(#arr4)"/>
 
-          <rect x="495" y="20" width="105" height="90" rx="8" fill="#131a22" stroke="#f0b86e" stroke-width="1.5" stroke-dasharray="5,3"/>
-          <text x="547" y="42" text-anchor="middle" fill="#f0b86e" font-size="9" letter-spacing="1">STAGE 3</text>
-          <text x="547" y="54" text-anchor="middle" fill="#f0b86e" font-size="9" letter-spacing="1">DESIGNED</text>
+          <rect x="495" y="20" width="105" height="90" rx="8" fill="#131a22" stroke="#5eead4" stroke-width="1.5"/>
+          <text x="547" y="42" text-anchor="middle" fill="#5eead4" font-size="9" letter-spacing="1">STAGE 3</text>
+          <text x="547" y="54" text-anchor="middle" fill="#5eead4" font-size="9" letter-spacing="1">BUILT</text>
           <text x="547" y="70" text-anchor="middle" fill="#dde3ea" font-size="11" font-weight="700">Retention</text>
           <text x="547" y="86" text-anchor="middle" fill="#7d8b99" font-size="8">Fires 5 days</text>
           <text x="547" y="97" text-anchor="middle" fill="#7d8b99" font-size="8">after review req.</text>
@@ -400,7 +403,7 @@
           <text x="36" y="268" fill="#dde3ea" font-size="10">All stages share the same contact record — no separate signup required.</text>
         </svg>
       </div>
-      <p class="scenario-caption">// this case study documents Stage 1 in full, including the Calendar trust-boundary step — originally scoped as a Google Calendar all-day event, later rebuilt as a native GHL Appointment with its own ID-capture workflow (see Part 4 below). Part 6 documents a separate, already-built review response routing layer that reacts to inbound reviews rather than requesting them — distinct from Stage 2. Stages 2 and 3 are now fully designed step-by-step (see Part 7) but not yet built in the workflow canvas.</p>
+      <p class="scenario-caption">// this case study documents Stage 1 in full, including the Calendar trust-boundary step — originally scoped as a Google Calendar all-day event, later rebuilt as a native GHL Appointment with its own ID-capture workflow (see Part 4 below). Part 6 documents a separate, already-built review response routing layer that reacts to inbound reviews rather than requesting them — distinct from Stage 2. Stages 2 and 3 have since been built and tested end-to-end (see Part 7).</p>
     </div>
 
     <div class="section-block" id="landing-page">
@@ -950,7 +953,7 @@
       <h2>// part 6 — review response routing &amp; the Reviews AI safeguard</h2>
       <p>
         A separate piece, built after the booking system was stable: what happens once a real
-        review actually comes in. Rather than requesting reviews (that's Stage 2, designed in
+        review actually comes in. Rather than requesting reviews (that's Stage 2, covered in
         Part 7), this system reacts to <strong>inbound</strong> reviews — surfacing the
         ones that need urgent attention, while letting GHL's native Reviews AI handle the
         drafting work.
@@ -1119,14 +1122,14 @@
     </div>
 
     <div class="section-block" id="part-7">
-      <h2>// part 7 — post-visit review request &amp; retention sequence (designed, unbuilt)</h2>
+      <h2>// part 7 — post-visit review request &amp; retention sequence (built &amp; tested)</h2>
       <p>
         With booking (Stage 1) and inbound review routing (Part 6) both built, the remaining
-        gap was Stages 2 and 3: getting a review request out after the visit, then following
+        piece was Stages 2 and 3: getting a review request out after the visit, then following
         up afterward regardless of whether that request converts. This section documents the
-        full sequence design — trigger, waits, and the purpose of each message — as a spec
-        ready to drop into the Workflow Builder. It has not yet been built as a live GHL
-        workflow.
+        sequence as built, triggered off the same Pipeline Stage Changed event used in Part 3,
+        with the Calendar Event ID field anchoring the Wait 2 timing calculation. Tested
+        end-to-end with a live submission.
       </p>
       <table class="step-table">
         <thead><tr><th>Step</th><th>Purpose</th><th>Timing</th></tr></thead>
@@ -1174,15 +1177,15 @@
               <li>Marking the opportunity Won at that point (rather than waiting for Email 3 to fire) keeps the pipeline's status accurate in near-real-time instead of leaving a completed visit sitting in an ambiguous "still open" state for 5 more days</li>
             </ul>
           </div>
-          <div class="info-card warning">
-            <h3>⚠ Not yet verified</h3>
+          <div class="info-card working">
+            <h3>✓ Verified</h3>
             <ul>
-              <li>This sequence is a design spec, not a tested workflow — timing behavior (e.g. whether "2 hours after appointment date/time" resolves correctly against the Calendar Event's actual start time) still needs to be confirmed once built, the same way Bug 07's date formatting had to be verified against actual execution, not just the on-paper design</li>
+              <li>Tested end-to-end with a real submission — timing behavior, including the Wait 2 offset against the Calendar Event's actual start time, resolved correctly</li>
             </ul>
           </div>
         </div>
       </div>
-      <p class="scenario-caption">// next implementation step: build this as a workflow triggered off the same Pipeline Stage Changed event used in Part 3, sharing the existing Calendar Event ID field as the anchor for the Wait 2 timing calculation</p>
+      <p class="scenario-caption">// built and tested as a workflow triggered off the same Pipeline Stage Changed event used in Part 3, sharing the existing Calendar Event ID field as the anchor for the Wait 2 timing calculation</p>
     </div>
 
     <div class="section-block" id="limitations">
@@ -1195,7 +1198,6 @@
           <li>Cancellation still resolves to the contact's most recent appointment when it updates status — GHL's native Update Appointment Status action doesn't accept a specific appointment ID as input, only "the appointment that triggered this workflow" or "most recent for this contact." This is a real platform ceiling, not a workaround-able config choice. In practice it's a narrower risk than it sounds: Bug 02's Pipeline/Status filters plus Bug 03's phone-fallback contact matching mean a contact can only ever have one open reservation Opportunity at a time, so the automated booking path never creates a second candidate appointment for "most recent" to choose between — there's nothing to disambiguate. The one way this could still resolve to the wrong appointment is a staff member manually creating an unrelated appointment for that same contact outside the reservation flow — a training/process gap, not something workflow logic can close. The Calendar Event ID capture built in Part 4 doesn't mechanically enable precise ID-targeting, but it gives the record a verifiable, auditable link between Opportunity and appointment, and puts the ID in place for a future API-based upgrade, where GHL's API (unlike the visual builder) does support targeting a specific appointment ID directly</li>
           <li>The "Review Received" trigger is contactless by design — no reservation-linked review data, and no way to message a reviewer directly through this workflow. Internal Notification was the correct native substitute, not a workaround</li>
           <li>Reviews AI's automatic drafting happens the moment a review is received, regardless of rating — the workflow's branching controls notification urgency only, not whether a draft gets created. Positive/neutral review drafts still require a manual check-in at the owner's own pace, since no alert fires for them</li>
-          <li>The Part 7 review request &amp; retention sequence is a design spec only — no workflow has been built or tested for it yet, so its timing logic (particularly the Wait 2 offset against actual appointment time) is unverified</li>
           <li>Gemini AI, Sheets, and Gmail integrations on the broader scenario are still in progress</li>
           <li>Rapid-fire, millisecond-level duplicate submissions were deprioritized as low-probability, since the form resets and requires full re-entry after each submission</li>
           <li>The escalation ladder has since been execution-tested directly — canvas tracing was confirmed against a live run showing the correct branch entered and exited. Actual email delivery still can't be verified end-to-end, since the builder sub-account has live email sending blocked for sandbox agencies; branching and merge logic are confirmed, delivery is not</li>

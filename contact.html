@@ -123,6 +123,7 @@
     text-align: left;
   }
   .submit-btn:hover { opacity: .88; transform: translateY(-1px); }
+  .submit-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
 
   .success-message {
     display: none;
@@ -133,6 +134,38 @@
     background: var(--bg-2);
     border-radius: 4px;
     padding: .75rem 1rem;
+  }
+
+  .form-error-message {
+    display: none;
+    align-items: flex-start;
+    gap: .6rem;
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: #e05c5c;
+    border: 1px solid rgba(224, 92, 92, .4);
+    background: var(--bg-2);
+    border-radius: 4px;
+    padding: .75rem 1rem;
+  }
+  .form-error-message .fe-icon { flex-shrink: 0; }
+  .form-error-message .fe-text { flex: 1; }
+  .form-error-message .fe-retry {
+    background: none;
+    border: 1px solid rgba(224, 92, 92, .5);
+    color: #e05c5c;
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .05em;
+    border-radius: 3px;
+    padding: .3rem .6rem;
+    cursor: pointer;
+    transition: background .2s, border-color .2s;
+    white-space: nowrap;
+  }
+  .form-error-message .fe-retry:hover {
+    background: rgba(224, 92, 92, .12);
+    border-color: #e05c5c;
   }
 
   .page-intro {
@@ -228,6 +261,11 @@
           <p class="char-count">0 / 500 characters</p>
           <button type="submit" class="submit-btn">→ send_message()</button>
           <div class="success-message">✓ Message received — I'll get back to you shortly.</div>
+          <div class="form-error-message">
+            <span class="fe-icon">✕</span>
+            <span class="fe-text">Something went wrong. Please try again.</span>
+            <button type="button" class="fe-retry">retry</button>
+          </div>
         </form>
       </div>
 
@@ -259,9 +297,24 @@
 
     const form = document.getElementById('contactForm');
     const successMessage = document.querySelector('.success-message');
+    const errorMessage = document.querySelector('.form-error-message');
+    const errorText = errorMessage.querySelector('.fe-text');
+    const retryBtn = errorMessage.querySelector('.fe-retry');
+    const submitBtn = form.querySelector('.submit-btn');
 
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
+    function showFormError(message) {
+      errorText.textContent = message;
+      errorMessage.style.display = 'flex';
+    }
+
+    function hideFormError() {
+      errorMessage.style.display = 'none';
+    }
+
+    async function submitForm() {
+      hideFormError();
+      successMessage.style.display = 'none';
+
       let valid = true;
       form.querySelectorAll('input, textarea').forEach(field => {
         if (!field.value.trim()) {
@@ -271,26 +324,40 @@
           field.classList.remove('error');
         }
       });
-      if (valid) {
-        try {
-          const response = await fetch(form.action, {
-            method: 'POST',
-            body: new FormData(form),
-            headers: { 'Accept': 'application/json' }
-          });
-          if (response.ok) {
-            successMessage.style.display = 'block';
-            form.reset();
-            charCount.textContent = '0 / 500 characters';
-            window.dispatchEvent(new CustomEvent('bon:messageSent'));
-          } else {
-            alert('There was a problem sending your message. Please try again.');
-          }
-        } catch (error) {
-          alert('Network error. Please try again later.');
+      if (!valid) return;
+
+      submitBtn.disabled = true;
+      const originalLabel = submitBtn.textContent;
+      submitBtn.textContent = '→ sending...';
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (response.ok) {
+          successMessage.style.display = 'block';
+          form.reset();
+          charCount.textContent = '0 / 500 characters';
+          window.dispatchEvent(new CustomEvent('bon:messageSent'));
+        } else {
+          showFormError('There was a problem sending your message. Please try again.');
         }
+      } catch (error) {
+        showFormError('Network error — please check your connection and try again.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalLabel;
       }
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      submitForm();
     });
+
+    retryBtn.addEventListener('click', submitForm);
   </script>
   <link rel="stylesheet" href="chatbot.css">
 <script src="chatbot.js"></script>

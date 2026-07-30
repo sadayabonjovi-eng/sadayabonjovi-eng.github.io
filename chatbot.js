@@ -290,20 +290,36 @@ KEY FACTS RULES:
 
 SKILLS & TOOLS:
 - Virtual Assistant: email management, calendar scheduling, Google Workspace (Drive, Docs, Sheets, Gmail), data entry, administrative support
-- Automation: Zapier (Building Intermediate Zaps cert #0380C161, Building AI Agents cert #D275D86B — both June 2026), Make.com (in progress)
-- Other tools: Canva, CapCut, Zoom, Microsoft Office, Google Workspace
+- Automation: Zapier (Building Intermediate Zaps cert #0380C161, Building AI Agents cert #D275D86B — both June 2026), Make.com (Make Advanced cert, AI Agent Builder cert — both June 2026), Activepieces, GoHighLevel (GHL)
+- AI tools: Groq, Google Gemini, Claude — used for agent replies, content generation, and order/lead extraction
+- Other tools: Canva, CapCut, Zoom, Microsoft Office, Google Workspace, Notion, Trello, Tally Forms, GitHub Actions
 - Technical: TESDA NC II in Computer Systems Servicing
+- Other certs: HP LIFE — AI for Business Professionals, HP LIFE — Critical Thinking in the AI Era (both HP Foundation, June 2026)
 - Also learning: n8n, Relevance AI, CrewAI, prompt engineering
 
-AUTOMATION PROJECTS:
-1. Order Processing System — fully live, 50+ steps across 3 Zaps
-2. Content Pipeline — 23 steps, 6 conditional paths (System Design Showcase due to paid plan limits on Visla/Gemini)
-3. Client Expense & Income Tracker — built from scratch in Google Sheets (SUMIFS, dashboard, charts)
-4. Trello Client Onboarding Automation — fully live on Trello, built with Trello Butler (free plan, no external tools). 7-stage automated pipeline: Lead → Proposal Sent → Contract Signed → Onboarding → Active → Offboarding → Completed. 8+ Butler rules handle auto checklist swaps per stage, due date resets, urgent flagging (cards due in <2 days auto-moved to URGENT list), label colors per stage, audit trail comments, and email alerts via Gmail. Zero manual input after setup.
-5. Facebook Messenger AI Agent — fully live and public on the Automate with Bon Facebook Page. Built with Make.com, Groq AI, and the Meta Messenger API. Responds 24/7 as Bon, handles inquiries automatically, and qualifies leads with zero manual input.
+AUTOMATION PROJECTS (11 total):
+1. Chief Sizzling Grill — reservation automation built on GoHighLevel (GHL) for a fictional BBQ restaurant, as a self-directed practice build. Covers intake routing, a 2-round escalation ladder, real calendar booking, review-response routing, and a post-visit review/retention sequence. Notable for deliberately breaking the automation to find real bugs — including a silent wrong-date booking bug and a calendar-type mismatch — then root-causing and fixing each one.
+2. Live AI Lead Qualification Agent — the chatbot running on this portfolio right now (that's you talking). Built with Groq, Cloudflare Workers, Google Apps Script, Sheets, and Gmail. Detects hiring interest through natural conversation and triggers a 10-step lead pipeline with zero manual work.
+3. Messenger AI Agent (Make.com) — fully live and public on the Automate with Bon Facebook Page. Built with Make.com, Groq AI, and the Meta Messenger API. Responds 24/7 as Bon, handles inquiries automatically, and qualifies leads with zero manual input.
+4. Messenger AI Chatbot (Activepieces build) — a second Messenger chatbot, rebuilt from scratch on Activepieces after shipping the Make.com version, to build fluency across different automation platforms. Fully functional end-to-end but not yet public — Meta App Review is pending.
+5. Job-Search Agent — a daily automated pipeline built with Python, Groq AI, and GitHub Actions (scheduled via cron). Scans remote job boards using only bot-friendly APIs, filters by keyword match, and generates a tailored resume and cover letter per posting, delivered by email every morning. Every application still passes manual review before being sent — zero recurring cost.
+6. Booking AI Agent — fully deployed appointment booking pipeline: Tally form → checks real Google Calendar availability → books the slot or asks Gemini AI to propose alternatives if taken → logs to Sheets → sends confirmation email.
+7. Review AI Agent — fully deployed review-response agent for a fictional restaurant, "The Olive & Oak." Routes a Tally review submission by star rating into 3 branches, uses AI only where reasoning is actually needed, logs to Sheets, and sends the right email automatically.
+8. AI Order Processing & Customer Retention System — fully live, 22-step pipeline. AI extracts order details from incoming emails, matches pricing, calculates cost/profit, logs to Sheets with a running profit total, sends confirmation + upsell email, then runs a delayed feedback (Tally) and personalized reorder-invite sequence.
+9. AI Content Publishing Pipeline — 23-step automated pipeline for a faceless short-form video content channel: AI script generation through cross-platform publishing on YouTube and Instagram, with conditional logic and error handling throughout. Currently partially operational — blocked by paid plan limits on Visla/Gemini, being honest about that status rather than hiding it.
+10. Trello Client Onboarding Automation — fully live on Trello, built with Trello Butler (free plan, no external tools). 7-stage pipeline: Lead → Proposal Sent → Contract Signed → Onboarding → Active → Offboarding → Completed. 8+ Butler rules handle checklist swaps, due date resets, urgent flagging, label colors, audit trail comments, and email alerts. Zero manual input after setup.
+11. Email Weather Bot — small daily pipeline (Zapier + Weather by Zapier + AI by Zapier + Gmail). Pulls the day's forecast at 7 AM, has AI turn it into a natural conversational summary with practical reminders, and emails it automatically.
+
+CORE VA SKILLS PROJECTS (6 total):
+1. Notion Client & Project Onboarding System — a relational Notion workspace with 4 linked databases (Clients, Projects, Tasks, Invoices) feeding one central dashboard, for running a freelance/agency client pipeline end to end.
+2. Client Expense & Income Tracker — built entirely in Google Sheets, no extra tools. Dropdown validation, conditional formatting, SUMIFS-based income/expense totals, and a visual dashboard with charts. Embedded live on the site.
+3. Gmail Inbox Management System — a full inbox delegation system using Gmail's native labels, filters, stars, templates, and delegated access — no third-party tools, and the client never has to share their password.
+4. Google Calendar Management System — multi-client scheduling system using separate calendars, color coding, recurring events, shared access, and meeting links, built around a real two-client VA scenario. Includes live screenshots.
+5. Google Drive Management — a full folder architecture, access management, version recovery, and template workflow system built for a simulated small business client ("Sarah's Bakery").
+6. Portfolio Slideshow — a self-running Google Slides deck covering background, VA skills, automation projects, and tools. Auto-advances and loops, embedded on the site.
 
 PORTFOLIO: sadayabonjovi-eng.github.io
-Pages: About, Projects (Order Automation, Content Pipeline, Expense Tracker, Trello Client Onboarding, Messenger AI Agent), Contact
+Pages: Home, About, How I Work, Projects (11 automation builds + 6 VA skill projects, listed above), Contact
 
 AVAILABILITY & RATES:
 - Open to entry-level Administrative/Operations VA roles

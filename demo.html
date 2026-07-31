@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexOps — Automate Your Business Like a Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-black: #05070D;
+    --bg-navy: #0A1220;
+    --blue-glow: #2E8FE8;
+    --blue-line: #1B4B7A;
+    --gold: #E8B14D;
+    --gold-deep: #C98B2E;
+    --ink: #F4F6FA;
+    --muted: #8A97AC;
+    --display: 'Poppins', sans-serif;
+    --sans: 'Inter', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg-black);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  #bgLayer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -5;
+    pointer-events: none;
+    will-change: transform;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(46,143,232,0.08), transparent 40%),
+      radial-gradient(circle at 80% 30%, rgba(232,177,77,0.06), transparent 40%),
+      linear-gradient(rgba(46,143,232,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(46,143,232,0.05) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+  }
+
+  .parallax-layer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 46vh;
+    min-height: 320px;
+    pointer-events: none;
+    will-change: transform;
+  }
+  .parallax-layer svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  #layerFar  { z-index: -4; opacity: 0.9; }
+  #layerMid  { z-index: -3; opacity: 0.95; }
+  #layerNear { z-index: -2; }
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.6rem 4rem;
+    position: relative;
+    z-index: 10;
+  }
+  .logo {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 0.02em;
+  }
+  .logo span { color: var(--gold); }
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    font-size: 0.9rem;
+    color: #C9D2E0;
+  }
+  .nav-links a { color: inherit; text-decoration: none; }
+  .nav-links a:hover { color: var(--gold); }
+
+  .hero {
+    position: relative;
+    padding: 3rem 4rem 2rem;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  #heroParallax {
+    will-change: transform;
+  }
+
+  .orb-cluster {
+    position: relative;
+    max-width: 620px;
+    margin: 1.5rem auto 2.5rem;
+    height: 320px;
+  }
+
+  .orb-wrap {
+    position: absolute;
+    will-change: transform;
+  }
+  .orb-wrap.pos-top    { top: 0; left: calc(50% - 75px); }
+  .orb-wrap.pos-left   { top: 90px; left: 10px; }
+  .orb-wrap.pos-right  { top: 90px; right: 10px; }
+  .orb-wrap.pos-bottom { bottom: 0; left: calc(50% - 80px); }
+
+  .orb {
+    position: relative;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+      0 0 40px rgba(46,143,232,0.35),
+      inset 0 0 30px rgba(255,255,255,0.08),
+      inset -10px -10px 25px rgba(0,0,0,0.5);
+    background: radial-gradient(circle at 35% 30%, #2E6FA8, #0D2038 70%);
+    border: 1px solid rgba(120,180,230,0.4);
+  }
+  .orb.gold-ring {
+    box-shadow:
+      0 0 45px rgba(232,177,77,0.35),
+      inset 0 0 30px rgba(255,255,255,0.08),
+      inset -10px -10px 25px rgba(0,0,0,0.5);
+  }
+  .orb svg { width: 42%; height: 42%; opacity: 0.95; }
+
+  .orb-top    { width: 150px; height: 150px; }
+  .orb-left   { width: 130px; height: 130px; }
+  .orb-right  { width: 130px; height: 130px; }
+  .orb-bottom { width: 160px; height: 160px; }
+
+  .orb-cluster svg.connectors {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+  }
+  .connector-line {
+    stroke: rgba(46,143,232,0.5);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 4;
+    animation: dash-flow 3s linear infinite;
+  }
+  @keyframes dash-flow { to { stroke-dashoffset: -16; } }
+
+  .float { animation: floaty 5s ease-in-out infinite; }
+  .float-delay { animation-delay: 1.2s; }
+  .float-delay2 { animation-delay: 2.4s; }
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  h1.headline {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(2.2rem, 4.6vw, 3.4rem);
+    line-height: 1.15;
+    max-width: 780px;
+    margin: 0 auto 1.2rem;
+  }
+  h1.headline em {
+    font-style: italic;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 540px;
+    margin: 0 auto 2.4rem;
+  }
+
+  .cta-primary {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1A1200;
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+    padding: 0.95rem 2.6rem;
+    border-radius: 6px;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(232,177,77,0.3);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(232,177,77,0.4);
+  }
+
+  .scrolly {
+    position: relative;
+    height: 300vh;
+  }
+  .scrolly-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    padding: 2rem 4rem;
+    overflow: hidden;
+  }
+  .scrolly-eyebrow {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .scrolly-track-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+  .scrolly-track-wrap svg { width: 100%; height: auto; display: block; }
+  .scrolly-node-bg { fill: #0D1A2C; stroke: rgba(46,143,232,0.35); stroke-width: 2; }
+  .scrolly-node-icon { stroke: var(--muted); stroke-width: 1.6; fill: none; transition: stroke 0.3s ease; }
+  .scrolly-node.is-active .scrolly-node-bg { stroke: var(--gold); }
+  .scrolly-node.is-active .scrolly-node-icon { stroke: var(--gold); }
+  #scrollyProgressLine { transition: none; }
+
+  .scrolly-text {
+    position: relative;
+    max-width: 560px;
+    text-align: center;
+    min-height: 110px;
+  }
+  .scrolly-step {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    pointer-events: none;
+  }
+  .scrolly-step.is-active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .scrolly-step .tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gold);
+    background: rgba(232,177,77,0.1);
+    border: 1px solid rgba(232,177,77,0.3);
+    padding: 0.2rem 0.7rem;
+    border-radius: 100px;
+    margin-bottom: 0.8rem;
+  }
+  .scrolly-step h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 0.6rem;
+  }
+  .scrolly-step p {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .scrolly-progress-hint {
+    font-size: 0.75rem;
+    color: var(--muted);
+    opacity: 0.7;
+  }
+
+  .cinema-scrolly {
+    position: relative;
+    height: 400vh;
+  }
+  .cinema-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  #pipelineCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .cinema-caption {
+    position: absolute;
+    bottom: 4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    max-width: 480px;
+    padding: 0 1.5rem;
+  }
+  .cinema-caption .tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gold);
+    background: rgba(232,177,77,0.1);
+    border: 1px solid rgba(232,177,77,0.3);
+    padding: 0.2rem 0.7rem;
+    border-radius: 100px;
+    margin-bottom: 0.7rem;
+  }
+  #cinemaCaptionText,
+  #scene3dCaptionText {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.3rem;
+    transition: opacity 0.25s ease;
+  }
+
+  .scene3d-scroll {
+    position: relative;
+    height: 400vh;
+  }
+  .scene3d-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  #threeContainer {
+    width: 100%;
+    height: 100%;
+  }
+  #threeContainer canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* ============ REVEAL-ON-VIEW ============ */
+  /* The simple, cheap cousin of scrollytelling: no continuous progress
+     mapping, no pinning. An IntersectionObserver just watches for an
+     element crossing into the viewport and toggles ONE class, once. This is
+     what most real sites use for 90% of their scroll motion — scrollytelling
+     is reserved for a hero moment, not every section. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-stagger.is-visible .reveal-child:nth-child(1) { transition-delay: 0s; }
+  .reveal-stagger.is-visible .reveal-child:nth-child(2) { transition-delay: 0.08s; }
+  .reveal-stagger.is-visible .reveal-child:nth-child(3) { transition-delay: 0.16s; }
+
+  /* ============ MARQUEE ============ */
+  /* Pure CSS keyframe animation, no scroll listener at all — it just runs
+     on its own clock. Content is duplicated once so the loop point is
+     invisible: when copy A has scrolled fully out, copy B is exactly
+     where copy A started. */
+  .marquee-section {
+    padding: 2.4rem 0;
+    border-top: 1px solid rgba(46,143,232,0.12);
+    border-bottom: 1px solid rgba(46,143,232,0.12);
+    overflow: hidden;
+  }
+  .marquee-label {
+    text-align: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.4rem;
+  }
+  .marquee-viewport {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    gap: 3.5rem;
+    animation: marquee-scroll 22s linear infinite;
+  }
+  .marquee-track span {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--muted);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .marquee-track span::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: inline-block;
+    opacity: 0.6;
+  }
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); } /* -50% because content is duplicated 2x */
+  }
+  .marquee-section:hover .marquee-track { animation-play-state: paused; }
+
+  /* ============ BENTO GRID ============ */
+  /* Asymmetric grid: cards span different column/row counts instead of
+     the uniform 3-equal-columns pattern used in .features-grid. The visual
+     hierarchy comes purely from grid-column/grid-row spans, not from
+     manually sized boxes. */
+  .bento-section {
+    padding: 3rem 4rem 5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .bento-header {
+    text-align: center;
+    margin-bottom: 2.4rem;
+  }
+  .bento-header .scrolly-eyebrow { display: block; margin-bottom: 0.6rem; }
+  .bento-header h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+  }
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 140px;
+    gap: 1.2rem;
+  }
+  .bento-card {
+    background: linear-gradient(160deg, rgba(20,32,52,0.6), rgba(10,18,32,0.6));
+    border: 1px solid rgba(46,143,232,0.2);
+    border-radius: 14px;
+    padding: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+  .bento-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(232,177,77,0.4);
+  }
+  .bento-card h4 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-bottom: 0.3rem;
+  }
+  .bento-card p {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .bento-card.b-wide  { grid-column: span 2; }
+  .bento-card.b-tall  { grid-row: span 2; }
+  .bento-card.b-large { grid-column: span 2; grid-row: span 2; }
+  .bento-card.b-gold  { border-color: rgba(232,177,77,0.35); }
+  @media (max-width: 860px) {
+    .bento-grid { grid-template-columns: repeat(2, 1fr); }
+    .bento-card.b-large, .bento-card.b-wide { grid-column: span 2; }
+  }
+  @media (max-width: 560px) {
+    .bento-grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
+    .bento-card.b-large, .bento-card.b-wide, .bento-card.b-tall { grid-column: span 1; grid-row: auto; min-height: 140px; }
+  }
+
+  /* ============ MAGNETIC BUTTON ============ */
+  /* No new visual styles needed beyond a smoothing transition — the pull
+     itself is computed in JS from cursor distance and applied as a
+     transform. This transition only smooths the SNAP BACK on mouseleave;
+     while the mouse is inside, JS overrides transform every frame so it
+     tracks instantly. */
+  .magnetic {
+    transition: transform 0.25s ease;
+    display: inline-block;
+  }
+
+  /* ============ HORIZONTAL SCROLL GALLERY ============ */
+  /* Same pin-and-map-progress mechanism as .scrolly, but instead of
+     crossfading text, scroll progress drives translateX on a flex row —
+     vertical scroll input becomes horizontal motion. This is the technique
+     behind project galleries that scroll sideways as you scroll down. */
+  .hscroll-section {
+    position: relative;
+    height: 260vh;
+  }
+  .hscroll-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .hscroll-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 0 4rem;
+  }
+  .hscroll-track {
+    display: flex;
+    gap: 1.6rem;
+    padding: 0 4rem;
+    will-change: transform;
+  }
+  .hscroll-card {
+    flex: 0 0 340px;
+    background: linear-gradient(160deg, rgba(20,32,52,0.6), rgba(10,18,32,0.6));
+    border: 1px solid rgba(46,143,232,0.2);
+    border-radius: 14px;
+    padding: 2rem;
+    height: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .hscroll-card .num {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 2rem;
+    color: rgba(232,177,77,0.4);
+    margin-bottom: auto;
+  }
+  .hscroll-card h4 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+  }
+  .hscroll-card p {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .features {
+    padding: 5rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.6rem;
+  }
+  @media (max-width: 860px) { .features-grid { grid-template-columns: 1fr; } }
+
+  .feature-card {
+    background: linear-gradient(160deg, rgba(20,32,52,0.6), rgba(10,18,32,0.6));
+    border: 1px solid rgba(46,143,232,0.2);
+    border-radius: 12px;
+    padding: 2rem 1.8rem;
+    text-align: center;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(232,177,77,0.4);
+  }
+  .feature-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 1.2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 35% 30%, #2E6FA8, #0D2038 70%);
+    box-shadow: 0 0 24px rgba(46,143,232,0.3), inset 0 0 14px rgba(255,255,255,0.06);
+  }
+  .feature-icon svg { width: 46%; height: 46%; }
+  .feature-card h3 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+  .feature-card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .testimonial {
+    max-width: 780px;
+    margin: 0 auto 5rem;
+    padding: 2.4rem 3rem;
+    background: linear-gradient(160deg, rgba(20,32,52,0.5), rgba(10,18,32,0.5));
+    border: 1px solid rgba(232,177,77,0.2);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+  }
+  @media (max-width: 640px) { .testimonial { flex-direction: column; text-align: center; padding: 2rem; } }
+
+  .testi-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--blue-glow), var(--gold));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: #05070D;
+    border: 2px solid rgba(232,177,77,0.5);
+  }
+  .testi-quote {
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--ink);
+    margin-bottom: 0.7rem;
+  }
+  .testi-name {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--gold);
+  }
+  .testi-role {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .final-cta {
+    text-align: center;
+    padding: 2rem 4rem 6rem;
+  }
+  .cta-secondary {
+    display: inline-block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+    background: transparent;
+    border: 2px solid var(--gold);
+    padding: 0.9rem 2.4rem;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .cta-secondary:hover {
+    background: var(--gold);
+    color: #1A1200;
+  }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+    border-top: 1px solid rgba(46,143,232,0.15);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+</style>
+</head>
+<body>
+
+  <div id="bgLayer"></div>
+
+  <div class="parallax-layer" id="layerFar" data-speed="0.15">
+    <svg viewBox="0 0 1440 400" preserveAspectRatio="none">
+      <path d="M0,230 C220,170 460,270 720,210 C980,150 1220,250 1440,200 L1440,400 L0,400 Z"
+            fill="rgba(46,143,232,0.12)"></path>
+    </svg>
+  </div>
+
+  <div class="parallax-layer" id="layerMid" data-speed="0.30">
+    <svg viewBox="0 0 1440 400" preserveAspectRatio="none">
+      <path d="M0,270 C200,210 420,300 700,250 C980,200 1220,290 1440,240 L1440,400 L0,400 Z"
+            fill="rgba(46,143,232,0.20)"></path>
+    </svg>
+  </div>
+
+  <div class="parallax-layer" id="layerNear" data-speed="0.50">
+    <svg viewBox="0 0 1440 400" preserveAspectRatio="none">
+      <path d="M0,310 C240,350 480,270 720,310 C960,350 1200,270 1440,310 L1440,400 L0,400 Z"
+            fill="rgba(10,20,36,0.85)"></path>
+      <circle cx="180" cy="300" r="2.4" fill="rgba(232,177,77,0.8)"></circle>
+      <circle cx="430" cy="330" r="2" fill="rgba(232,177,77,0.6)"></circle>
+      <circle cx="760" cy="295" r="2.6" fill="rgba(232,177,77,0.75)"></circle>
+      <circle cx="1050" cy="335" r="2" fill="rgba(232,177,77,0.55)"></circle>
+      <circle cx="1300" cy="300" r="2.4" fill="rgba(232,177,77,0.7)"></circle>
+    </svg>
+  </div>
+
+  <nav>
+    <div class="logo">Nex<span>Ops</span></div>
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">Services</a>
+      <a href="#">Automations</a>
+      <a href="#consult">Contact</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div id="heroParallax">
+      <div class="orb-cluster" id="orbCluster">
+        <svg class="connectors" viewBox="0 0 620 320">
+          <path class="connector-line" d="M310,75 L310,140" />
+          <path class="connector-line" d="M75,155 L245,170" />
+          <path class="connector-line" d="M545,155 L375,170" />
+          <path class="connector-line" d="M310,225 L310,160" />
+          <path class="connector-line" d="M75,155 L310,240" />
+          <path class="connector-line" d="M545,155 L310,240" />
+        </svg>
+
+        <div class="orb-wrap pos-top" data-depth="16">
+          <div class="orb orb-top float">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#EAF2FB" stroke-width="1.5">
+              <path d="M6 16a4 4 0 010-8 5 5 0 019.5-1.5A4.5 4.5 0 0118 16H6z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="orb-wrap pos-left" data-depth="28">
+          <div class="orb orb-left gold-ring float float-delay">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#F5DFA8" stroke-width="1.5">
+              <circle cx="9" cy="12" r="2.5"/>
+              <circle cx="15" cy="7" r="2.5"/>
+              <circle cx="15" cy="17" r="2.5"/>
+              <path d="M11 11l2-2.5M11 13l2 2.5"/>
+            </svg>
+          </div>
+        </div>
+        <div class="orb-wrap pos-right" data-depth="28">
+          <div class="orb orb-right float float-delay2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#EAF2FB" stroke-width="1.5">
+              <path d="M3 17l4-6 4 3 4-7 4 5"/>
+              <path d="M3 20h18"/>
+            </svg>
+          </div>
+        </div>
+        <div class="orb-wrap pos-bottom" data-depth="20">
+          <div class="orb orb-bottom gold-ring float float-delay">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#F5DFA8" stroke-width="1.5">
+              <rect x="4" y="4" width="6" height="6" rx="1"/>
+              <path d="M10 7h4M16 7l3 3-3 3"/>
+              <rect x="14" y="14" width="6" height="6" rx="1"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <h1 class="headline">Automate Your Business <em>Like a Pro</em></h1>
+      <p class="sub">Streamline the busywork and free up your team with automation built around how your business actually runs.</p>
+
+      <a href="#consult" class="cta-primary magnetic" data-magnetic>Get Started</a>
+    </div>
+  </section>
+
+  <section class="marquee-section">
+    <p class="marquee-label">Built with the tools you already run on</p>
+    <div class="marquee-viewport">
+      <div class="marquee-track">
+        <span>Make.com</span>
+        <span>Zapier</span>
+        <span>GoHighLevel</span>
+        <span>Activepieces</span>
+        <span>Google Workspace</span>
+        <span>Meta Messenger API</span>
+        <span>Trello</span>
+        <span>Notion</span>
+        <!-- duplicated set so the -50% translateX loop point is seamless -->
+        <span>Make.com</span>
+        <span>Zapier</span>
+        <span>GoHighLevel</span>
+        <span>Activepieces</span>
+        <span>Google Workspace</span>
+        <span>Meta Messenger API</span>
+        <span>Trello</span>
+        <span>Notion</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#EAF2FB" stroke-width="1.5">
+            <circle cx="6" cy="6" r="2.5"/>
+            <circle cx="18" cy="6" r="2.5"/>
+            <circle cx="12" cy="18" r="2.5"/>
+            <path d="M8 7l3 9M16 7l-3 9"/>
+          </svg>
+        </div>
+        <h3>Workflow Automation</h3>
+        <p>Automate tasks and processes with ease, no more manual re-entry or copy-paste busywork.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#EAF2FB" stroke-width="1.5">
+            <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+            <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+          </svg>
+        </div>
+        <h3>Seamless Integrations</h3>
+        <p>Connect your favorite tools effortlessly, your CRM, forms, and inbox, all working as one system.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#EAF2FB" stroke-width="1.5">
+            <path d="M3 20V10M9 20V4M15 20v-8M21 20V7"/>
+          </svg>
+        </div>
+        <h3>Scale &amp; Optimize</h3>
+        <p>Grow your business with smart systems built to handle more without more manual effort.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bento-section reveal" id="bentoSection">
+    <div class="bento-header">
+      <span class="scrolly-eyebrow">What's inside</span>
+      <h2 id="bentoHeading">Capabilities</h2>
+    </div>
+    <div class="bento-grid">
+      <div class="bento-card b-large b-gold">
+        <h4>Lead qualification agents</h4>
+        <p>Messenger and live-chat agents that check intent and route automatically, no human triage needed.</p>
+      </div>
+      <div class="bento-card">
+        <h4>CRM booking</h4>
+        <p>Capacity-enforced scheduling with branching success/fail logic.</p>
+      </div>
+      <div class="bento-card b-tall">
+        <h4>Review routing</h4>
+        <p>Responses suggested automatically, routed by sentiment before they ever reach a human.</p>
+      </div>
+      <div class="bento-card b-wide">
+        <h4>Email sequences</h4>
+        <p>Confirmation, reminder, review request, and retention follow-up, sent on their own schedule.</p>
+      </div>
+      <div class="bento-card">
+        <h4>Reporting</h4>
+        <p>Dashboards that track what the automations are actually doing.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="scrolly" id="scrollySection">
+    <div class="scrolly-pin">
+      <span class="scrolly-eyebrow">How It Works</span>
+
+      <div class="scrolly-track-wrap">
+        <svg viewBox="0 0 760 120" fill="none">
+          <line x1="80" y1="60" x2="680" y2="60" stroke="rgba(46,143,232,0.15)" stroke-width="3"/>
+          <line id="scrollyProgressLine" x1="80" y1="60" x2="80" y2="60" stroke="var(--gold)" stroke-width="3"/>
+
+          <g class="scrolly-node" data-step="0">
+            <circle class="scrolly-node-bg" cx="80" cy="60" r="26"/>
+            <path class="scrolly-node-icon" d="M68,54 h24 M68,60 h24 M68,66 h16"/>
+          </g>
+          <g class="scrolly-node" data-step="1">
+            <circle class="scrolly-node-bg" cx="380" cy="60" r="26"/>
+            <path class="scrolly-node-icon" d="M368,60 l8,8 16,-16"/>
+          </g>
+          <g class="scrolly-node" data-step="2">
+            <circle class="scrolly-node-bg" cx="680" cy="60" r="26"/>
+            <path class="scrolly-node-icon" d="M668,52 a12,12 0 1,1 0,16 M676,60 l4,4 6,-8"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="scrolly-text">
+        <div class="scrolly-step" data-step="0">
+          <span class="tag">Step 1</span>
+          <h3>A request comes in</h3>
+          <p>A customer message, form submission, or booking request lands, no matter which channel it arrives from.</p>
+        </div>
+        <div class="scrolly-step" data-step="1">
+          <span class="tag">Step 2</span>
+          <h3>NexOps checks and routes it</h3>
+          <p>Availability, rules, and conditions are checked automatically, then the request is routed to the right workflow.</p>
+        </div>
+        <div class="scrolly-step" data-step="2">
+          <span class="tag">Step 3</span>
+          <h3>Confirmation goes out</h3>
+          <p>The customer gets an instant confirmation, and your team sees it logged, with zero manual follow-up.</p>
+        </div>
+      </div>
+
+      <span class="scrolly-progress-hint">Keep scrolling to see each step ↓</span>
+    </div>
+  </section>
+
+  <section class="hscroll-section" id="hscrollSection">
+    <div class="hscroll-pin">
+      <div class="hscroll-header">
+        <span class="scrolly-eyebrow">Projects</span>
+        <h2>Keep scrolling — this row moves sideways</h2>
+      </div>
+      <div class="hscroll-track" id="hscrollTrack">
+        <div class="hscroll-card">
+          <span class="num">01</span>
+          <h4>Messenger Lead Agent</h4>
+          <p>Make.com + Groq, qualifying leads straight in chat.</p>
+        </div>
+        <div class="hscroll-card">
+          <span class="num">02</span>
+          <h4>Live Lead Agent</h4>
+          <p>Cloudflare Workers + Apps Script, real-time qualification.</p>
+        </div>
+        <div class="hscroll-card">
+          <span class="num">03</span>
+          <h4>Activepieces Chatbot</h4>
+          <p>Cross-platform rebuild for fluency across tools.</p>
+        </div>
+        <div class="hscroll-card">
+          <span class="num">04</span>
+          <h4>GHL Reservation System</h4>
+          <p>Capacity-enforced booking with branching logic.</p>
+        </div>
+        <div class="hscroll-card">
+          <span class="num">05</span>
+          <h4>Job-Search Agent</h4>
+          <p>Python + GitHub Actions, running its own search loop.</p>
+        </div>
+        <div class="hscroll-card">
+          <span class="num">06</span>
+          <h4>Content Pipeline</h4>
+          <p>Publishing automation from draft to post.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cinema-scrolly" id="cinemaSection">
+    <div class="cinema-pin">
+      <canvas id="pipelineCanvas"></canvas>
+      <div class="cinema-caption">
+        <span class="tag">Behind the scenes</span>
+        <h3 id="cinemaCaptionText">Your pipeline assembles itself</h3>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene3d-scroll" id="scene3dSection">
+    <div class="scene3d-pin">
+      <div id="threeContainer"></div>
+      <div class="cinema-caption">
+        <span class="tag">Real 3D — WebGL</span>
+        <h3 id="scene3dCaptionText">This one's actual geometry, lit and rendered live</h3>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="testimonial reveal">
+      <div class="testi-avatar">MR</div>
+      <div>
+        <p class="testi-quote">"This service transformed our business. Increased efficiency and seamless integration, truly a game changer!"</p>
+        <p class="testi-name">Michael R.</p>
+        <p class="testi-role">CEO, Tech Innovations</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="final-cta" id="consult">
+    <a href="#" class="cta-secondary magnetic" data-magnetic>Book a Free Consultation</a>
+  </section>
+
+  <footer>
+    NexOps — Demo / Practice Build — Not a Live Business
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <script>
+    (function () {
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) return;
+
+      var cluster = document.getElementById('orbCluster');
+      var orbLayers = cluster ? Array.prototype.slice.call(cluster.querySelectorAll('.orb-wrap')) : [];
+      var targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+
+      if (cluster) {
+        cluster.addEventListener('mousemove', function (e) {
+          var rect = cluster.getBoundingClientRect();
+          targetX = (e.clientX - rect.left) / rect.width - 0.5;
+          targetY = (e.clientY - rect.top) / rect.height - 0.5;
+        });
+        cluster.addEventListener('mouseleave', function () {
+          targetX = 0;
+          targetY = 0;
+        });
+      }
+
+      var heroEl = document.getElementById('heroParallax');
+      var HERO_SPEED = 0.35;
+      var HERO_MAX = 140;
+
+      var scene3dSection = document.getElementById('scene3dSection');
+      var threeContainer = document.getElementById('threeContainer');
+      var scene3dCaptionEl = document.getElementById('scene3dCaptionText');
+      var three = null;
+
+      if (typeof THREE !== 'undefined' && threeContainer) {
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
+        var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        threeContainer.appendChild(renderer.domElement);
+
+        var group = new THREE.Group();
+        scene.add(group);
+
+        var path3d = [
+          [-4, 0.4, 0], [-2, -1.2, -2.4], [0.2, 0.8, -5], [2.4, -1.2, -7.6], [4.4, 0.6, -10.4]
+        ];
+        var nodeLabels3d = [
+          'Intake', 'Route', 'Process', 'Confirm', 'Deliver'
+        ];
+
+        path3d.forEach(function (p) {
+          var geo = new THREE.SphereGeometry(0.42, 24, 24);
+          var mat = new THREE.MeshStandardMaterial({
+            color: 0x2E8FE8, emissive: 0x0A1830, metalness: 0.35, roughness: 0.4
+          });
+          var mesh = new THREE.Mesh(geo, mat);
+          mesh.position.set(p[0], p[1], p[2]);
+          group.add(mesh);
+        });
+
+        for (var i = 0; i < path3d.length - 1; i++) {
+          var a = new THREE.Vector3(path3d[i][0], path3d[i][1], path3d[i][2]);
+          var b = new THREE.Vector3(path3d[i + 1][0], path3d[i + 1][1], path3d[i + 1][2]);
+          var mid = a.clone().add(b).multiplyScalar(0.5);
+          var dir = b.clone().sub(a);
+          var len = dir.length();
+          var cylGeo = new THREE.CylinderGeometry(0.045, 0.045, len, 8);
+          var cylMat = new THREE.MeshStandardMaterial({
+            color: 0xE8B14D, emissive: 0x2B1D05, metalness: 0.2, roughness: 0.5
+          });
+          var cyl = new THREE.Mesh(cylGeo, cylMat);
+          cyl.position.copy(mid);
+          cyl.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+          group.add(cyl);
+        }
+
+        scene.add(new THREE.AmbientLight(0x25334f, 1.4));
+        var keyLight = new THREE.PointLight(0xE8B14D, 2.2, 26);
+        keyLight.position.set(0, 4, 3);
+        scene.add(keyLight);
+        var rimLight = new THREE.PointLight(0x2E8FE8, 1.4, 30);
+        rimLight.position.set(-3, -2, -6);
+        scene.add(rimLight);
+
+        function resize3d() {
+          var rect = threeContainer.getBoundingClientRect();
+          camera.aspect = rect.width / rect.height;
+          camera.updateProjectionMatrix();
+          renderer.setSize(rect.width, rect.height);
+        }
+        window.addEventListener('resize', resize3d);
+        resize3d();
+
+        function render3d(progress) {
+          camera.position.z = 3 - progress * 13;
+          camera.position.x = Math.sin(progress * Math.PI) * 1.2;
+          camera.position.y = 0.3;
+          camera.lookAt(0, 0, 3 - progress * 13 - 3);
+          group.rotation.y = progress * 0.35;
+          renderer.render(scene, camera);
+
+          var idx = Math.min(nodeLabels3d.length - 1, Math.floor(progress * nodeLabels3d.length));
+          var label = nodeLabels3d[idx];
+          if (scene3dCaptionEl && scene3dCaptionEl.textContent !== label) {
+            scene3dCaptionEl.style.opacity = 0;
+            setTimeout(function () {
+              scene3dCaptionEl.textContent = label;
+              scene3dCaptionEl.style.opacity = 1;
+            }, 120);
+          }
+        }
+
+        three = { render: render3d };
+        render3d(0);
+      }
+
+      function updateScene3d() {
+        if (!scene3dSection || !three) return;
+        var rect = scene3dSection.getBoundingClientRect();
+        var total = scene3dSection.offsetHeight - window.innerHeight;
+        if (total <= 0) return;
+        var progress = Math.max(0, Math.min(1, -rect.top / total));
+        three.render(progress);
+      }
+
+      var cinemaSection = document.getElementById('cinemaSection');
+      var canvas = document.getElementById('pipelineCanvas');
+      var ctx = canvas ? canvas.getContext('2d') : null;
+      var cinemaCaptionEl = document.getElementById('cinemaCaptionText');
+
+      var pipelineNodes = [
+        { x: 0.14, y: 0.58, label: 'Intake message received' },
+        { x: 0.34, y: 0.34, label: 'Routed to the right workflow' },
+        { x: 0.54, y: 0.62, label: 'Availability checked automatically' },
+        { x: 0.74, y: 0.34, label: 'Confirmation drafted' },
+        { x: 0.90, y: 0.58, label: 'Delivered, zero manual steps' }
+      ];
+
+      function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+      function clamp01(t) { return Math.max(0, Math.min(1, t)); }
+
+      function resizeCanvas() {
+        if (!canvas || !ctx) return;
+        var dpr = window.devicePixelRatio || 1;
+        var rect = canvas.getBoundingClientRect();
+        canvas.width = Math.round(rect.width * dpr);
+        canvas.height = Math.round(rect.height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      function drawPipeline(progress) {
+        if (!ctx) return;
+        var w = canvas.clientWidth, h = canvas.clientHeight;
+        ctx.clearRect(0, 0, w, h);
+
+        var zoom = 1 + progress * 0.1;
+        ctx.save();
+        ctx.translate(w / 2, h / 2);
+        ctx.scale(zoom, zoom);
+        ctx.translate(-w / 2, -h / 2);
+
+        ctx.strokeStyle = 'rgba(46,143,232,0.45)';
+        ctx.lineWidth = 2;
+        for (var i = 0; i < pipelineNodes.length - 1; i++) {
+          var segStart = i / (pipelineNodes.length - 1);
+          var segEnd = (i + 1) / (pipelineNodes.length - 1);
+          var segT = clamp01((progress - segStart) / (segEnd - segStart));
+          if (segT <= 0) continue;
+          var a = pipelineNodes[i], b = pipelineNodes[i + 1];
+          var ax = a.x * w, ay = a.y * h, bx = b.x * w, by = b.y * h;
+          ctx.beginPath();
+          ctx.moveTo(ax, ay);
+          ctx.lineTo(ax + (bx - ax) * segT, ay + (by - ay) * segT);
+          ctx.stroke();
+        }
+
+        var activeLabel = pipelineNodes[0].label;
+        pipelineNodes.forEach(function (n, i) {
+          var appearAt = i / (pipelineNodes.length + 1);
+          var t = clamp01((progress - appearAt) / 0.18);
+          if (t <= 0) return;
+          var eased = easeOutCubic(t);
+          var r = 15 * eased;
+          var x = n.x * w, y = n.y * h;
+
+          ctx.save();
+          ctx.shadowColor = 'rgba(232,177,77,' + (0.55 * eased).toFixed(2) + ')';
+          ctx.shadowBlur = 22 * eased;
+          ctx.fillStyle = '#0D1A2C';
+          ctx.strokeStyle = t >= 1 ? '#E8B14D' : 'rgba(46,143,232,0.6)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+
+          if (progress >= appearAt) activeLabel = n.label;
+        });
+
+        ctx.restore();
+
+        if (cinemaCaptionEl && cinemaCaptionEl.textContent !== activeLabel) {
+          cinemaCaptionEl.style.opacity = 0;
+          setTimeout(function () {
+            cinemaCaptionEl.textContent = activeLabel;
+            cinemaCaptionEl.style.opacity = 1;
+          }, 120);
+        }
+      }
+      drawPipeline(0);
+
+      function updateCinema() {
+        if (!cinemaSection || !ctx) return;
+        var rect = cinemaSection.getBoundingClientRect();
+        var total = cinemaSection.offsetHeight - window.innerHeight;
+        if (total <= 0) return;
+        var progress = clamp01(-rect.top / total);
+        drawPipeline(progress);
+      }
+
+      // ---- Reveal-on-view: IntersectionObserver watches each .reveal
+      // element and adds .is-visible ONCE when it crosses into the
+      // viewport. Unlike scrollytelling, there's no continuous progress
+      // number here — just a single boolean flip, which is why this is
+      // cheap enough to put on dozens of elements at once. ----
+      var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+      if ('IntersectionObserver' in window && revealEls.length) {
+        var revealObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              revealObserver.unobserve(entry.target); // fire once, then stop watching
+            }
+          });
+        }, { threshold: 0.15 });
+        revealEls.forEach(function (el) { revealObserver.observe(el); });
+      } else {
+        revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+      }
+
+      // ---- Text scramble: cycles random characters before settling into
+      // the real text, character by character, left to right. Triggered
+      // once via the same IntersectionObserver pattern as reveal-on-view. ----
+      var SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&*';
+      function scrambleText(el, finalText, duration) {
+        var frame = 0;
+        var totalFrames = Math.round(duration / 16);
+        var revealCount = 0;
+        function step() {
+          frame++;
+          revealCount = Math.floor((frame / totalFrames) * finalText.length);
+          var out = '';
+          for (var i = 0; i < finalText.length; i++) {
+            if (i < revealCount) {
+              out += finalText[i];
+            } else if (finalText[i] === ' ') {
+              out += ' ';
+            } else {
+              out += SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+            }
+          }
+          el.textContent = out;
+          if (frame < totalFrames) {
+            requestAnimationFrame(step);
+          } else {
+            el.textContent = finalText;
+          }
+        }
+        step();
+      }
+      var bentoHeadingEl = document.getElementById('bentoHeading');
+      if (bentoHeadingEl && 'IntersectionObserver' in window) {
+        var scrambleObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              scrambleText(bentoHeadingEl, bentoHeadingEl.textContent, 700);
+              scrambleObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.4 });
+        scrambleObserver.observe(bentoHeadingEl);
+      }
+
+      // ---- Magnetic buttons: while the cursor is within a padded radius
+      // of the button, the button translates a fraction of the distance
+      // toward the cursor. On mouseleave, the CSS transition (not JS)
+      // eases it back to rest — that split is what makes it feel magnetic
+      // rather than just "stuck to the cursor". ----
+      var magneticEls = Array.prototype.slice.call(document.querySelectorAll('[data-magnetic]'));
+      var MAGNETIC_STRENGTH = 0.35;
+      var MAGNETIC_RADIUS = 60; // px padding around the button that still counts as "in range"
+      magneticEls.forEach(function (el) {
+        el.addEventListener('mousemove', function (e) {
+          var rect = el.getBoundingClientRect();
+          var cx = rect.left + rect.width / 2;
+          var cy = rect.top + rect.height / 2;
+          var dx = e.clientX - cx;
+          var dy = e.clientY - cy;
+          el.style.transition = 'transform 0.05s ease'; // fast tracking while inside
+          el.style.transform = 'translate(' + (dx * MAGNETIC_STRENGTH).toFixed(1) + 'px, ' + (dy * MAGNETIC_STRENGTH).toFixed(1) + 'px)';
+        });
+        el.addEventListener('mouseleave', function () {
+          el.style.transition = 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)'; // slight overshoot on release
+          el.style.transform = 'translate(0, 0)';
+        });
+      });
+
+      // ---- Horizontal scroll gallery: identical pin-and-progress mechanism
+      // as .scrolly, but the output is translateX on a row instead of a
+      // CSS class toggle. Vertical scroll input becomes horizontal motion. ----
+      var hscrollSection = document.getElementById('hscrollSection');
+      var hscrollTrack = document.getElementById('hscrollTrack');
+
+      function updateHscroll() {
+        if (!hscrollSection || !hscrollTrack) return;
+        var rect = hscrollSection.getBoundingClientRect();
+        var total = hscrollSection.offsetHeight - window.innerHeight;
+        if (total <= 0) return;
+        var progress = Math.max(0, Math.min(1, -rect.top / total));
+        var maxScroll = Math.max(0, hscrollTrack.scrollWidth - hscrollSection.clientWidth);
+        hscrollTrack.style.transform = 'translate3d(' + (-progress * maxScroll).toFixed(1) + 'px, 0, 0)';
+      }
+
+      var scrollySection = document.getElementById('scrollySection');
+      var scrollySteps = scrollySection ? Array.prototype.slice.call(scrollySection.querySelectorAll('.scrolly-step')) : [];
+      var scrollyNodes = scrollySection ? Array.prototype.slice.call(scrollySection.querySelectorAll('.scrolly-node')) : [];
+      var scrollyProgressLine = document.getElementById('scrollyProgressLine');
+      var SCROLLY_STEP_COUNT = scrollySteps.length || 3;
+      var lastActiveStep = -1;
+
+      function updateScrolly() {
+        if (!scrollySection) return;
+        var rect = scrollySection.getBoundingClientRect();
+        var total = scrollySection.offsetHeight - window.innerHeight;
+        if (total <= 0) return;
+        var scrolled = -rect.top;
+        var progress = Math.min(1, Math.max(0, scrolled / total));
+
+        var stepFloat = progress * SCROLLY_STEP_COUNT;
+        var activeStep = Math.min(SCROLLY_STEP_COUNT - 1, Math.floor(stepFloat));
+
+        if (activeStep !== lastActiveStep) {
+          scrollySteps.forEach(function (el) {
+            el.classList.toggle('is-active', parseInt(el.getAttribute('data-step'), 10) === activeStep);
+          });
+          scrollyNodes.forEach(function (el) {
+            el.classList.toggle('is-active', parseInt(el.getAttribute('data-step'), 10) <= activeStep);
+          });
+          lastActiveStep = activeStep;
+        }
+
+        if (scrollyProgressLine) {
+          var x2 = 80 + progress * 600;
+          scrollyProgressLine.setAttribute('x2', x2.toFixed(1));
+        }
+      }
+
+      var bgLayer = document.getElementById('bgLayer');
+      var sceneLayers = Array.prototype.slice.call(document.querySelectorAll('.parallax-layer'));
+      var targetScroll = window.scrollY || window.pageYOffset;
+      var currentScroll = targetScroll;
+      var BG_SPEED = 0.08;
+
+      window.addEventListener('scroll', function () {
+        targetScroll = window.scrollY || window.pageYOffset;
+      }, { passive: true });
+
+      function tick() {
+        currentX += (targetX - currentX) * 0.08;
+        currentY += (targetY - currentY) * 0.08;
+
+        orbLayers.forEach(function (layer) {
+          var depth = parseFloat(layer.getAttribute('data-depth')) || 20;
+          var x = (currentX * depth).toFixed(2);
+          var y = (currentY * depth).toFixed(2);
+          layer.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
+        });
+
+        currentScroll += (targetScroll - currentScroll) * 0.08;
+
+        if (bgLayer) {
+          bgLayer.style.transform = 'translate3d(0, ' + (currentScroll * BG_SPEED).toFixed(2) + 'px, 0)';
+        }
+
+        sceneLayers.forEach(function (layer) {
+          var speed = parseFloat(layer.getAttribute('data-speed')) || 0.2;
+          layer.style.transform = 'translate3d(0, ' + (currentScroll * speed).toFixed(2) + 'px, 0)';
+        });
+
+        if (heroEl) {
+          var heroOffset = Math.min(HERO_MAX, currentScroll * HERO_SPEED);
+          heroEl.style.transform = 'translate3d(0, ' + (-heroOffset).toFixed(2) + 'px, 0)';
+        }
+
+        updateScrolly();
+        updateHscroll();
+        updateCinema();
+        updateScene3d();
+
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    })();
+  </script>
+
+</body>
+</html>

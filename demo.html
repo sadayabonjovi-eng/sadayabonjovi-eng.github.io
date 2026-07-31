@@ -355,11 +355,6 @@
   }
 
   /* ============ REVEAL-ON-VIEW ============ */
-  /* The simple, cheap cousin of scrollytelling: no continuous progress
-     mapping, no pinning. An IntersectionObserver just watches for an
-     element crossing into the viewport and toggles ONE class, once. This is
-     what most real sites use for 90% of their scroll motion — scrollytelling
-     is reserved for a hero moment, not every section. */
   .reveal {
     opacity: 0;
     transform: translateY(28px);
@@ -374,10 +369,6 @@
   .reveal-stagger.is-visible .reveal-child:nth-child(3) { transition-delay: 0.16s; }
 
   /* ============ MARQUEE ============ */
-  /* Pure CSS keyframe animation, no scroll listener at all — it just runs
-     on its own clock. Content is duplicated once so the loop point is
-     invisible: when copy A has scrolled fully out, copy B is exactly
-     where copy A started. */
   .marquee-section {
     padding: 2.4rem 0;
     border-top: 1px solid rgba(46,143,232,0.12);
@@ -424,15 +415,11 @@
   }
   @keyframes marquee-scroll {
     from { transform: translateX(0); }
-    to   { transform: translateX(-50%); } /* -50% because content is duplicated 2x */
+    to   { transform: translateX(-50%); }
   }
   .marquee-section:hover .marquee-track { animation-play-state: paused; }
 
   /* ============ BENTO GRID ============ */
-  /* Asymmetric grid: cards span different column/row counts instead of
-     the uniform 3-equal-columns pattern used in .features-grid. The visual
-     hierarchy comes purely from grid-column/grid-row spans, not from
-     manually sized boxes. */
   .bento-section {
     padding: 3rem 4rem 5rem;
     max-width: 1100px;
@@ -492,21 +479,12 @@
   }
 
   /* ============ MAGNETIC BUTTON ============ */
-  /* No new visual styles needed beyond a smoothing transition — the pull
-     itself is computed in JS from cursor distance and applied as a
-     transform. This transition only smooths the SNAP BACK on mouseleave;
-     while the mouse is inside, JS overrides transform every frame so it
-     tracks instantly. */
   .magnetic {
     transition: transform 0.25s ease;
     display: inline-block;
   }
 
   /* ============ HORIZONTAL SCROLL GALLERY ============ */
-  /* Same pin-and-map-progress mechanism as .scrolly, but instead of
-     crossfading text, scroll progress drives translateX on a flex row —
-     vertical scroll input becomes horizontal motion. This is the technique
-     behind project galleries that scroll sideways as you scroll down. */
   .hscroll-section {
     position: relative;
     height: 260vh;
@@ -558,6 +536,469 @@
   .hscroll-card p {
     font-size: 0.85rem;
     color: var(--muted);
+  }
+
+  /* ============ NOISE / GRAIN OVERLAY ============ */
+  #noiseOverlay {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    animation: grain-shift 0.4s steps(1) infinite;
+  }
+  @keyframes grain-shift {
+    0%   { transform: translate(0, 0); }
+    25%  { transform: translate(-1%, 1%); }
+    50%  { transform: translate(1%, -1%); }
+    75%  { transform: translate(-1%, -1%); }
+    100% { transform: translate(0, 0); }
+  }
+
+  /* ============ GLASSMORPHISM ============ */
+  .glass-card {
+    background: rgba(255,255,255,0.045);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 16px;
+  }
+
+  /* ============ STATS / ANIMATED COUNTERS ============ */
+  .stats-section {
+    padding: 4rem 4rem 5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+    margin-top: 2.4rem;
+  }
+  @media (max-width: 760px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  .stat-card {
+    padding: 2rem 1.2rem;
+  }
+  .stat-number {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 2.2rem;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .stat-label {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  /* ============ SPLIT-TEXT STAGGER ============ */
+  .split-heading {
+    font-family: var(--display);
+    font-weight: 700;
+  }
+  .split-heading .split-word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .split-heading.is-split .split-word {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ============ 3D TILT CARDS ============ */
+  .tilt-card {
+    transform-style: preserve-3d;
+    transition: transform 0.4s ease;
+    will-change: transform;
+  }
+
+  /* ============ SVG PATH DRAW ============ */
+  .draw-divider {
+    display: block;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    height: 60px;
+  }
+  .draw-path {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0.7;
+    transition: stroke-dashoffset 1.6s ease;
+  }
+
+  /* ============ CURSOR SPOTLIGHT ============ */
+  .spotlight-section {
+    position: relative;
+    overflow: hidden;
+  }
+  .spotlight-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle 260px at var(--spot-x, 50%) var(--spot-y, 50%),
+        rgba(232,177,77,0.14), transparent 70%),
+      repeating-linear-gradient(0deg, rgba(46,143,232,0.05) 0 1px, transparent 1px 40px),
+      repeating-linear-gradient(90deg, rgba(46,143,232,0.05) 0 1px, transparent 1px 40px);
+    pointer-events: none;
+    transition: background 0.05s linear;
+  }
+
+  /* ============ SHADER MESH BACKGROUND ============ */
+  /* Raw WebGL, no library: a full-screen triangle pair is rasterized, and
+     every pixel's color comes from a fragment shader mixing two sine waves
+     over time. Nothing is uploaded per-frame except two uniforms (time,
+     resolution) — the GPU does the actual gradient math, which is why this
+     stays smooth even while other scroll work is happening. */
+  .shader-section {
+    position: relative;
+    height: 60vh;
+    min-height: 420px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  #shaderCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .shader-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 2rem;
+  }
+  .shader-content .scrolly-eyebrow { display: block; margin-bottom: 0.8rem; }
+  .typewriter-text {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+    min-height: 1.4em;
+  }
+  .typewriter-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1em;
+    vertical-align: -0.15em;
+    margin-left: 2px;
+    background: var(--gold);
+    animation: tw-blink 0.9s steps(1) infinite;
+  }
+  @keyframes tw-blink { 50% { opacity: 0; } }
+
+  /* ============ PARTICLE SYSTEM ============ */
+  /* A plain 2D canvas, not WebGL — ~70 points updated with basic velocity
+     integration, plus an O(n^2) nearest-neighbor pass that draws a line
+     between any two particles closer than a threshold. That n^2 loop is
+     the whole "connected network" look; it's cheap enough at this particle
+     count but is the first thing to reduce if particle count ever grows. */
+  .particle-section {
+    position: relative;
+    height: 70vh;
+    min-height: 460px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #particleCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .particle-caption {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 520px;
+    padding: 0 2rem;
+    pointer-events: none;
+  }
+
+  /* ============ SKELETON SHIMMER ============ */
+  /* A diagonal-looking gradient sweep is actually just a linear gradient
+     translated from -100% to 100% on a pseudo-element covering the whole
+     placeholder — the shimmer is the sweep, not the placeholder itself,
+     which stays a flat, static color underneath it the whole time. */
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255,255,255,0.04);
+  }
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+    transform: translateX(-100%);
+    animation: shimmer-sweep 1.4s ease-in-out infinite;
+  }
+  @keyframes shimmer-sweep { to { transform: translateX(100%); } }
+  .loaded-fade { animation: fade-in-content 0.5s ease forwards; }
+  @keyframes fade-in-content { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ============ DRAGGABLE PAN CANVAS ============ */
+  /* The canvas itself never redraws during a drag — only its CSS transform
+     changes. That's the key perf decision: dragging just repositions an
+     already-rendered bitmap instead of re-running any drawing code, so it
+     stays smooth no matter how complex the underlying map is. */
+  .pan-wrap {
+    position: relative;
+    height: 340px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(46,143,232,0.25);
+    cursor: grab;
+    touch-action: none;
+    background: #0A1220;
+  }
+  .pan-wrap.is-dragging { cursor: grabbing; }
+  #panCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    will-change: transform;
+  }
+  .pan-hint {
+    position: absolute;
+    bottom: 0.8rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.72rem;
+    color: var(--muted);
+    background: rgba(5,7,13,0.6);
+    padding: 0.3rem 0.8rem;
+    border-radius: 100px;
+    pointer-events: none;
+  }
+
+  /* ============ MASK-WIPE REVEAL ============ */
+  /* clip-path: inset() hides content by clipping a rectangle down to
+     nothing on one side, then transitions that rectangle back open —
+     unlike opacity, the element is genuinely un-rendered outside the clip
+     box the whole time, which is what gives the "wipe" its hard edge. */
+  .mask-wipe {
+    display: inline-block;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 1s cubic-bezier(0.65,0,0.35,1);
+  }
+  .mask-wipe.is-wiped { clip-path: inset(0 0 0 0); }
+
+  /* ============ SCROLL-SNAP CAROUSEL ============ */
+  /* scroll-snap-type on the container plus scroll-snap-align on each
+     child is a pure-CSS mechanism — the browser itself decides where a
+     drag/swipe/scroll settles. JS here only reads position (to update the
+     active dot) and calls scrollIntoView() for the arrow buttons; it never
+     drives the actual scroll physics. */
+  .carousel-section { padding: 4rem 4rem 5rem; }
+  .carousel-header { text-align: center; margin-bottom: 2rem; }
+  .carousel-viewport {
+    display: flex;
+    gap: 1.4rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 0.6rem 4rem 1.2rem;
+    scrollbar-width: none;
+  }
+  .carousel-viewport::-webkit-scrollbar { display: none; }
+  .carousel-slide {
+    flex: 0 0 min(340px, 80vw);
+    scroll-snap-align: center;
+    background: linear-gradient(160deg, rgba(20,32,52,0.6), rgba(10,18,32,0.6));
+    border: 1px solid rgba(46,143,232,0.2);
+    border-radius: 14px;
+    padding: 2rem;
+  }
+  .carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 1.4rem;
+  }
+  .carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(138,151,172,0.4);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .carousel-dot.is-active { background: var(--gold); transform: scale(1.3); }
+  .carousel-arrow {
+    background: transparent;
+    border: 1px solid rgba(46,143,232,0.3);
+    color: var(--ink);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  .carousel-arrow:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ============ COMMAND PALETTE ============ */
+  .cmdk-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: var(--sans);
+  }
+  .cmdk-trigger kbd {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    background: rgba(255,255,255,0.08);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+  }
+  .cmdk-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(5,7,13,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 14vh;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+  }
+  .cmdk-overlay.is-open { opacity: 1; pointer-events: auto; }
+  .cmdk-panel {
+    width: min(560px, 90vw);
+    background: #0A1220;
+    border: 1px solid rgba(46,143,232,0.25);
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    transform: translateY(-10px);
+    transition: transform 0.15s ease;
+    overflow: hidden;
+  }
+  .cmdk-overlay.is-open .cmdk-panel { transform: translateY(0); }
+  .cmdk-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 1rem;
+    padding: 1rem 1.2rem;
+    outline: none;
+  }
+  .cmdk-list { max-height: 300px; overflow-y: auto; padding: 0.5rem; }
+  .cmdk-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.7rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: var(--ink);
+  }
+  .cmdk-item.is-selected { background: rgba(232,177,77,0.12); color: var(--gold); }
+  .cmdk-item span.hint { font-size: 0.75rem; color: var(--muted); }
+  .cmdk-empty { padding: 1.4rem; text-align: center; font-size: 0.85rem; color: var(--muted); }
+
+  /* ============ CUSTOM CURSOR ============ */
+  /* Two elements track the mouse at different speeds: the dot snaps to
+     the raw cursor position every event, while the ring lerps toward it
+     each animation frame — that speed mismatch (instant dot, trailing
+     ring) is what reads as "custom cursor" rather than just a cursor:none
+     hack with one static replacement graphic. */
+  body.custom-cursor-active { cursor: none; }
+  body.custom-cursor-active a,
+  body.custom-cursor-active button,
+  body.custom-cursor-active [data-magnetic] { cursor: none; }
+  #customCursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    margin: -4px 0 0 -4px;
+    border-radius: 50%;
+    background: var(--gold);
+    pointer-events: none;
+    z-index: 1001;
+    will-change: transform;
+  }
+  #customCursorRing {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    border-radius: 50%;
+    border: 1px solid rgba(232,177,77,0.5);
+    pointer-events: none;
+    z-index: 1001;
+    will-change: transform;
+    transition: width 0.2s ease, height 0.2s ease, margin 0.2s ease, border-color 0.2s ease;
+  }
+  #customCursorRing.is-hover { width: 54px; height: 54px; margin: -27px 0 0 -27px; border-color: var(--gold); }
+  @media (hover: none) {
+    #customCursor, #customCursorRing { display: none; }
+    body.custom-cursor-active { cursor: auto; }
+  }
+
+  /* ============ NATIVE CSS SCROLL-DRIVEN ANIMATION ============ */
+  /* animation-timeline: scroll() ties keyframe progress directly to the
+     document's scroll position at the compositor level — no scroll event,
+     no rAF loop, no JS at all on browsers that support it. @supports gates
+     the whole rule, and a small JS fallback (added separately) covers
+     browsers that don't, using the same scroll-progress math as the rest
+     of the page's scroll effects. */
+  #scrollProgressBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--blue-glow), var(--gold));
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    z-index: 998;
+  }
+  @supports (animation-timeline: scroll()) {
+    #scrollProgressBar {
+      animation: scroll-progress-grow auto linear;
+      animation-timeline: scroll(root);
+    }
+    @keyframes scroll-progress-grow {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
   }
 
   .features {
@@ -693,6 +1134,10 @@
 </head>
 <body>
 
+  <div id="scrollProgressBar"></div>
+
+  <div id="noiseOverlay"></div>
+
   <div id="bgLayer"></div>
 
   <div class="parallax-layer" id="layerFar" data-speed="0.15">
@@ -729,6 +1174,7 @@
       <a href="#">Automations</a>
       <a href="#consult">Contact</a>
     </div>
+    <button class="cmdk-trigger" id="cmdkTrigger" type="button">Search <kbd>⌘K</kbd></button>
   </nav>
 
   <section class="hero">
@@ -798,7 +1244,6 @@
         <span>Meta Messenger API</span>
         <span>Trello</span>
         <span>Notion</span>
-        <!-- duplicated set so the -50% translateX loop point is seamless -->
         <span>Make.com</span>
         <span>Zapier</span>
         <span>GoHighLevel</span>
@@ -808,6 +1253,14 @@
         <span>Trello</span>
         <span>Notion</span>
       </div>
+    </div>
+  </section>
+
+  <section class="shader-section">
+    <canvas id="shaderCanvas"></canvas>
+    <div class="shader-content">
+      <span class="scrolly-eyebrow">Real-time WebGL</span>
+      <h2 class="typewriter-text"><span id="typewriterText"></span><span class="typewriter-cursor"></span></h2>
     </div>
   </section>
 
@@ -854,24 +1307,24 @@
       <span class="scrolly-eyebrow">What's inside</span>
       <h2 id="bentoHeading">Capabilities</h2>
     </div>
-    <div class="bento-grid">
-      <div class="bento-card b-large b-gold">
+    <div class="bento-grid" style="perspective: 1000px;">
+      <div class="bento-card tilt-card b-large b-gold">
         <h4>Lead qualification agents</h4>
         <p>Messenger and live-chat agents that check intent and route automatically, no human triage needed.</p>
       </div>
-      <div class="bento-card">
+      <div class="bento-card tilt-card">
         <h4>CRM booking</h4>
         <p>Capacity-enforced scheduling with branching success/fail logic.</p>
       </div>
-      <div class="bento-card b-tall">
+      <div class="bento-card tilt-card b-tall">
         <h4>Review routing</h4>
         <p>Responses suggested automatically, routed by sentiment before they ever reach a human.</p>
       </div>
-      <div class="bento-card b-wide">
+      <div class="bento-card tilt-card b-wide">
         <h4>Email sequences</h4>
         <p>Confirmation, reminder, review request, and retention follow-up, sent on their own schedule.</p>
       </div>
-      <div class="bento-card">
+      <div class="bento-card tilt-card">
         <h4>Reporting</h4>
         <p>Dashboards that track what the automations are actually doing.</p>
       </div>
@@ -965,6 +1418,63 @@
     </div>
   </section>
 
+  <section class="stats-section">
+    <svg class="draw-divider" viewBox="0 0 900 60" fill="none">
+      <path id="dividerPath" class="draw-path" d="M10,30 C150,5 250,55 400,30 C550,5 650,55 890,30" />
+    </svg>
+    <h2 class="split-heading" id="statsHeading">Numbers that back it up</h2>
+    <div class="stats-grid">
+      <div class="stat-card glass-card reveal">
+        <div class="stat-number" data-count-to="1200000" data-suffix="+">0</div>
+        <div class="stat-label">YouTube views</div>
+      </div>
+      <div class="stat-card glass-card reveal">
+        <div class="stat-number" data-count-to="7100" data-suffix="+">0</div>
+        <div class="stat-label">Subscribers</div>
+      </div>
+      <div class="stat-card glass-card reveal">
+        <div class="stat-number" data-count-to="8" data-suffix="+">0</div>
+        <div class="stat-label">Automation projects</div>
+      </div>
+      <div class="stat-card glass-card reveal">
+        <div class="stat-number" data-count-to="26" data-suffix="">0</div>
+        <div class="stat-label">Portfolio pages</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="particle-section" id="particleSection">
+    <canvas id="particleCanvas"></canvas>
+    <div class="particle-caption">
+      <span class="scrolly-eyebrow">Nodes, always connecting</span>
+      <h2>Every integration, quietly talking to every other</h2>
+    </div>
+  </section>
+
+  <section class="bento-section" style="padding-top: 0;">
+    <div class="bento-header">
+      <span class="scrolly-eyebrow">Live example</span>
+      <h2>What a loading state should feel like</h2>
+    </div>
+    <div class="bento-grid" id="skeletonGrid" style="grid-auto-rows: 110px;">
+      <div class="bento-card skeleton b-wide"></div>
+      <div class="bento-card skeleton"></div>
+      <div class="bento-card skeleton"></div>
+      <div class="bento-card skeleton b-wide"></div>
+    </div>
+  </section>
+
+  <section class="bento-section" style="padding-top: 0;">
+    <div class="bento-header">
+      <span class="scrolly-eyebrow">Drag to explore</span>
+      <h2 class="mask-wipe" id="maskWipeHeading">Your automation map, click-and-drag</h2>
+    </div>
+    <div class="pan-wrap" id="panWrap">
+      <canvas id="panCanvas" width="1600" height="700"></canvas>
+      <span class="pan-hint">Click and drag</span>
+    </div>
+  </section>
+
   <section class="cinema-scrolly" id="cinemaSection">
     <div class="cinema-pin">
       <canvas id="pipelineCanvas"></canvas>
@@ -996,13 +1506,60 @@
     </div>
   </section>
 
-  <section class="final-cta" id="consult">
+  <section class="carousel-section">
+    <div class="carousel-header">
+      <span class="scrolly-eyebrow">More results</span>
+      <h2>Swipe through client feedback</h2>
+    </div>
+    <div class="carousel-viewport" id="carouselViewport">
+      <div class="carousel-slide">
+        <p class="testi-quote">"Response time on inquiries went from hours to seconds. Our booking rate went up almost immediately."</p>
+        <p class="testi-name">Dana K.</p>
+        <p class="testi-role">Owner, Coastal Fitness Studio</p>
+      </div>
+      <div class="carousel-slide">
+        <p class="testi-quote">"We stopped losing leads overnight. Everything gets triaged automatically now, no more manual follow-up."</p>
+        <p class="testi-name">Ramon T.</p>
+        <p class="testi-role">Operations Lead, GrillHouse Group</p>
+      </div>
+      <div class="carousel-slide">
+        <p class="testi-quote">"The reporting alone paid for itself. We finally know which channel is actually driving bookings."</p>
+        <p class="testi-name">Priya S.</p>
+        <p class="testi-role">Marketing Manager, Bluewave Salon</p>
+      </div>
+      <div class="carousel-slide">
+        <p class="testi-quote">"Setup was fast and the system just runs. It's the closest thing to hiring a full-time coordinator."</p>
+        <p class="testi-name">Elliot F.</p>
+        <p class="testi-role">Founder, Lume Consulting</p>
+      </div>
+    </div>
+    <div class="carousel-controls">
+      <button class="carousel-arrow" id="carouselPrev" type="button" aria-label="Previous">‹</button>
+      <button class="carousel-dot is-active" data-index="0" aria-label="Slide 1"></button>
+      <button class="carousel-dot" data-index="1" aria-label="Slide 2"></button>
+      <button class="carousel-dot" data-index="2" aria-label="Slide 3"></button>
+      <button class="carousel-dot" data-index="3" aria-label="Slide 4"></button>
+      <button class="carousel-arrow" id="carouselNext" type="button" aria-label="Next">›</button>
+    </div>
+  </section>
+
+  <section class="final-cta spotlight-section" id="consult">
     <a href="#" class="cta-secondary magnetic" data-magnetic>Book a Free Consultation</a>
   </section>
 
   <footer>
     NexOps — Demo / Practice Build — Not a Live Business
   </footer>
+
+  <div class="cmdk-overlay" id="cmdkOverlay">
+    <div class="cmdk-panel">
+      <input type="text" class="cmdk-input" id="cmdkInput" placeholder="Jump to a section..." autocomplete="off">
+      <div class="cmdk-list" id="cmdkList"></div>
+    </div>
+  </div>
+
+  <div id="customCursor"></div>
+  <div id="customCursorRing"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
@@ -1226,18 +1783,13 @@
         drawPipeline(progress);
       }
 
-      // ---- Reveal-on-view: IntersectionObserver watches each .reveal
-      // element and adds .is-visible ONCE when it crosses into the
-      // viewport. Unlike scrollytelling, there's no continuous progress
-      // number here — just a single boolean flip, which is why this is
-      // cheap enough to put on dozens of elements at once. ----
       var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
       if ('IntersectionObserver' in window && revealEls.length) {
         var revealObserver = new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) {
             if (entry.isIntersecting) {
               entry.target.classList.add('is-visible');
-              revealObserver.unobserve(entry.target); // fire once, then stop watching
+              revealObserver.unobserve(entry.target);
             }
           });
         }, { threshold: 0.15 });
@@ -1246,9 +1798,6 @@
         revealEls.forEach(function (el) { el.classList.add('is-visible'); });
       }
 
-      // ---- Text scramble: cycles random characters before settling into
-      // the real text, character by character, left to right. Triggered
-      // once via the same IntersectionObserver pattern as reveal-on-view. ----
       var SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&*';
       function scrambleText(el, finalText, duration) {
         var frame = 0;
@@ -1289,14 +1838,9 @@
         scrambleObserver.observe(bentoHeadingEl);
       }
 
-      // ---- Magnetic buttons: while the cursor is within a padded radius
-      // of the button, the button translates a fraction of the distance
-      // toward the cursor. On mouseleave, the CSS transition (not JS)
-      // eases it back to rest — that split is what makes it feel magnetic
-      // rather than just "stuck to the cursor". ----
       var magneticEls = Array.prototype.slice.call(document.querySelectorAll('[data-magnetic]'));
       var MAGNETIC_STRENGTH = 0.35;
-      var MAGNETIC_RADIUS = 60; // px padding around the button that still counts as "in range"
+      var MAGNETIC_RADIUS = 60;
       magneticEls.forEach(function (el) {
         el.addEventListener('mousemove', function (e) {
           var rect = el.getBoundingClientRect();
@@ -1304,18 +1848,121 @@
           var cy = rect.top + rect.height / 2;
           var dx = e.clientX - cx;
           var dy = e.clientY - cy;
-          el.style.transition = 'transform 0.05s ease'; // fast tracking while inside
+          el.style.transition = 'transform 0.05s ease';
           el.style.transform = 'translate(' + (dx * MAGNETIC_STRENGTH).toFixed(1) + 'px, ' + (dy * MAGNETIC_STRENGTH).toFixed(1) + 'px)';
         });
         el.addEventListener('mouseleave', function () {
-          el.style.transition = 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)'; // slight overshoot on release
+          el.style.transition = 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)';
           el.style.transform = 'translate(0, 0)';
         });
       });
 
-      // ---- Horizontal scroll gallery: identical pin-and-progress mechanism
-      // as .scrolly, but the output is translateX on a row instead of a
-      // CSS class toggle. Vertical scroll input becomes horizontal motion. ----
+      function splitIntoWords(el) {
+        var words = el.textContent.trim().split(/\s+/);
+        el.textContent = '';
+        words.forEach(function (word, i) {
+          var span = document.createElement('span');
+          span.className = 'split-word';
+          span.textContent = word;
+          span.style.transitionDelay = (i * 0.07) + 's';
+          el.appendChild(span);
+          if (i < words.length - 1) el.appendChild(document.createTextNode(' '));
+        });
+      }
+      var statsHeadingEl = document.getElementById('statsHeading');
+      if (statsHeadingEl) {
+        splitIntoWords(statsHeadingEl);
+        if ('IntersectionObserver' in window) {
+          var splitObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-split');
+                splitObserver.unobserve(entry.target);
+              }
+            });
+          }, { threshold: 0.5 });
+          splitObserver.observe(statsHeadingEl);
+        } else {
+          statsHeadingEl.classList.add('is-split');
+        }
+      }
+
+      function animateCounter(el, target, suffix, duration) {
+        var start = performance.now();
+        function frame(now) {
+          var t = Math.min(1, (now - start) / duration);
+          var eased = 1 - Math.pow(1 - t, 3);
+          var value = Math.floor(eased * target);
+          el.textContent = value.toLocaleString() + suffix;
+          if (t < 1) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+      }
+      var counterEls = Array.prototype.slice.call(document.querySelectorAll('[data-count-to]'));
+      if (counterEls.length && 'IntersectionObserver' in window) {
+        var counterObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              var el = entry.target;
+              var target = parseInt(el.getAttribute('data-count-to'), 10) || 0;
+              var suffix = el.getAttribute('data-suffix') || '';
+              animateCounter(el, target, suffix, 1600);
+              counterObserver.unobserve(el);
+            }
+          });
+        }, { threshold: 0.6 });
+        counterEls.forEach(function (el) { counterObserver.observe(el); });
+      }
+
+      var dividerPath = document.getElementById('dividerPath');
+      if (dividerPath) {
+        var pathLen = dividerPath.getTotalLength();
+        dividerPath.style.strokeDasharray = pathLen;
+        dividerPath.style.strokeDashoffset = pathLen;
+        if ('IntersectionObserver' in window) {
+          var pathObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                dividerPath.style.strokeDashoffset = 0;
+                pathObserver.unobserve(entry.target);
+              }
+            });
+          }, { threshold: 0.4 });
+          pathObserver.observe(dividerPath);
+        } else {
+          dividerPath.style.strokeDashoffset = 0;
+        }
+      }
+
+      var tiltCards = Array.prototype.slice.call(document.querySelectorAll('.tilt-card'));
+      var TILT_MAX_DEG = 8;
+      tiltCards.forEach(function (card) {
+        card.addEventListener('mousemove', function (e) {
+          var rect = card.getBoundingClientRect();
+          var px = (e.clientX - rect.left) / rect.width;
+          var py = (e.clientY - rect.top) / rect.height;
+          var rotateY = (px - 0.5) * 2 * TILT_MAX_DEG;
+          var rotateX = (0.5 - py) * 2 * TILT_MAX_DEG;
+          card.style.transition = 'transform 0.05s ease';
+          card.style.transform = 'perspective(1000px) rotateX(' + rotateX.toFixed(2) + 'deg) rotateY(' + rotateY.toFixed(2) + 'deg) scale3d(1.02, 1.02, 1.02)';
+        });
+        card.addEventListener('mouseleave', function () {
+          card.style.transition = 'transform 0.4s ease';
+          card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+        });
+      });
+
+      var spotlightSection = document.querySelector('.spotlight-section');
+      if (spotlightSection) {
+        spotlightSection.addEventListener('mousemove', function (e) {
+          var rect = spotlightSection.getBoundingClientRect();
+          var x = ((e.clientX - rect.left) / rect.width) * 100;
+          var y = ((e.clientY - rect.top) / rect.height) * 100;
+          spotlightSection.style.setProperty('--spot-x', x + '%');
+          spotlightSection.style.setProperty('--spot-y', y + '%');
+        });
+      }
+
       var hscrollSection = document.getElementById('hscrollSection');
       var hscrollTrack = document.getElementById('hscrollTrack');
 
@@ -1362,6 +2009,558 @@
           scrollyProgressLine.setAttribute('x2', x2.toFixed(1));
         }
       }
+
+      // ---- Shader mesh background: raw WebGL, no library. A full-screen
+      // quad is rasterized once; the fragment shader mixes two offset sine
+      // waves over time and applies a radial vignette. Only two uniforms
+      // (time, resolution) are touched per frame — all the gradient math
+      // runs on the GPU, which is why it stays smooth alongside everything
+      // else happening on scroll. ----
+      function initShader() {
+        var canvas = document.getElementById('shaderCanvas');
+        if (!canvas) return;
+        var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        if (!gl) return;
+
+        var vertSrc = 'attribute vec2 a_pos; void main(){ gl_Position = vec4(a_pos, 0.0, 1.0); }';
+        var fragSrc = [
+          'precision mediump float;',
+          'uniform vec2 u_res;',
+          'uniform float u_time;',
+          'void main(){',
+          '  vec2 uv = gl_FragCoord.xy / u_res;',
+          '  vec3 colA = vec3(0.02, 0.03, 0.06);',
+          '  vec3 colB = vec3(0.11, 0.35, 0.83);',
+          '  vec3 colC = vec3(0.79, 0.62, 0.24);',
+          '  float w1 = sin(uv.x * 3.0 + u_time * 0.25) * 0.5 + 0.5;',
+          '  float w2 = sin(uv.y * 4.0 - u_time * 0.18 + w1) * 0.5 + 0.5;',
+          '  vec3 mixed = mix(colA, colB, w1 * 0.5);',
+          '  mixed = mix(mixed, colC, w2 * 0.18);',
+          '  float vign = smoothstep(1.1, 0.2, distance(uv, vec2(0.5)));',
+          '  gl_FragColor = vec4(mixed * (0.35 + vign * 0.65), 1.0);',
+          '}'
+        ].join('\n');
+
+        function compile(type, src) {
+          var s = gl.createShader(type);
+          gl.shaderSource(s, src);
+          gl.compileShader(s);
+          return s;
+        }
+        var vs = compile(gl.VERTEX_SHADER, vertSrc);
+        var fs = compile(gl.FRAGMENT_SHADER, fragSrc);
+        var prog = gl.createProgram();
+        gl.attachShader(prog, vs);
+        gl.attachShader(prog, fs);
+        gl.linkProgram(prog);
+        if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+        gl.useProgram(prog);
+
+        var quad = new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]);
+        var buf = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+        gl.bufferData(gl.ARRAY_BUFFER, quad, gl.STATIC_DRAW);
+        var posLoc = gl.getAttribLocation(prog, 'a_pos');
+        gl.enableVertexAttribArray(posLoc);
+        gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+        var resLoc = gl.getUniformLocation(prog, 'u_res');
+        var timeLoc = gl.getUniformLocation(prog, 'u_time');
+
+        function resize() {
+          var rect = canvas.getBoundingClientRect();
+          var dpr = Math.min(window.devicePixelRatio || 1, 2);
+          canvas.width = Math.round(rect.width * dpr);
+          canvas.height = Math.round(rect.height * dpr);
+          gl.viewport(0, 0, canvas.width, canvas.height);
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        var shaderSection = document.querySelector('.shader-section');
+        var shaderVisible = true;
+        if ('IntersectionObserver' in window && shaderSection) {
+          new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { shaderVisible = e.isIntersecting; });
+          }, { threshold: 0 }).observe(shaderSection);
+        }
+
+        function frame(t) {
+          if (shaderVisible) {
+            gl.uniform2f(resLoc, canvas.width, canvas.height);
+            gl.uniform1f(timeLoc, t * 0.001);
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+          }
+          requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+      }
+      initShader();
+
+      // ---- Typewriter: types a phrase in character by character, pauses,
+      // deletes it back out, then moves to the next phrase in the list.
+      // Two setTimeout calls do all the work — one for the typing/deleting
+      // cadence, one for the pause at full length — no animation library. ----
+      function initTypewriter() {
+        var el = document.getElementById('typewriterText');
+        if (!el) return;
+        var phrases = ['powered by real automation.', 'connected to your CRM.', 'running while you sleep.'];
+        var pi = 0, ci = 0, deleting = false;
+        function step() {
+          var phrase = phrases[pi];
+          if (!deleting) {
+            ci++;
+            el.textContent = phrase.slice(0, ci);
+            if (ci === phrase.length) { deleting = true; setTimeout(step, 1400); return; }
+          } else {
+            ci--;
+            el.textContent = phrase.slice(0, ci);
+            if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; }
+          }
+          setTimeout(step, deleting ? 35 : 55);
+        }
+        step();
+      }
+      initTypewriter();
+
+      // ---- Particle system: plain 2D canvas, ~70 points with basic
+      // velocity integration that wrap at the edges and get gently pushed
+      // away from the cursor. A second O(n^2) pass draws a line between any
+      // two particles under a distance threshold — that nearest-neighbor
+      // pass is the entire "network" look, and is the first thing to cut
+      // back if the particle count ever grows much past this. ----
+      function initParticles() {
+        var canvas = document.getElementById('particleCanvas');
+        var pctx = canvas ? canvas.getContext('2d') : null;
+        if (!pctx) return;
+        var section = document.getElementById('particleSection');
+        var particles = [];
+        var COUNT = 70;
+        var mouseX = null, mouseY = null;
+
+        function resize() {
+          var rect = canvas.getBoundingClientRect();
+          var dpr = Math.min(window.devicePixelRatio || 1, 2);
+          canvas.width = Math.round(rect.width * dpr);
+          canvas.height = Math.round(rect.height * dpr);
+          pctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function seed() {
+          particles = [];
+          var rect = canvas.getBoundingClientRect();
+          for (var i = 0; i < COUNT; i++) {
+            particles.push({
+              x: Math.random() * rect.width,
+              y: Math.random() * rect.height,
+              vx: (Math.random() - 0.5) * 0.25,
+              vy: (Math.random() - 0.5) * 0.25,
+              r: Math.random() * 1.6 + 0.8
+            });
+          }
+        }
+        seed();
+
+        if (section) {
+          section.addEventListener('mousemove', function (e) {
+            var rect = section.getBoundingClientRect();
+            mouseX = e.clientX - rect.left;
+            mouseY = e.clientY - rect.top;
+          });
+          section.addEventListener('mouseleave', function () { mouseX = null; mouseY = null; });
+        }
+
+        var particleVisible = true;
+        if ('IntersectionObserver' in window && section) {
+          new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { particleVisible = e.isIntersecting; });
+          }, { threshold: 0 }).observe(section);
+        }
+
+        function drawParticles() {
+          if (particleVisible) {
+            var rect = canvas.getBoundingClientRect();
+            pctx.clearRect(0, 0, rect.width, rect.height);
+
+            particles.forEach(function (p) {
+              p.x += p.vx; p.y += p.vy;
+              if (p.x < 0) p.x = rect.width; if (p.x > rect.width) p.x = 0;
+              if (p.y < 0) p.y = rect.height; if (p.y > rect.height) p.y = 0;
+              if (mouseX != null) {
+                var dx = p.x - mouseX, dy = p.y - mouseY;
+                var dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 90 && dist > 0.01) {
+                  p.x += (dx / dist) * 0.6;
+                  p.y += (dy / dist) * 0.6;
+                }
+              }
+            });
+
+            pctx.fillStyle = 'rgba(232,177,77,0.7)';
+            particles.forEach(function (p) {
+              pctx.beginPath();
+              pctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+              pctx.fill();
+            });
+
+            pctx.strokeStyle = 'rgba(46,143,232,0.15)';
+            pctx.lineWidth = 1;
+            for (var i = 0; i < particles.length; i++) {
+              for (var j = i + 1; j < particles.length; j++) {
+                var a = particles[i], b = particles[j];
+                var dx2 = a.x - b.x, dy2 = a.y - b.y;
+                if (dx2 * dx2 + dy2 * dy2 < 120 * 120) {
+                  pctx.beginPath();
+                  pctx.moveTo(a.x, a.y);
+                  pctx.lineTo(b.x, b.y);
+                  pctx.stroke();
+                }
+              }
+            }
+          }
+          requestAnimationFrame(drawParticles);
+        }
+        requestAnimationFrame(drawParticles);
+      }
+      initParticles();
+
+      // ---- Skeleton shimmer: shows placeholder cards with the shimmer
+      // sweep from the CSS above, then swaps in the real content once
+      // (simulating a network load) after the section scrolls into view.
+      // Fires once via IntersectionObserver, same one-shot pattern as
+      // reveal-on-view. ----
+      function initSkeleton() {
+        var grid = document.getElementById('skeletonGrid');
+        if (!grid) return;
+        var content = [
+          { cls: 'b-wide', title: 'Lead intake', text: 'Every channel lands in one queue.' },
+          { cls: '', title: 'Auto-routing', text: 'Rules decide where it goes next.' },
+          { cls: '', title: 'Confirmations', text: 'Sent the moment a booking succeeds.' },
+          { cls: 'b-wide', title: 'Reporting', text: 'Dashboards update on their own.' }
+        ];
+        function load() {
+          grid.innerHTML = '';
+          content.forEach(function (c) {
+            var div = document.createElement('div');
+            div.className = 'bento-card loaded-fade ' + c.cls;
+            div.innerHTML = '<h4>' + c.title + '</h4><p>' + c.text + '</p>';
+            grid.appendChild(div);
+          });
+        }
+        if ('IntersectionObserver' in window) {
+          var obs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                setTimeout(load, 1200);
+                obs.unobserve(entry.target);
+              }
+            });
+          }, { threshold: 0.3 });
+          obs.observe(grid);
+        } else {
+          load();
+        }
+      }
+      initSkeleton();
+
+      // ---- Draggable pan canvas: the map is drawn to the canvas exactly
+      // once. Dragging only ever changes a CSS transform on that already-
+      // rendered bitmap — no redraw happens mid-drag, which is what keeps
+      // panning smooth regardless of how complex the map drawing itself is. ----
+      function initPanCanvas() {
+        var wrap = document.getElementById('panWrap');
+        var canvas = document.getElementById('panCanvas');
+        if (!wrap || !canvas) return;
+        var pctx = canvas.getContext('2d');
+
+        function drawMap() {
+          pctx.clearRect(0, 0, canvas.width, canvas.height);
+          pctx.fillStyle = '#0A1220';
+          pctx.fillRect(0, 0, canvas.width, canvas.height);
+          pctx.strokeStyle = 'rgba(46,143,232,0.15)';
+          pctx.lineWidth = 1;
+          for (var x = 0; x < canvas.width; x += 60) {
+            pctx.beginPath(); pctx.moveTo(x, 0); pctx.lineTo(x, canvas.height); pctx.stroke();
+          }
+          for (var y = 0; y < canvas.height; y += 60) {
+            pctx.beginPath(); pctx.moveTo(0, y); pctx.lineTo(canvas.width, y); pctx.stroke();
+          }
+          var nodes = [
+            [140,120,'Intake'], [420,260,'Route'], [700,140,'Qualify'],
+            [980,300,'Book'], [1260,180,'Confirm'], [1460,420,'Report'],
+            [260,480,'Follow-up'], [860,520,'Review']
+          ];
+          pctx.strokeStyle = 'rgba(232,177,77,0.4)';
+          pctx.lineWidth = 2;
+          for (var i = 0; i < nodes.length - 1; i++) {
+            pctx.beginPath();
+            pctx.moveTo(nodes[i][0], nodes[i][1]);
+            pctx.lineTo(nodes[i + 1][0], nodes[i + 1][1]);
+            pctx.stroke();
+          }
+          nodes.forEach(function (n) {
+            pctx.beginPath();
+            pctx.fillStyle = '#0D1A2C';
+            pctx.strokeStyle = '#2E8FE8';
+            pctx.lineWidth = 2;
+            pctx.arc(n[0], n[1], 26, 0, Math.PI * 2);
+            pctx.fill(); pctx.stroke();
+            pctx.fillStyle = '#F4F6FA';
+            pctx.font = '600 13px Inter, sans-serif';
+            pctx.textAlign = 'center';
+            pctx.fillText(n[2], n[0], n[1] + 4);
+          });
+        }
+        drawMap();
+
+        var isDown = false, startX = 0, startY = 0, curX = 0, curY = 0, lastTx = 0, lastTy = 0;
+        function clampPan() {
+          var wrapRect = wrap.getBoundingClientRect();
+          var minX = wrapRect.width - canvas.width;
+          var minY = wrapRect.height - canvas.height;
+          curX = Math.min(0, Math.max(minX, curX));
+          curY = Math.min(0, Math.max(minY, curY));
+        }
+        function apply() {
+          canvas.style.transform = 'translate3d(' + curX + 'px,' + curY + 'px,0)';
+        }
+        function down(e) {
+          isDown = true;
+          wrap.classList.add('is-dragging');
+          var p = e.touches ? e.touches[0] : e;
+          startX = p.clientX; startY = p.clientY;
+          lastTx = curX; lastTy = curY;
+        }
+        function move(e) {
+          if (!isDown) return;
+          var p = e.touches ? e.touches[0] : e;
+          curX = lastTx + (p.clientX - startX);
+          curY = lastTy + (p.clientY - startY);
+          clampPan();
+          apply();
+        }
+        function up() {
+          isDown = false;
+          wrap.classList.remove('is-dragging');
+        }
+        wrap.addEventListener('mousedown', down);
+        window.addEventListener('mousemove', move);
+        window.addEventListener('mouseup', up);
+        wrap.addEventListener('touchstart', down, { passive: true });
+        wrap.addEventListener('touchmove', move, { passive: true });
+        wrap.addEventListener('touchend', up);
+        clampPan();
+        apply();
+      }
+      initPanCanvas();
+
+      // ---- Mask-wipe reveal: clip-path starts fully closed on one side
+      // and transitions open once the element scrolls into view. Unlike an
+      // opacity fade, the content is genuinely clipped out of the box the
+      // whole time, giving it the harder "wipe" edge instead of a soft fade. ----
+      function initMaskWipe() {
+        var els = Array.prototype.slice.call(document.querySelectorAll('.mask-wipe'));
+        if (!els.length) return;
+        if (!('IntersectionObserver' in window)) {
+          els.forEach(function (el) { el.classList.add('is-wiped'); });
+          return;
+        }
+        var obs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-wiped');
+              obs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.4 });
+        els.forEach(function (el) { obs.observe(el); });
+      }
+      initMaskWipe();
+
+      // ---- Scroll-snap carousel: scroll-snap-type/scroll-snap-align in the
+      // CSS above does all the actual settling — JS here only reads the
+      // slide nearest the viewport center (to light up the right dot) and
+      // calls scrollIntoView() for the arrow buttons. It never drives the
+      // scroll physics itself. ----
+      function initCarousel() {
+        var viewport = document.getElementById('carouselViewport');
+        var prevBtn = document.getElementById('carouselPrev');
+        var nextBtn = document.getElementById('carouselNext');
+        var dots = Array.prototype.slice.call(document.querySelectorAll('.carousel-dot'));
+        if (!viewport) return;
+        var slides = Array.prototype.slice.call(viewport.children);
+
+        function currentIndex() {
+          var vRect = viewport.getBoundingClientRect();
+          var center = vRect.left + vRect.width / 2;
+          var closest = 0, closestDist = Infinity;
+          slides.forEach(function (s, i) {
+            var r = s.getBoundingClientRect();
+            var d = Math.abs((r.left + r.width / 2) - center);
+            if (d < closestDist) { closestDist = d; closest = i; }
+          });
+          return closest;
+        }
+        function scrollToIndex(i) {
+          i = Math.max(0, Math.min(slides.length - 1, i));
+          slides[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+        function updateDots() {
+          var idx = currentIndex();
+          dots.forEach(function (d, i) { d.classList.toggle('is-active', i === idx); });
+        }
+        if (prevBtn) prevBtn.addEventListener('click', function () { scrollToIndex(currentIndex() - 1); });
+        if (nextBtn) nextBtn.addEventListener('click', function () { scrollToIndex(currentIndex() + 1); });
+        dots.forEach(function (d, i) { d.addEventListener('click', function () { scrollToIndex(i); }); });
+
+        var scrollTimer = null;
+        viewport.addEventListener('scroll', function () {
+          clearTimeout(scrollTimer);
+          scrollTimer = setTimeout(updateDots, 100);
+        }, { passive: true });
+        updateDots();
+      }
+      initCarousel();
+
+      // ---- Command palette (⌘K): a filtered list of section jump-targets.
+      // Cmd/Ctrl+K (or the nav trigger) opens it; typing filters the list;
+      // arrow keys move a selectedIndex; Enter scrolls to the chosen
+      // section via scrollIntoView(). No fuzzy-match library — plain
+      // substring filtering on the label. ----
+      function initCommandPalette() {
+        var trigger = document.getElementById('cmdkTrigger');
+        var overlay = document.getElementById('cmdkOverlay');
+        var input = document.getElementById('cmdkInput');
+        var list = document.getElementById('cmdkList');
+        if (!overlay || !input || !list) return;
+
+        var items = [
+          { label: 'Home', hint: 'Top of page', target: 'body' },
+          { label: 'Services / Features', hint: 'What NexOps does', target: '.features' },
+          { label: 'Capabilities', hint: 'Bento grid', target: '#bentoSection' },
+          { label: 'How It Works', hint: 'Scrollytelling steps', target: '#scrollySection' },
+          { label: 'Projects', hint: 'Horizontal gallery', target: '#hscrollSection' },
+          { label: 'Stats', hint: 'Numbers that back it up', target: '.stats-section' },
+          { label: 'Automation Map', hint: 'Drag to explore', target: '#panWrap' },
+          { label: 'Client Feedback', hint: 'Swipe carousel', target: '.carousel-section' },
+          { label: 'Book a Consultation', hint: 'Contact', target: '#consult' }
+        ];
+        var selectedIndex = 0;
+        var filtered = items.slice();
+
+        function render() {
+          list.innerHTML = '';
+          if (!filtered.length) {
+            list.innerHTML = '<div class="cmdk-empty">No matches</div>';
+            return;
+          }
+          filtered.forEach(function (item, i) {
+            var row = document.createElement('div');
+            row.className = 'cmdk-item' + (i === selectedIndex ? ' is-selected' : '');
+            row.innerHTML = '<span>' + item.label + '</span><span class="hint">' + item.hint + '</span>';
+            row.addEventListener('mouseenter', function () { selectedIndex = i; render(); });
+            row.addEventListener('click', function () { go(item); });
+            list.appendChild(row);
+          });
+        }
+        function go(item) {
+          close();
+          var el = document.querySelector(item.target);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        function open() {
+          overlay.classList.add('is-open');
+          input.value = '';
+          filtered = items.slice();
+          selectedIndex = 0;
+          render();
+          setTimeout(function () { input.focus(); }, 50);
+        }
+        function close() {
+          overlay.classList.remove('is-open');
+        }
+        if (trigger) trigger.addEventListener('click', open);
+        overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+        input.addEventListener('input', function () {
+          var q = input.value.toLowerCase();
+          filtered = items.filter(function (item) { return item.label.toLowerCase().indexOf(q) !== -1; });
+          selectedIndex = 0;
+          render();
+        });
+        input.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowDown') { e.preventDefault(); selectedIndex = Math.min(filtered.length - 1, selectedIndex + 1); render(); }
+          else if (e.key === 'ArrowUp') { e.preventDefault(); selectedIndex = Math.max(0, selectedIndex - 1); render(); }
+          else if (e.key === 'Enter') { e.preventDefault(); if (filtered[selectedIndex]) go(filtered[selectedIndex]); }
+          else if (e.key === 'Escape') { close(); }
+        });
+        window.addEventListener('keydown', function (e) {
+          var isK = e.key === 'k' || e.key === 'K';
+          if ((e.metaKey || e.ctrlKey) && isK) {
+            e.preventDefault();
+            if (overlay.classList.contains('is-open')) close(); else open();
+          } else if (e.key === 'Escape') {
+            close();
+          }
+        });
+      }
+      initCommandPalette();
+
+      // ---- Custom cursor: a small dot snaps to the raw mouse position on
+      // every mousemove, while a larger ring lerps toward that same
+      // position each animation frame. That speed mismatch — instant dot,
+      // trailing ring — is what reads as a custom cursor rather than a
+      // static replacement icon. Skipped entirely on touch devices via the
+      // (hover: hover) media check. ----
+      function initCustomCursor() {
+        if (window.matchMedia && !window.matchMedia('(hover: hover)').matches) return;
+        var dot = document.getElementById('customCursor');
+        var ring = document.getElementById('customCursorRing');
+        if (!dot || !ring) return;
+        document.body.classList.add('custom-cursor-active');
+
+        var rx = 0, ry = 0, tx = 0, ty = 0;
+        window.addEventListener('mousemove', function (e) {
+          dot.style.transform = 'translate3d(' + e.clientX + 'px,' + e.clientY + 'px,0)';
+          tx = e.clientX; ty = e.clientY;
+        });
+
+        var hoverables = document.querySelectorAll('a, button, [data-magnetic], .tilt-card, .carousel-dot');
+        hoverables.forEach(function (el) {
+          el.addEventListener('mouseenter', function () { ring.classList.add('is-hover'); });
+          el.addEventListener('mouseleave', function () { ring.classList.remove('is-hover'); });
+        });
+
+        function ringTick() {
+          rx += (tx - rx) * 0.18;
+          ry += (ty - ry) * 0.18;
+          ring.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0)';
+          requestAnimationFrame(ringTick);
+        }
+        requestAnimationFrame(ringTick);
+      }
+      initCustomCursor();
+
+      // ---- Scroll-driven progress bar fallback: the CSS handles this
+      // natively via animation-timeline: scroll() on browsers that support
+      // it (gated by @supports). This is only the fallback path for
+      // browsers that don't, using the same scrollTop/scrollHeight math as
+      // the rest of the page's scroll effects. ----
+      function initScrollProgressFallback() {
+        var supported = window.CSS && CSS.supports && CSS.supports('animation-timeline: scroll()');
+        if (supported) return;
+        var bar = document.getElementById('scrollProgressBar');
+        if (!bar) return;
+        window.addEventListener('scroll', function () {
+          var h = document.documentElement;
+          var scrollTop = h.scrollTop || document.body.scrollTop;
+          var scrollHeight = (h.scrollHeight || document.body.scrollHeight) - h.clientHeight;
+          var progress = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
+          bar.style.transform = 'scaleX(' + progress.toFixed(4) + ')';
+        }, { passive: true });
+      }
+      initScrollProgressFallback();
 
       var bgLayer = document.getElementById('bgLayer');
       var sceneLayers = Array.prototype.slice.call(document.querySelectorAll('.parallax-layer'));

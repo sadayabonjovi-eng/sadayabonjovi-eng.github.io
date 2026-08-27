@@ -330,13 +330,29 @@
     .status-line .pulse{ animation:none; }
   }
 
-  /* ===== ROTATING HERO LINE ("Handles your ___ automatically.") ===== */
+  /* ===== ROTATING HERO LINE ("Handles your ___ automatically.") =====
+     Positioned INSIDE the hero, overlaid on top of the video, so it is
+     visible immediately on page load — no scrolling required. */
+  .rotator-overlay{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:8.5rem;
+    z-index:3;
+    display:flex;
+    justify-content:center;
+    padding:0 1.5rem;
+    pointer-events:none;
+  }
   .rotator-line{
     font-family:var(--mono);
-    font-size:clamp(1.1rem, 2.6vw, 1.55rem);
-    color:var(--muted);
-    margin:0 0 1.4rem;
+    font-size:clamp(1.3rem, 3.4vw, 2.1rem);
+    font-weight:700;
+    color:var(--ink);
+    margin:0;
     letter-spacing:.01em;
+    text-align:center;
+    text-shadow:0 2px 18px rgba(0,0,0,.6);
   }
   .rotator-word{
     display:inline-block;
@@ -354,6 +370,10 @@
   }
   @media (prefers-reduced-motion: reduce){
     .rotator-word.is-swapping{ animation:none; }
+  }
+  @media (max-width:760px){
+    .rotator-overlay{ bottom:6.5rem; }
+    .rotator-line{ font-size:1.15rem; }
   }
   /* ===== END ROTATING HERO LINE ===== */
 
@@ -818,6 +838,18 @@
         </div>
       </div>
 
+      <!-- ===== Rotating hero line — overlaid directly on top of the
+           video, inside the pinned hero. It stays visible for the
+           entire time the hero is pinned (through both video1 and
+           video2), regardless of scroll position — never requires
+           scrolling to see, never gets covered. ===== -->
+      <div class="rotator-overlay">
+        <p class="rotator-line">
+          Handles your <span class="rotator-word" id="rotator-word">reporting</span> automatically.
+        </p>
+      </div>
+      <!-- ===== END Rotating hero line ===== -->
+
       <div class="scroll-cue" id="scroll-cue">
         <span>scroll</span>
         <span class="chevron"></span>
@@ -832,12 +864,6 @@
   <div class="hero-content">
     <p class="welcome">Welcome to my portfolio</p>
     <div class="status-line"><span class="pulse"></span> Automation Specialist — with Administrative &amp; Operational VA Support</div>
-
-    <!-- ===== Rotating hero line ===== -->
-    <p class="rotator-line">
-      Handles your <span class="rotator-word" id="rotator-word">reporting</span> automatically.
-    </p>
-    <!-- ===== END Rotating hero line ===== -->
 
     <h1>Bon Jovi F. Sadaya</h1>
     <p class="lede">

@@ -330,6 +330,33 @@
     .status-line .pulse{ animation:none; }
   }
 
+  /* ===== ROTATING HERO LINE ("Handles your ___ automatically.") ===== */
+  .rotator-line{
+    font-family:var(--mono);
+    font-size:clamp(1.1rem, 2.6vw, 1.55rem);
+    color:var(--muted);
+    margin:0 0 1.4rem;
+    letter-spacing:.01em;
+  }
+  .rotator-word{
+    display:inline-block;
+    color:var(--signal);
+    font-weight:700;
+    min-width:1ch;
+    position:relative;
+  }
+  .rotator-word.is-swapping{
+    animation:rotator-swap .5s ease;
+  }
+  @keyframes rotator-swap{
+    0%{ opacity:0; transform:translateY(6px); filter:blur(2px); }
+    100%{ opacity:1; transform:translateY(0); filter:blur(0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .rotator-word.is-swapping{ animation:none; }
+  }
+  /* ===== END ROTATING HERO LINE ===== */
+
   .hero-content h1{
     font-family:var(--sans);
     font-weight:700;
@@ -805,6 +832,13 @@
   <div class="hero-content">
     <p class="welcome">Welcome to my portfolio</p>
     <div class="status-line"><span class="pulse"></span> Automation Specialist — with Administrative &amp; Operational VA Support</div>
+
+    <!-- ===== Rotating hero line ===== -->
+    <p class="rotator-line">
+      Handles your <span class="rotator-word" id="rotator-word">reporting</span> automatically.
+    </p>
+    <!-- ===== END Rotating hero line ===== -->
+
     <h1>Bon Jovi F. Sadaya</h1>
     <p class="lede">
       I'm an <strong>Automation Specialist</strong> who builds systems on <strong>Make.com, Zapier, Activepieces, and GoHighLevel</strong> — AI lead agents, order processing pipelines, and reservation systems that run your business faster, cleaner, and more reliably in the background.
@@ -1046,6 +1080,40 @@
       }, { passive: true });
 
       updateHeroVideo();
+    })();
+
+    /* ===== Rotating hero word ("Handles your ___ automatically.") ===== */
+    (function(){
+      const el = document.getElementById('rotator-word');
+      if (!el) return;
+
+      const words = [
+        'reporting',
+        'lead replies',
+        'appointment booking',
+        'client onboarding',
+        'invoicing',
+        'follow-ups',
+        'data entry',
+        'inbox triage'
+      ];
+
+      let i = 0;
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function nextWord(){
+        i = (i + 1) % words.length;
+        el.textContent = words[i];
+        if (!prefersReduced) {
+          el.classList.remove('is-swapping');
+          void el.offsetWidth; // restart animation
+          el.classList.add('is-swapping');
+        }
+      }
+
+      if (!prefersReduced) {
+        setInterval(nextWord, 2200);
+      }
     })();
   </script>
   <link rel="stylesheet" href="chatbot.css">

@@ -142,9 +142,21 @@
   #theme-toggle:hover{ border-color:var(--signal); color:var(--signal); }
   #theme-toggle:focus-visible{ outline:2px solid var(--signal); outline-offset:2px; }
 
+  /* ===== HERO SCROLL TRACK (pins the hero in place while the
+     background video switches, so the switch always happens while
+     the hero is fully visible — no cut-off, no scrolling past it
+     mid-transition) ===== */
+  .hero-scroll-track{
+    position:relative;
+    height:190vh; /* extra 90vh = scroll buffer before the hero releases.
+                      Increase for a longer pinned buffer, decrease to
+                      release sooner. */
+  }
+
   /* ===== HERO VIDEO BACKGROUND ===== */
   header{
-    position:relative;
+    position:sticky;
+    top:0;
     overflow:hidden;
     padding:6rem 1.5rem 4rem;
     min-height:100vh;
@@ -193,7 +205,7 @@
     gap:2.5rem;
     align-items:center;
   }
-  .hero-text{ grid-column:1; max-width:640px; }
+  .hero-text{ grid-column:1; max-width:640px; margin-top:3rem; }
   .hero-art{
     grid-column:2;
     align-self:center;
@@ -206,6 +218,7 @@
   @media (max-width:760px){
     .hero-inner{ grid-template-columns:1fr; }
     .hero-art{ grid-column:1; order:-1; max-width:260px; margin:0 auto 1rem; min-height:180px; }
+    .hero-text{ margin-top:1.5rem; }
   }
 
   .scroll-cue{
@@ -243,6 +256,7 @@
   }
   @media (max-width:760px){
     header{ min-height:92vh; padding:5rem 1.5rem 3rem; }
+    .hero-scroll-track{ height:180vh; }
   }
   /* ===== END HERO VIDEO BACKGROUND ===== */
 
@@ -686,86 +700,88 @@
     <button id="theme-toggle" aria-label="Toggle dark and light mode"></button>
   </div>
 
-  <header id="hero">
-    <div class="hero-video-bg" aria-hidden="true">
-      <video id="video-idle" class="is-active" autoplay loop muted playsinline preload="auto">
-        <source src="hero-idle.mp4" type="video/mp4">
-      </video>
-      <video id="video-scroll" loop muted playsinline preload="auto">
-        <source src="hero-scroll.mp4" type="video/mp4">
-      </video>
-    </div>
+  <div class="hero-scroll-track" id="hero-scroll-track">
+    <header id="hero">
+      <div class="hero-video-bg" aria-hidden="true">
+        <video id="video-idle" class="is-active" autoplay loop muted playsinline preload="auto">
+          <source src="hero-idle.mp4" type="video/mp4">
+        </video>
+        <video id="video-scroll" loop muted playsinline preload="auto">
+          <source src="hero-scroll.mp4" type="video/mp4">
+        </video>
+      </div>
 
-    <div class="hero-inner">
-      <div class="hero-text">
-      <p class="welcome">Welcome to my portfolio</p>
-      <div class="status-line"><span class="pulse"></span> Automation Specialist — with Administrative &amp; Operational VA Support</div>
-      <h1>Bon Jovi F. Sadaya</h1>
-      <p class="lede">
-        I'm an <strong>Automation Specialist</strong> who builds systems on <strong>Make.com, Zapier, Activepieces, and GoHighLevel</strong> — AI lead agents, order processing pipelines, and reservation systems that run your business faster, cleaner, and more reliably in the background.
-      </p>
-      <p class="lede">
-        Underneath every build is <strong>Administrative &amp; Operational VA support</strong> — I monitor what I build live, handle the email, scheduling, and documentation the automation touches, and step in myself whenever a human decision is needed.
-      </p>
-      <div class="credentials">
-        <span>creds//</span> 7 years government &amp; military operations · Top 1 of 55, Coast Guard IT Specialization (96.77%) · TESDA NC II, Computer Systems Servicing
+      <div class="hero-inner">
+        <div class="hero-text">
+        <p class="welcome">Welcome to my portfolio</p>
+        <div class="status-line"><span class="pulse"></span> Automation Specialist — with Administrative &amp; Operational VA Support</div>
+        <h1>Bon Jovi F. Sadaya</h1>
+        <p class="lede">
+          I'm an <strong>Automation Specialist</strong> who builds systems on <strong>Make.com, Zapier, Activepieces, and GoHighLevel</strong> — AI lead agents, order processing pipelines, and reservation systems that run your business faster, cleaner, and more reliably in the background.
+        </p>
+        <p class="lede">
+          Underneath every build is <strong>Administrative &amp; Operational VA support</strong> — I monitor what I build live, handle the email, scheduling, and documentation the automation touches, and step in myself whenever a human decision is needed.
+        </p>
+        <div class="credentials">
+          <span>creds//</span> 7 years government &amp; military operations · Top 1 of 55, Coast Guard IT Specialization (96.77%) · TESDA NC II, Computer Systems Servicing
+        </div>
+        <a href="projects.html" class="cv-button">→ run_projects()</a>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <!-- Interactive 3D globe mounts here via hero-scroll.js.
+               If that script ever fails to find this mount, the static
+               SVG fallback below stays visible as the safety net. -->
+          <div id="hero-orbit-mount"></div>
+          <svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="var(--signal)" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="var(--signal)" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <circle cx="180" cy="180" r="170" fill="url(#glow)"/>
+            <g stroke="var(--line)" stroke-width="1.5" fill="none">
+              <line x1="180" y1="180" x2="60" y2="80"/>
+              <line x1="180" y1="180" x2="300" y2="70"/>
+              <line x1="180" y1="180" x2="50" y2="260"/>
+              <line x1="180" y1="180" x2="300" y2="270"/>
+              <line x1="180" y1="180" x2="180" y2="40"/>
+              <line x1="180" y1="180" x2="180" y2="320"/>
+            </g>
+            <g fill="var(--bg-2)" stroke="var(--signal)" stroke-width="2">
+              <rect x="30" y="60" width="60" height="40" rx="6"/>
+              <circle cx="300" cy="70" r="22"/>
+              <rect x="20" y="240" width="60" height="40" rx="6"/>
+              <circle cx="300" cy="270" r="22"/>
+              <rect x="150" y="14" width="60" height="40" rx="6"/>
+              <circle cx="180" cy="320" r="22"/>
+            </g>
+            <g stroke="var(--signal)" stroke-width="2" fill="none" stroke-linecap="round">
+              <path d="M40 70 h40 v20 h-40 z M40 70 l20 14 l20 -14"/>
+              <path d="M300 60 v6 M300 84 v6 M290 70 h-6 M310 70 h6 M292 62 l-4 -4 M308 62 l4 -4 M292 78 l-4 4 M308 78 l4 4"/>
+              <circle cx="300" cy="70" r="8"/>
+              <rect x="30" y="248" width="40" height="26" rx="2"/>
+              <line x1="30" y1="258" x2="70" y2="258"/>
+              <path d="M288 260 h24 v16 l-8 -6 h-16 z"/>
+              <path d="M162 22 h24 v24 h-24 z M168 28 h12 M168 34 h12 M168 40 h8"/>
+              <path d="M170 330 v-12 M180 330 v-18 M190 330 v-8"/>
+            </g>
+            <circle cx="180" cy="180" r="46" fill="var(--bg-2)" stroke="var(--signal)" stroke-width="2.5"/>
+            <g stroke="var(--signal)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="180" cy="164" r="14"/>
+              <path d="M156 206 c0 -16 11 -26 24 -26 s24 10 24 26"/>
+            </g>
+            <circle cx="180" cy="180" r="46" fill="none" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="4 6"/>
+          </svg>
+        </div>
       </div>
-      <a href="projects.html" class="cv-button">→ run_projects()</a>
-      </div>
-      <div class="hero-art" aria-hidden="true">
-        <!-- Interactive 3D globe mounts here via hero-scroll.js.
-             If that script ever fails to find this mount, the static
-             SVG fallback below stays visible as the safety net. -->
-        <div id="hero-orbit-mount"></div>
-        <svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="var(--signal)" stop-opacity="0.35"/>
-              <stop offset="100%" stop-color="var(--signal)" stop-opacity="0"/>
-            </radialGradient>
-          </defs>
-          <circle cx="180" cy="180" r="170" fill="url(#glow)"/>
-          <g stroke="var(--line)" stroke-width="1.5" fill="none">
-            <line x1="180" y1="180" x2="60" y2="80"/>
-            <line x1="180" y1="180" x2="300" y2="70"/>
-            <line x1="180" y1="180" x2="50" y2="260"/>
-            <line x1="180" y1="180" x2="300" y2="270"/>
-            <line x1="180" y1="180" x2="180" y2="40"/>
-            <line x1="180" y1="180" x2="180" y2="320"/>
-          </g>
-          <g fill="var(--bg-2)" stroke="var(--signal)" stroke-width="2">
-            <rect x="30" y="60" width="60" height="40" rx="6"/>
-            <circle cx="300" cy="70" r="22"/>
-            <rect x="20" y="240" width="60" height="40" rx="6"/>
-            <circle cx="300" cy="270" r="22"/>
-            <rect x="150" y="14" width="60" height="40" rx="6"/>
-            <circle cx="180" cy="320" r="22"/>
-          </g>
-          <g stroke="var(--signal)" stroke-width="2" fill="none" stroke-linecap="round">
-            <path d="M40 70 h40 v20 h-40 z M40 70 l20 14 l20 -14"/>
-            <path d="M300 60 v6 M300 84 v6 M290 70 h-6 M310 70 h6 M292 62 l-4 -4 M308 62 l4 -4 M292 78 l-4 4 M308 78 l4 4"/>
-            <circle cx="300" cy="70" r="8"/>
-            <rect x="30" y="248" width="40" height="26" rx="2"/>
-            <line x1="30" y1="258" x2="70" y2="258"/>
-            <path d="M288 260 h24 v16 l-8 -6 h-16 z"/>
-            <path d="M162 22 h24 v24 h-24 z M168 28 h12 M168 34 h12 M168 40 h8"/>
-            <path d="M170 330 v-12 M180 330 v-18 M190 330 v-8"/>
-          </g>
-          <circle cx="180" cy="180" r="46" fill="var(--bg-2)" stroke="var(--signal)" stroke-width="2.5"/>
-          <g stroke="var(--signal)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="180" cy="164" r="14"/>
-            <path d="M156 206 c0 -16 11 -26 24 -26 s24 10 24 26"/>
-          </g>
-          <circle cx="180" cy="180" r="46" fill="none" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="4 6"/>
-        </svg>
-      </div>
-    </div>
 
-    <div class="scroll-cue" id="scroll-cue">
-      <span>scroll</span>
-      <span class="chevron"></span>
-    </div>
-  </header>
+      <div class="scroll-cue" id="scroll-cue">
+        <span>scroll</span>
+        <span class="chevron"></span>
+      </div>
+    </header>
+  </div>
 
   <div class="nav-wrap">
     <nav>
@@ -941,35 +957,34 @@
 
     /* ===== Hero video scroll-swap ===== */
     (function(){
+      const track = document.getElementById('hero-scroll-track');
       const hero = document.getElementById('hero');
       const idleVideo = document.getElementById('video-idle');
       const scrollVideo = document.getElementById('video-scroll');
       const scrollCue = document.getElementById('scroll-cue');
-      if (!hero || !idleVideo || !scrollVideo) return;
+      if (!track || !hero || !idleVideo || !scrollVideo) return;
 
-      const BUFFER_PX = 220; // how far the visitor must scroll before the video switches
+      const BUFFER_PX = 220; // how far into the pinned hero before the video switches
       let switched = false;
       let ticking = false;
 
       function updateHeroVideo(){
-        const scrollY = window.scrollY || window.pageYOffset;
-        const heroHeight = hero.offsetHeight;
+        const rect = track.getBoundingClientRect();
+        const scrolledIntoTrack = -rect.top; // 0 while hero is first pinned, grows as user scrolls through it
+        const maxScroll = track.offsetHeight - window.innerHeight;
+        const progress = Math.max(0, Math.min(scrolledIntoTrack, maxScroll));
 
         if (scrollCue) {
-          if (scrollY > 20) {
-            scrollCue.classList.add('is-hidden');
-          } else {
-            scrollCue.classList.remove('is-hidden');
-          }
+          scrollCue.classList.toggle('is-hidden', progress > 20);
         }
 
-        if (scrollY > BUFFER_PX && scrollY < heroHeight && !switched) {
+        if (progress > BUFFER_PX && !switched) {
           switched = true;
           scrollVideo.currentTime = 0;
           scrollVideo.play().catch(()=>{});
           scrollVideo.classList.add('is-active');
           idleVideo.classList.remove('is-active');
-        } else if (scrollY <= BUFFER_PX && switched) {
+        } else if (progress <= BUFFER_PX && switched) {
           switched = false;
           idleVideo.play().catch(()=>{});
           idleVideo.classList.add('is-active');

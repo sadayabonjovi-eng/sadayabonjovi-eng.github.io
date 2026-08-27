@@ -337,7 +337,7 @@
     position:absolute;
     left:0;
     right:0;
-    bottom:8.5rem;
+    top:3.5rem;
     z-index:3;
     display:flex;
     justify-content:center;
@@ -352,6 +352,11 @@
     margin:0;
     letter-spacing:.01em;
     text-align:center;
+    padding:.6rem 1.4rem;
+    border-radius:8px;
+    background:color-mix(in srgb, var(--bg) 55%, transparent);
+    backdrop-filter:blur(4px);
+    -webkit-backdrop-filter:blur(4px);
     text-shadow:0 2px 18px rgba(0,0,0,.6);
   }
   .rotator-word{
@@ -372,8 +377,8 @@
     .rotator-word.is-swapping{ animation:none; }
   }
   @media (max-width:760px){
-    .rotator-overlay{ bottom:6.5rem; }
-    .rotator-line{ font-size:1.15rem; }
+    .rotator-overlay{ top:2rem; }
+    .rotator-line{ font-size:1.1rem; padding:.5rem 1rem; }
   }
   /* ===== END ROTATING HERO LINE ===== */
 

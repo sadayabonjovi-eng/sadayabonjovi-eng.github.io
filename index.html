@@ -148,9 +148,11 @@
      before the hero releases into the text content below) ===== */
   .hero-scroll-track{
     position:relative;
-    height:260vh; /* total pinned scroll distance. Split roughly:
-                      ~40vh to view video1, then switch, then ~120vh
-                      to view video2 before release. Tune freely. */
+    height:400vh; /* total pinned scroll distance. A big number here is
+                      what actually creates a felt "buffer" — a normal
+                      scroll/trackpad swipe can't skip past it in one go.
+                      Split roughly: ~100vh to view video1 before the
+                      switch, then ~200vh to view video2 before release. */
   }
 
   /* ===== HERO VIDEO BACKGROUND (visual only — no text lives here
@@ -200,21 +202,20 @@
     z-index:2;
     width:100%;
     height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
   }
   .hero-art{
-    width:100%;
-    max-width:560px;
-    min-height:420px;
+    position:absolute;
+    top:6.5rem;
+    right:2.5rem;
+    width:300px;
+    min-height:260px;
     display:flex;
     align-items:center;
     justify-content:center;
   }
   .hero-art svg{ width:100%; height:auto; display:block; }
   @media (max-width:760px){
-    .hero-art{ max-width:280px; min-height:220px; }
+    .hero-art{ top:5rem; right:1rem; width:170px; min-height:150px; }
   }
 
   .scroll-cue{
@@ -252,7 +253,7 @@
   }
   @media (max-width:760px){
     header{ height:92vh; }
-    .hero-scroll-track{ height:230vh; }
+    .hero-scroll-track{ height:340vh; }
   }
   /* ===== END HERO VIDEO BACKGROUND ===== */
 
@@ -971,10 +972,17 @@
       const scrollCue = document.getElementById('scroll-cue');
       if (!track || !hero || !idleVideo || !scrollVideo) return;
 
-      const SWITCH_AT_PX = 420; // scroll distance while pinned before video1 → video2 switches.
-                                 // Gives a real "buffer" to view video1 first.
-                                 // The remaining track height (260vh - 100vh - this)
-                                 // is the buffer to view video2 before the hero releases.
+      let SWITCH_AT_PX = window.innerHeight * 1.0; // scroll distance while pinned
+                                 // before video1 → video2 switches. Scaled to
+                                 // viewport height so the buffer feels the same
+                                 // on any screen — roughly one full screen's
+                                 // worth of scrolling to view video1 before it
+                                 // switches. The remaining track height beyond
+                                 // this is the buffer to view video2 before release.
+      window.addEventListener('resize', () => {
+        SWITCH_AT_PX = window.innerHeight * 1.0;
+      }, { passive: true });
+
       let switched = false;
       let ticking = false;
 

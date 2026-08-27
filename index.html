@@ -142,28 +142,27 @@
   #theme-toggle:hover{ border-color:var(--signal); color:var(--signal); }
   #theme-toggle:focus-visible{ outline:2px solid var(--signal); outline-offset:2px; }
 
-  /* ===== HERO SCROLL TRACK (pins the hero in place while the
-     background video switches, so the switch always happens while
-     the hero is fully visible — no cut-off, no scrolling past it
-     mid-transition) ===== */
+  /* ===== HERO SCROLL TRACK (pins the hero video in place so both
+     videos get proper viewing time: video1 plays for a scroll buffer,
+     THEN switches to video2, which then also gets a scroll buffer
+     before the hero releases into the text content below) ===== */
   .hero-scroll-track{
     position:relative;
-    height:190vh; /* extra 90vh = scroll buffer before the hero releases.
-                      Increase for a longer pinned buffer, decrease to
-                      release sooner. */
+    height:260vh; /* total pinned scroll distance. Split roughly:
+                      ~40vh to view video1, then switch, then ~120vh
+                      to view video2 before release. Tune freely. */
   }
 
-  /* ===== HERO VIDEO BACKGROUND ===== */
+  /* ===== HERO VIDEO BACKGROUND (visual only — no text lives here
+     anymore, so nothing can ever grow this box or crop the video) ===== */
   header{
     position:sticky;
     top:0;
     overflow:hidden;
-    padding:6rem 1.5rem 4rem;
-    height:100vh; /* fixed, not min-height — guarantees the sticky hero and
-                     its background video never stretch taller than the
-                     viewport, whatever the text content does */
+    height:100vh;
     display:flex;
     align-items:center;
+    justify-content:center;
   }
   .hero-video-bg{
     position:absolute;
@@ -199,25 +198,15 @@
   .hero-inner{
     position:relative;
     z-index:2;
-    max-width:1080px;
-    margin:0 auto;
     width:100%;
-    display:grid;
-    grid-template-columns:1.3fr 1fr;
-    gap:2.5rem;
+    height:100%;
+    display:flex;
     align-items:center;
-  }
-  .hero-text{
-    grid-column:1;
-    max-width:640px;
-    transform:translateY(3rem); /* nudges text down visually WITHOUT adding
-                                    layout height — a margin-top here would
-                                    grow header beyond 100vh and stretch/crop
-                                    the background video */
+    justify-content:center;
   }
   .hero-art{
-    grid-column:2;
-    align-self:center;
+    width:100%;
+    max-width:560px;
     min-height:420px;
     display:flex;
     align-items:center;
@@ -225,9 +214,7 @@
   }
   .hero-art svg{ width:100%; height:auto; display:block; }
   @media (max-width:760px){
-    .hero-inner{ grid-template-columns:1fr; }
-    .hero-art{ grid-column:1; order:-1; max-width:260px; margin:0 auto 1rem; min-height:180px; }
-    .hero-text{ transform:translateY(1.5rem); }
+    .hero-art{ max-width:280px; min-height:220px; }
   }
 
   .scroll-cue{
@@ -264,10 +251,23 @@
     .scroll-cue .chevron{ animation:none; }
   }
   @media (max-width:760px){
-    header{ height:92vh; padding:5rem 1.5rem 3rem; }
-    .hero-scroll-track{ height:180vh; }
+    header{ height:92vh; }
+    .hero-scroll-track{ height:230vh; }
   }
   /* ===== END HERO VIDEO BACKGROUND ===== */
+
+  /* ===== HERO CONTENT (the name, copy, credentials, CTA — now sits
+     BELOW the pinned video instead of overlaid on top of it, so it
+     never competes with or gets cropped by the video) ===== */
+  .hero-content{
+    max-width:920px;
+    margin:0 auto;
+    padding:4.5rem 1.5rem 2rem;
+  }
+  @media (max-width:760px){
+    .hero-content{ padding:3rem 1.5rem 1.5rem; }
+  }
+  /* ===== END HERO CONTENT ===== */
 
   .welcome{
     font-family:var(--mono);

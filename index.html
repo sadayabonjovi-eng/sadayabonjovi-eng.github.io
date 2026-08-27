@@ -270,6 +270,31 @@
   }
   /* ===== END HERO CONTENT ===== */
 
+  .hero-divider{
+    max-width:920px;
+    margin:0 auto;
+    padding:1.6rem 1.5rem 0;
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    font-family:var(--mono);
+    font-size:.68rem;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .hero-divider::before,
+  .hero-divider::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+  .hero-divider span{ white-space:nowrap; color:var(--signal); }
+  @media (max-width:760px){
+    .hero-divider{ font-size:.6rem; padding:1.2rem 1.5rem 0; }
+  }
+
   .welcome{
     font-family:var(--mono);
     font-size:1.4rem;
@@ -775,6 +800,8 @@
 
   <!-- Hero text now lives here, below the pinned video, so it never
        overlaps or gets cropped with the background video -->
+  <div class="hero-divider"><span>// orbit_view.complete → profile.load()</span></div>
+
   <div class="hero-content">
     <p class="welcome">Welcome to my portfolio</p>
     <div class="status-line"><span class="pulse"></span> Automation Specialist — with Administrative &amp; Operational VA Support</div>

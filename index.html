@@ -121,6 +121,9 @@
     letter-spacing:.12em;
     border-bottom:1px solid var(--line);
     color:var(--muted);
+    position:relative;
+    z-index:5;
+    background:var(--bg);
   }
   .topstrip .dot{ color:var(--signal); }
 
@@ -139,27 +142,93 @@
   #theme-toggle:hover{ border-color:var(--signal); color:var(--signal); }
   #theme-toggle:focus-visible{ outline:2px solid var(--signal); outline-offset:2px; }
 
+  /* ===== HERO VIDEO BACKGROUND ===== */
   header{
-    padding:4.5rem 1.5rem 1.75rem;
-    max-width:1080px;
-    margin:0 auto;
     position:relative;
-    display:grid;
-    grid-template-columns:1fr 1.3fr;
-    gap:2.5rem;
-    align-items:center;
-  }
-  .hero-text{ grid-column:1; }
-  .hero-art{
-    grid-column:2;
-    align-self:center;
-    /* Give it a defined height so the canvas has something to size against */
-    min-height:520px;
+    overflow:hidden;
+    padding:6rem 1.5rem 4rem;
+    min-height:100vh;
     display:flex;
     align-items:center;
-    justify-content:center;
   }
-  .hero-art svg{ width:100%; height:auto; display:block; }
+  .hero-video-bg{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    overflow:hidden;
+    background:#000;
+  }
+  .hero-video-bg video{
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transform:translate(-50%,-50%);
+    opacity:0;
+    transition:opacity 1.1s ease;
+  }
+  .hero-video-bg video.is-active{
+    opacity:1;
+  }
+  .hero-video-bg::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:1;
+    background:linear-gradient(180deg,
+      color-mix(in srgb, var(--bg) 68%, transparent) 0%,
+      color-mix(in srgb, var(--bg) 78%, transparent) 55%,
+      color-mix(in srgb, var(--bg) 92%, transparent) 100%);
+  }
+  .hero-inner{
+    position:relative;
+    z-index:2;
+    max-width:1080px;
+    margin:0 auto;
+    width:100%;
+  }
+  .hero-text{ max-width:680px; }
+
+  .scroll-cue{
+    position:absolute;
+    bottom:1.8rem;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:2;
+    font-family:var(--mono);
+    font-size:.7rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--muted);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:.4rem;
+    opacity:.9;
+    transition:opacity .4s ease;
+  }
+  .scroll-cue.is-hidden{ opacity:0; pointer-events:none; }
+  .scroll-cue .chevron{
+    width:14px; height:14px;
+    border-right:2px solid currentColor;
+    border-bottom:2px solid currentColor;
+    transform:rotate(45deg);
+    animation:bob 1.8s infinite;
+  }
+  @keyframes bob{
+    0%,100%{ transform:rotate(45deg) translate(0,0); }
+    50%{ transform:rotate(45deg) translate(3px,3px); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .scroll-cue .chevron{ animation:none; }
+  }
+  @media (max-width:760px){
+    header{ min-height:92vh; padding:5rem 1.5rem 3rem; }
+  }
+  /* ===== END HERO VIDEO BACKGROUND ===== */
+
   .welcome{
     font-family:var(--mono);
     font-size:1.4rem;
@@ -168,10 +237,6 @@
     color:var(--muted);
     margin:0 0 .8rem;
     font-weight:700;
-  }
-  @media (max-width:760px){
-    header{ grid-template-columns:1fr; }
-    .hero-art{ grid-column:1; order:-1; max-width:280px; margin:0 auto 1rem; min-height:180px; }
   }
   .status-line{
     font-family:var(--mono);
@@ -229,7 +294,8 @@
     padding:.9rem 1.1rem;
     border:1px solid var(--line);
     border-radius:6px;
-    background:var(--bg-2);
+    background:color-mix(in srgb, var(--bg-2) 85%, transparent);
+    backdrop-filter:blur(6px);
   }
   .credentials span{ color:var(--warn); }
 
@@ -603,68 +669,37 @@
     <button id="theme-toggle" aria-label="Toggle dark and light mode"></button>
   </div>
 
-  <header>
-    <div class="hero-text">
-    <p class="welcome">Welcome to my portfolio</p>
-    <div class="status-line"><span class="pulse"></span> Automation Specialist — with Administrative &amp; Operational VA Support</div>
-    <h1>Bon Jovi F. Sadaya</h1>
-    <p class="lede">
-      I'm an <strong>Automation Specialist</strong> who builds systems on <strong>Make.com, Zapier, Activepieces, and GoHighLevel</strong> — AI lead agents, order processing pipelines, and reservation systems that run your business faster, cleaner, and more reliably in the background.
-    </p>
-    <p class="lede">
-      Underneath every build is <strong>Administrative &amp; Operational VA support</strong> — I monitor what I build live, handle the email, scheduling, and documentation the automation touches, and step in myself whenever a human decision is needed.
-    </p>
-    <div class="credentials">
-      <span>creds//</span> 7 years government &amp; military operations · Top 1 of 55, Coast Guard IT Specialization (96.77%) · TESDA NC II, Computer Systems Servicing
+  <header id="hero">
+    <div class="hero-video-bg" aria-hidden="true">
+      <video id="video-idle" class="is-active" autoplay loop muted playsinline preload="auto">
+        <source src="hero-idle.mp4" type="video/mp4">
+      </video>
+      <video id="video-scroll" loop muted playsinline preload="auto">
+        <source src="hero-scroll.mp4" type="video/mp4">
+      </video>
     </div>
-    <a href="projects.html" class="cv-button">→ run_projects()</a>
+
+    <div class="hero-inner">
+      <div class="hero-text">
+      <p class="welcome">Welcome to my portfolio</p>
+      <div class="status-line"><span class="pulse"></span> Automation Specialist — with Administrative &amp; Operational VA Support</div>
+      <h1>Bon Jovi F. Sadaya</h1>
+      <p class="lede">
+        I'm an <strong>Automation Specialist</strong> who builds systems on <strong>Make.com, Zapier, Activepieces, and GoHighLevel</strong> — AI lead agents, order processing pipelines, and reservation systems that run your business faster, cleaner, and more reliably in the background.
+      </p>
+      <p class="lede">
+        Underneath every build is <strong>Administrative &amp; Operational VA support</strong> — I monitor what I build live, handle the email, scheduling, and documentation the automation touches, and step in myself whenever a human decision is needed.
+      </p>
+      <div class="credentials">
+        <span>creds//</span> 7 years government &amp; military operations · Top 1 of 55, Coast Guard IT Specialization (96.77%) · TESDA NC II, Computer Systems Servicing
+      </div>
+      <a href="projects.html" class="cv-button">→ run_projects()</a>
+      </div>
     </div>
-    <div class="hero-art" aria-hidden="true">
-      <!-- Interactive 3D globe mounts here via hero-scroll.js.
-           If that script ever fails to find this mount, the static
-           SVG fallback below stays visible as the safety net. -->
-      <div id="hero-orbit-mount"></div>
-      <svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="var(--signal)" stop-opacity="0.35"/>
-            <stop offset="100%" stop-color="var(--signal)" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-        <circle cx="180" cy="180" r="170" fill="url(#glow)"/>
-        <g stroke="var(--line)" stroke-width="1.5" fill="none">
-          <line x1="180" y1="180" x2="60" y2="80"/>
-          <line x1="180" y1="180" x2="300" y2="70"/>
-          <line x1="180" y1="180" x2="50" y2="260"/>
-          <line x1="180" y1="180" x2="300" y2="270"/>
-          <line x1="180" y1="180" x2="180" y2="40"/>
-          <line x1="180" y1="180" x2="180" y2="320"/>
-        </g>
-        <g fill="var(--bg-2)" stroke="var(--signal)" stroke-width="2">
-          <rect x="30" y="60" width="60" height="40" rx="6"/>
-          <circle cx="300" cy="70" r="22"/>
-          <rect x="20" y="240" width="60" height="40" rx="6"/>
-          <circle cx="300" cy="270" r="22"/>
-          <rect x="150" y="14" width="60" height="40" rx="6"/>
-          <circle cx="180" cy="320" r="22"/>
-        </g>
-        <g stroke="var(--signal)" stroke-width="2" fill="none" stroke-linecap="round">
-          <path d="M40 70 h40 v20 h-40 z M40 70 l20 14 l20 -14"/>
-          <path d="M300 60 v6 M300 84 v6 M290 70 h-6 M310 70 h6 M292 62 l-4 -4 M308 62 l4 -4 M292 78 l-4 4 M308 78 l4 4"/>
-          <circle cx="300" cy="70" r="8"/>
-          <rect x="30" y="248" width="40" height="26" rx="2"/>
-          <line x1="30" y1="258" x2="70" y2="258"/>
-          <path d="M288 260 h24 v16 l-8 -6 h-16 z"/>
-          <path d="M162 22 h24 v24 h-24 z M168 28 h12 M168 34 h12 M168 40 h8"/>
-          <path d="M170 330 v-12 M180 330 v-18 M190 330 v-8"/>
-        </g>
-        <circle cx="180" cy="180" r="46" fill="var(--bg-2)" stroke="var(--signal)" stroke-width="2.5"/>
-        <g stroke="var(--signal)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="180" cy="164" r="14"/>
-          <path d="M156 206 c0 -16 11 -26 24 -26 s24 10 24 26"/>
-        </g>
-        <circle cx="180" cy="180" r="46" fill="none" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="4 6"/>
-      </svg>
+
+    <div class="scroll-cue" id="scroll-cue">
+      <span>scroll</span>
+      <span class="chevron"></span>
     </div>
   </header>
 
@@ -839,13 +874,60 @@
     backToTop.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+
+    /* ===== Hero video scroll-swap ===== */
+    (function(){
+      const hero = document.getElementById('hero');
+      const idleVideo = document.getElementById('video-idle');
+      const scrollVideo = document.getElementById('video-scroll');
+      const scrollCue = document.getElementById('scroll-cue');
+      if (!hero || !idleVideo || !scrollVideo) return;
+
+      const BUFFER_PX = 220; // how far the visitor must scroll before the video switches
+      let switched = false;
+      let ticking = false;
+
+      function updateHeroVideo(){
+        const scrollY = window.scrollY || window.pageYOffset;
+        const heroHeight = hero.offsetHeight;
+
+        if (scrollCue) {
+          if (scrollY > 20) {
+            scrollCue.classList.add('is-hidden');
+          } else {
+            scrollCue.classList.remove('is-hidden');
+          }
+        }
+
+        if (scrollY > BUFFER_PX && scrollY < heroHeight && !switched) {
+          switched = true;
+          scrollVideo.currentTime = 0;
+          scrollVideo.play().catch(()=>{});
+          scrollVideo.classList.add('is-active');
+          idleVideo.classList.remove('is-active');
+        } else if (scrollY <= BUFFER_PX && switched) {
+          switched = false;
+          idleVideo.play().catch(()=>{});
+          idleVideo.classList.add('is-active');
+          scrollVideo.classList.remove('is-active');
+        }
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(updateHeroVideo);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      updateHeroVideo();
+    })();
   </script>
   <link rel="stylesheet" href="chatbot.css">
   <script src="chatbot.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="network-bg.js"></script>
-  <!-- Interactive 3D globe in the hero — drag/rotate with project nodes -->
-  <script src="hero-scroll.js"></script>
   <!-- Cinematic 3D scroll reveals for featured builds + service block (hero untouched) -->
   <script src="scroll-cinematic.js"></script>
   <script src="trail-effect.js" defer></script>

@@ -75,7 +75,10 @@
   const styles = document.createElement("style");
   styles.textContent = `
     #${MOUNT_ID} {
-      --ho-radius: 210px;
+      --ho-radius: 185px;
+    }
+    @media (max-width: 760px) {
+      #${MOUNT_ID} { --ho-radius: 95px; }
     }
     .hero-orbit-panel {
       max-width: 620px;
@@ -578,7 +581,7 @@
   scene.addEventListener("wheel", (e) => {
     if (!e.ctrlKey) return; // avoid hijacking normal page scroll
     e.preventDefault();
-    targetZoom = clamp(targetZoom - e.deltaY * 0.0016, 0.6, 1.8);
+    targetZoom = clamp(targetZoom - e.deltaY * 0.0016, 0.6, 1.6);
   }, { passive: false });
 
   /* ---- pinch to zoom (touch) — same on mobile as desktop, no separate fallback ---- */
@@ -594,7 +597,7 @@
     if (e.touches.length === 2 && pinchStartDist) {
       e.preventDefault();
       const d = dist(e.touches[0], e.touches[1]);
-      targetZoom = clamp(pinchStartZoom * (d / pinchStartDist), 0.6, 1.8);
+      targetZoom = clamp(pinchStartZoom * (d / pinchStartDist), 0.6, 1.6);
     }
   }, { passive: false });
   scene.addEventListener("touchend", (e) => { if (e.touches.length < 2) pinchStartDist = null; });

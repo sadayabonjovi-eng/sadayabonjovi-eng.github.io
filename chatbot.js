@@ -809,7 +809,7 @@ LEAD CAPTURE RULES:
 
   /* ─────────────────────────────────────────
      SEND MESSAGE → GROQ API
-     Model: llama-3.3-70b-versatile
+     Model: openai/gpt-oss-120b
   ───────────────────────────────────────── */
   async function sendMessage(text) {
     text = (text || input.value).trim();
@@ -831,7 +831,7 @@ LEAD CAPTURE RULES:
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
+          model: "openai/gpt-oss-120b",
           max_tokens: 500,
           messages: [
             { role: "system", content: SYSTEM },

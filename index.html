@@ -275,13 +275,13 @@
   .hero-divider{
     max-width:920px;
     margin:0 auto;
-    padding:1.6rem 1.5rem 0;
+    padding:2rem 1.5rem 0;
     display:flex;
     align-items:center;
-    gap:1rem;
+    gap:1.1rem;
     font-family:var(--mono);
-    font-size:.68rem;
-    letter-spacing:.15em;
+    font-size:.7rem;
+    letter-spacing:.18em;
     text-transform:uppercase;
     color:var(--muted);
   }
@@ -290,11 +290,37 @@
     content:"";
     flex:1;
     height:1px;
-    background:var(--line);
+    /* Fades from edge to center instead of a flat hairline, so the
+       divider reads as a soft rule rather than a plain underline. */
+    background:linear-gradient(90deg, transparent, var(--line) 45%, var(--line) 100%);
   }
-  .hero-divider span{ white-space:nowrap; color:var(--signal); }
+  .hero-divider::after{
+    background:linear-gradient(90deg, var(--line) 0%, var(--line) 55%, transparent);
+  }
+  .hero-divider span{
+    white-space:nowrap;
+    display:inline-flex;
+    align-items:center;
+    gap:.55rem;
+    color:var(--signal);
+    font-weight:600;
+    text-shadow:0 0 14px color-mix(in srgb, var(--signal) 45%, transparent);
+  }
+  .hero-divider span::before{
+    content:"";
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--signal);
+    box-shadow:0 0 0 0 color-mix(in srgb, var(--signal) 55%, transparent);
+    animation:pulse 2.4s infinite;
+    flex:none;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hero-divider span::before{ animation:none; }
+  }
   @media (max-width:760px){
-    .hero-divider{ font-size:.6rem; padding:1.2rem 1.5rem 0; }
+    .hero-divider{ font-size:.6rem; padding:1.6rem 1.5rem 0; gap:.8rem; }
   }
 
   .welcome{
@@ -350,7 +376,10 @@
     font-family:var(--mono);
     font-size:clamp(1.3rem, 3.4vw, 2.1rem);
     font-weight:700;
-    color:var(--ink);
+    /* Fixed light color (not var(--ink)) — the hero video is always
+       dark now, so the text must always stay light, even in light mode,
+       or it goes dark-on-dark and reads as blurry/low-contrast. */
+    color:#eef2f5;
     margin:0;
     letter-spacing:.01em;
     text-align:center;
@@ -358,7 +387,9 @@
   }
   .rotator-word{
     display:inline-block;
-    color:var(--signal);
+    /* Fixed bright teal — var(--signal) goes duller in light mode,
+       which would mute the highlighted word against the dark video. */
+    color:#5eead4;
     font-weight:700;
     min-width:1ch;
     position:relative;

@@ -159,7 +159,9 @@
     top:0;
     overflow:hidden;
     padding:6rem 1.5rem 4rem;
-    min-height:100vh;
+    height:100vh; /* fixed, not min-height — guarantees the sticky hero and
+                     its background video never stretch taller than the
+                     viewport, whatever the text content does */
     display:flex;
     align-items:center;
   }
@@ -205,7 +207,14 @@
     gap:2.5rem;
     align-items:center;
   }
-  .hero-text{ grid-column:1; max-width:640px; margin-top:3rem; }
+  .hero-text{
+    grid-column:1;
+    max-width:640px;
+    transform:translateY(3rem); /* nudges text down visually WITHOUT adding
+                                    layout height — a margin-top here would
+                                    grow header beyond 100vh and stretch/crop
+                                    the background video */
+  }
   .hero-art{
     grid-column:2;
     align-self:center;
@@ -218,7 +227,7 @@
   @media (max-width:760px){
     .hero-inner{ grid-template-columns:1fr; }
     .hero-art{ grid-column:1; order:-1; max-width:260px; margin:0 auto 1rem; min-height:180px; }
-    .hero-text{ margin-top:1.5rem; }
+    .hero-text{ transform:translateY(1.5rem); }
   }
 
   .scroll-cue{
@@ -255,7 +264,7 @@
     .scroll-cue .chevron{ animation:none; }
   }
   @media (max-width:760px){
-    header{ min-height:92vh; padding:5rem 1.5rem 3rem; }
+    header{ height:92vh; padding:5rem 1.5rem 3rem; }
     .hero-scroll-track{ height:180vh; }
   }
   /* ===== END HERO VIDEO BACKGROUND ===== */

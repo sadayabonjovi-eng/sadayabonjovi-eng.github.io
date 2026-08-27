@@ -304,26 +304,21 @@
     .status-line .pulse{ animation:none; }
   }
 
-  header h1{
+  .hero-content h1{
     font-family:var(--sans);
     font-weight:700;
     font-size:clamp(2.2rem, 5.2vw, 3.7rem);
     line-height:1.05;
     margin:0 0 1.2rem;
     letter-spacing:-.02em;
-    white-space:nowrap;
   }
-  @media (max-width:520px){
-    header h1{ white-space:normal; }
-  }
-  header .lede{
+  .hero-content .lede{
     font-size:1.08rem;
     max-width:640px;
     margin:0 0 1.4rem;
     color:var(--ink);
-    transition:opacity .5s ease;
   }
-  header .lede strong{ color:var(--signal); font-weight:600; }
+  .hero-content .lede strong{ color:var(--signal); font-weight:600; }
 
   .credentials{
     font-family:var(--mono);
@@ -721,21 +716,6 @@
       </div>
 
       <div class="hero-inner">
-        <div class="hero-text">
-        <p class="welcome">Welcome to my portfolio</p>
-        <div class="status-line"><span class="pulse"></span> Automation Specialist — with Administrative &amp; Operational VA Support</div>
-        <h1>Bon Jovi F. Sadaya</h1>
-        <p class="lede">
-          I'm an <strong>Automation Specialist</strong> who builds systems on <strong>Make.com, Zapier, Activepieces, and GoHighLevel</strong> — AI lead agents, order processing pipelines, and reservation systems that run your business faster, cleaner, and more reliably in the background.
-        </p>
-        <p class="lede">
-          Underneath every build is <strong>Administrative &amp; Operational VA support</strong> — I monitor what I build live, handle the email, scheduling, and documentation the automation touches, and step in myself whenever a human decision is needed.
-        </p>
-        <div class="credentials">
-          <span>creds//</span> 7 years government &amp; military operations · Top 1 of 55, Coast Guard IT Specialization (96.77%) · TESDA NC II, Computer Systems Servicing
-        </div>
-        <a href="projects.html" class="cv-button">→ run_projects()</a>
-        </div>
         <div class="hero-art" aria-hidden="true">
           <!-- Interactive 3D globe mounts here via hero-scroll.js.
                If that script ever fails to find this mount, the static
@@ -790,6 +770,24 @@
         <span class="chevron"></span>
       </div>
     </header>
+  </div>
+
+  <!-- Hero text now lives here, below the pinned video, so it never
+       overlaps or gets cropped with the background video -->
+  <div class="hero-content">
+    <p class="welcome">Welcome to my portfolio</p>
+    <div class="status-line"><span class="pulse"></span> Automation Specialist — with Administrative &amp; Operational VA Support</div>
+    <h1>Bon Jovi F. Sadaya</h1>
+    <p class="lede">
+      I'm an <strong>Automation Specialist</strong> who builds systems on <strong>Make.com, Zapier, Activepieces, and GoHighLevel</strong> — AI lead agents, order processing pipelines, and reservation systems that run your business faster, cleaner, and more reliably in the background.
+    </p>
+    <p class="lede">
+      Underneath every build is <strong>Administrative &amp; Operational VA support</strong> — I monitor what I build live, handle the email, scheduling, and documentation the automation touches, and step in myself whenever a human decision is needed.
+    </p>
+    <div class="credentials">
+      <span>creds//</span> 7 years government &amp; military operations · Top 1 of 55, Coast Guard IT Specialization (96.77%) · TESDA NC II, Computer Systems Servicing
+    </div>
+    <a href="projects.html" class="cv-button">→ run_projects()</a>
   </div>
 
   <div class="nav-wrap">
@@ -973,7 +971,10 @@
       const scrollCue = document.getElementById('scroll-cue');
       if (!track || !hero || !idleVideo || !scrollVideo) return;
 
-      const BUFFER_PX = 220; // how far into the pinned hero before the video switches
+      const SWITCH_AT_PX = 420; // scroll distance while pinned before video1 → video2 switches.
+                                 // Gives a real "buffer" to view video1 first.
+                                 // The remaining track height (260vh - 100vh - this)
+                                 // is the buffer to view video2 before the hero releases.
       let switched = false;
       let ticking = false;
 
@@ -987,13 +988,13 @@
           scrollCue.classList.toggle('is-hidden', progress > 20);
         }
 
-        if (progress > BUFFER_PX && !switched) {
+        if (progress > SWITCH_AT_PX && !switched) {
           switched = true;
           scrollVideo.currentTime = 0;
           scrollVideo.play().catch(()=>{});
           scrollVideo.classList.add('is-active');
           idleVideo.classList.remove('is-active');
-        } else if (progress <= BUFFER_PX && switched) {
+        } else if (progress <= SWITCH_AT_PX && switched) {
           switched = false;
           idleVideo.play().catch(()=>{});
           idleVideo.classList.add('is-active');

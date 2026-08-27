@@ -178,9 +178,9 @@
     inset:0;
     z-index:1;
     background:linear-gradient(180deg,
-      color-mix(in srgb, var(--bg) 68%, transparent) 0%,
-      color-mix(in srgb, var(--bg) 78%, transparent) 55%,
-      color-mix(in srgb, var(--bg) 92%, transparent) 100%);
+      color-mix(in srgb, var(--bg) 30%, transparent) 0%,
+      color-mix(in srgb, var(--bg) 42%, transparent) 55%,
+      color-mix(in srgb, var(--bg) 65%, transparent) 100%);
   }
   .hero-inner{
     position:relative;
@@ -188,8 +188,25 @@
     max-width:1080px;
     margin:0 auto;
     width:100%;
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:2.5rem;
+    align-items:center;
   }
-  .hero-text{ max-width:680px; }
+  .hero-text{ grid-column:1; max-width:640px; }
+  .hero-art{
+    grid-column:2;
+    align-self:center;
+    min-height:420px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .hero-art svg{ width:100%; height:auto; display:block; }
+  @media (max-width:760px){
+    .hero-inner{ grid-template-columns:1fr; }
+    .hero-art{ grid-column:1; order:-1; max-width:260px; margin:0 auto 1rem; min-height:180px; }
+  }
 
   .scroll-cue{
     position:absolute;
@@ -695,6 +712,53 @@
       </div>
       <a href="projects.html" class="cv-button">→ run_projects()</a>
       </div>
+      <div class="hero-art" aria-hidden="true">
+        <!-- Interactive 3D globe mounts here via hero-scroll.js.
+             If that script ever fails to find this mount, the static
+             SVG fallback below stays visible as the safety net. -->
+        <div id="hero-orbit-mount"></div>
+        <svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="var(--signal)" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="var(--signal)" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="180" cy="180" r="170" fill="url(#glow)"/>
+          <g stroke="var(--line)" stroke-width="1.5" fill="none">
+            <line x1="180" y1="180" x2="60" y2="80"/>
+            <line x1="180" y1="180" x2="300" y2="70"/>
+            <line x1="180" y1="180" x2="50" y2="260"/>
+            <line x1="180" y1="180" x2="300" y2="270"/>
+            <line x1="180" y1="180" x2="180" y2="40"/>
+            <line x1="180" y1="180" x2="180" y2="320"/>
+          </g>
+          <g fill="var(--bg-2)" stroke="var(--signal)" stroke-width="2">
+            <rect x="30" y="60" width="60" height="40" rx="6"/>
+            <circle cx="300" cy="70" r="22"/>
+            <rect x="20" y="240" width="60" height="40" rx="6"/>
+            <circle cx="300" cy="270" r="22"/>
+            <rect x="150" y="14" width="60" height="40" rx="6"/>
+            <circle cx="180" cy="320" r="22"/>
+          </g>
+          <g stroke="var(--signal)" stroke-width="2" fill="none" stroke-linecap="round">
+            <path d="M40 70 h40 v20 h-40 z M40 70 l20 14 l20 -14"/>
+            <path d="M300 60 v6 M300 84 v6 M290 70 h-6 M310 70 h6 M292 62 l-4 -4 M308 62 l4 -4 M292 78 l-4 4 M308 78 l4 4"/>
+            <circle cx="300" cy="70" r="8"/>
+            <rect x="30" y="248" width="40" height="26" rx="2"/>
+            <line x1="30" y1="258" x2="70" y2="258"/>
+            <path d="M288 260 h24 v16 l-8 -6 h-16 z"/>
+            <path d="M162 22 h24 v24 h-24 z M168 28 h12 M168 34 h12 M168 40 h8"/>
+            <path d="M170 330 v-12 M180 330 v-18 M190 330 v-8"/>
+          </g>
+          <circle cx="180" cy="180" r="46" fill="var(--bg-2)" stroke="var(--signal)" stroke-width="2.5"/>
+          <g stroke="var(--signal)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="180" cy="164" r="14"/>
+            <path d="M156 206 c0 -16 11 -26 24 -26 s24 10 24 26"/>
+          </g>
+          <circle cx="180" cy="180" r="46" fill="none" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="4 6"/>
+        </svg>
+      </div>
     </div>
 
     <div class="scroll-cue" id="scroll-cue">
@@ -928,6 +992,8 @@
   <script src="chatbot.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="network-bg.js"></script>
+  <!-- Interactive 3D globe in the hero — drag/rotate with project nodes -->
+  <script src="hero-scroll.js"></script>
   <!-- Cinematic 3D scroll reveals for featured builds + service block (hero untouched) -->
   <script src="scroll-cinematic.js"></script>
   <script src="trail-effect.js" defer></script>
